@@ -8,12 +8,10 @@ on:
   schedule:
     - cron: '17,47 * * * *'
   workflow_dispatch:
-  # Commits made by GITHUB_TOKEN do NOT trigger other workflows, so the
-  # snapshot refresh would never reach the deployed site. This explicit
-  # dispatch does trigger the Pages deploy.
-  workflow_run:
-    workflows: ["Refresh market snapshot"]
-    types: [completed]
+  # NOTE: deliberately no `workflow_run` trigger here. Listing this workflow
+  # in its own `workflow_run.workflows` makes its completion re-trigger
+  # itself, which fails as an invalid workflow file. The deploy chaining
+  # lives in deploy.yml, which is the only side that needs it.
 
 permissions:
   contents: write
