@@ -1,0 +1,12 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Node
+node_modules/
+
+# Local scratch
+*.log
+scratch/

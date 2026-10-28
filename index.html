@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market Dashboard — Live Stocks, Indices, Crypto &amp; FX</title>
+<meta name="description" content="Live market dashboard: real-time quotes for major indices, megacap equities, crypto and foreign exchange, with interactive intraday and historical charts.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Market Dashboard">
+<meta property="og:description" content="Live quotes for indices, equities, crypto and FX with interactive charts.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/uPlot.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2308090a'/%3E%3Cpath d='M5 22l6-8 5 5 4-7 7 10' fill='none' stroke='%233fb950' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#111214"/>
+        <path d="M5 22l6-8 5 5 4-7 7 10" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="brand-text">
+        <h1>Market Dashboard</h1>
+        <p>Live quotes · Indices · Equities · Crypto · FX</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <div class="status-block" id="marketStatus">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="status-label" id="statusLabel">Connecting…</span>
+    </div>
+    <div class="meta-block">
+      <span class="meta-caption">Last update</span>
+      <span class="meta-value" id="lastUpdate">—</span>
+    </div>
+    <button class="btn btn-ghost" id="autoToggle" type="button" aria-pressed="true" title="Toggle automatic refresh">
+      <span class="dot-live" id="autoDot"></span> Auto
+    </button>
+    <button class="btn btn-accent" id="refreshBtn" type="button">
+      <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M13.6 8a5.6 5.6 0 1 1-1.64-3.96M13.5 1.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Refresh
+    </button>
+  </div>
+</header>
+
+<div class="ticker-rail" aria-label="Market ticker">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<main class="layout">
+
+  <section class="panel panel-indices" aria-labelledby="indicesHeading">
+    <div class="panel-head">
+      <h2 id="indicesHeading">Global Indices</h2>
+      <span class="panel-note" id="indicesNote">—</span>
+    </div>
+    <div class="index-grid" id="indexGrid"></div>
+  </section>
+
+  <section class="panel panel-chart" aria-labelledby="chartHeading">
+    <div class="panel-head chart-head">
+      <div class="chart-title">
+        <h2 id="chartHeading">—</h2>
+        <p class="chart-sub" id="chartSub">—</p>
+      </div>
+      <div class="range-tabs" id="rangeTabs" role="tablist" aria-label="Chart range">
+        <button class="range-tab is-active" data-range="1d" role="tab" aria-selected="true">1D</button>
+        <button class="range-tab" data-range="5d" role="tab" aria-selected="false">5D</button>
+        <button class="range-tab" data-range="1mo" role="tab" aria-selected="false">1M</button>
+        <button class="range-tab" data-range="6mo" role="tab" aria-selected="false">6M</button>
+        <button class="range-tab" data-range="1y" role="tab" aria-selected="false">1Y</button>
+        <button class="range-tab" data-range="5y" role="tab" aria-selected="false">5Y</button>
+      </div>
+    </div>
+    <div class="chart-price-row">
+      <span class="chart-price" id="chartPrice">—</span>
+      <span class="chart-change" id="chartChange">—</span>
+      <span class="chart-currency" id="chartCurrency"></span>
+    </div>
+    <div class="chart-host" id="chartHost">
+      <div class="chart-loading" id="chartLoading">Loading chart…</div>
+    </div>
+    <div class="chart-stats" id="chartStats"></div>
+  </section>
+
+  <section class="panel panel-watchlist" aria-labelledby="watchlistHeading">
+    <div class="panel-head">
+      <h2 id="watchlistHeading">Watchlist</h2>
+      <span class="panel-note">Click any row to chart it · click a header to sort</span>
+    </div>
+    <div class="table-scroll">
+      <table class="quote-table">
+        <thead>
+          <tr>
+            <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+            <th class="col-name" data-sort="name" scope="col">Name</th>
+            <th class="col-num" data-sort="price" scope="col">Last</th>
+            <th class="col-num" data-sort="change" scope="col">Change</th>
+            <th class="col-num" data-sort="changePct" scope="col">Change %</th>
+            <th class="col-range" scope="col">Day range</th>
+            <th class="col-num" data-sort="volume" scope="col">Volume</th>
+            <th class="col-spark" scope="col">Trend</th>
+          </tr>
+        </thead>
+        <tbody id="watchlistBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel panel-movers" aria-labelledby="moversHeading">
+    <div class="panel-head">
+      <h2 id="moversHeading">Movers</h2>
+      <span class="panel-note">Across the tracked universe</span>
+    </div>
+    <div class="movers-grid">
+      <div class="mover-col">
+        <h3 class="mover-head mover-up">Top gainers</h3>
+        <ul class="mover-list" id="gainersList"></ul>
+      </div>
+      <div class="mover-col">
+        <h3 class="mover-head mover-down">Top losers</h3>
+        <ul class="mover-list" id="losersList"></ul>
+      </div>
+      <div class="mover-col">
+        <h3 class="mover-head mover-vol">Most active</h3>
+        <ul class="mover-list" id="activeList"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel panel-aux" aria-labelledby="auxHeading">
+    <div class="panel-head">
+      <h2 id="auxHeading">Crypto &amp; Foreign Exchange</h2>
+      <span class="panel-note" id="auxNote">—</span>
+    </div>
+    <div class="aux-grid" id="auxGrid"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-block">
+      <h3>About this dashboard</h3>
+      <p>
+        A static, dependency-free dashboard published by GitHub Pages. Quotes are streamed live
+        from Yahoo Finance chart data via a CORS proxy, with CoinGecko and the Frankfurter
+        exchange-rate API as independent fallbacks for crypto and FX. Charts are rendered by uPlot.
+      </p>
+    </div>
+    <div class="footer-block">
+      <h3>Data sources</h3>
+      <ul class="footer-list">
+        <li>Yahoo Finance — equities, indices, FX, crypto chart data</li>
+        <li>CoinGecko — crypto spot prices (fallback)</li>
+        <li>Frankfurter / European Central Bank — FX reference rates (fallback)</li>
+        <li>r.jina.ai — CORS proxy for the Yahoo endpoints</li>
+      </ul>
+    </div>
+    <div class="footer-block">
+      <h3>Good to know</h3>
+      <ul class="footer-list">
+        <li>Quotes may be delayed by the upstream provider.</li>
+        <li>When live feeds fail, the last committed snapshot is shown and clearly marked stale.</li>
+        <li>Market hours follow each exchange's local timezone.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>Market Dashboard · open source · MIT licensed</span>
+    <span class="footer-disclaimer">
+      For information and research only. Not investment advice.
+    </span>
+  </div>
+</footer>
+
+<script src="assets/vendor/uPlot.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify assets and links
+        run: |
+          set -euo pipefail
+          test -f index.html
+          test -f assets/style.css
+          test -f assets/app.js
+          test -f assets/vendor/uPlot.min.js
+          test -f assets/vendor/uPlot.min.css
+          test -f data/snapshot.json
+          grep -q 'assets/app.js' index.html || { echo 'ERROR: app.js not referenced'; exit 1; }
+          grep -q 'assets/style.css' index.html || { echo 'ERROR: style.css not referenced'; exit 1; }
+          grep -q 'uPlot.min.js' index.html || { echo 'ERROR: uPlot not referenced'; exit 1; }
+          echo "asset check OK"
+
+      - name: Validate JSON snapshot
+        run: |
+          set -euo pipefail
+          node -e "
+            const s = require('./data/snapshot.json');
+            if (!s.quotes || Object.keys(s.quotes).length === 0) {
+              console.error('ERROR: snapshot has no quotes'); process.exit(1);
+            }
+            console.log('snapshot OK: ' + Object.keys(s.quotes).length + ' quotes, updated ' + s.updated);
+          "
+
+      - name: Syntax check JavaScript
+        run: |
+          set -euo pipefail
+          node --check assets/app.js
+          node --check scripts/make-snapshot.js
+          echo "js syntax OK"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Verify deployment
+        run: |
+          echo "URL: ${{ steps.deployment.outputs.page_url }}"
+          sleep 10
+          curl -fsSL -o /dev/null -w "HTTP %{http_code}\n" "${{ steps.deployment.outputs.page_url }}"
