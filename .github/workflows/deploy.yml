@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # The snapshot workflow commits with GITHUB_TOKEN, and such commits do not
+  # fire `push` triggers. workflow_run closes that gap so a refreshed
+  # snapshot is actually deployed.
+  workflow_run:
+    workflows: ["Refresh market snapshot"]
+    types: [completed]
 
 permissions:
   contents: read

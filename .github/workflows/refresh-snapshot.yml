@@ -8,6 +8,12 @@ on:
   schedule:
     - cron: '17,47 * * * *'
   workflow_dispatch:
+  # Commits made by GITHUB_TOKEN do NOT trigger other workflows, so the
+  # snapshot refresh would never reach the deployed site. This explicit
+  # dispatch does trigger the Pages deploy.
+  workflow_run:
+    workflows: ["Refresh market snapshot"]
+    types: [completed]
 
 permissions:
   contents: write
