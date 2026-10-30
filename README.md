@@ -9,6 +9,9 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ## What it shows
 
+- **Portfolio allocation** — 13 holdings with allocation weight, role, live
+  price, day change and intraday sparkline; sector concentration strip;
+  weighted day move across the portfolio. Click any row to chart it.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
 - **Watchlist** — 14 large-cap equities with last price, change, day range bar,
@@ -21,6 +24,27 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 - **Market status** — open / pre-market / after-hours / closed, in US Eastern
 
 The page refreshes itself every 60 seconds. The `Auto` button pauses that.
+
+## Portfolio data and what is deliberately not published
+
+The portfolio section is derived from a **private** investment-plan repository.
+This is a public repo, so only a deliberately narrow slice is published:
+
+**Published** — ticker symbols, allocation weights (percentages), a short
+role label per holding, sector buckets, and live market data for each ticker.
+
+**Never published** — absolute dollar amounts, total portfolio value, cost
+basis, share counts, forward P/E and other valuation figures, broker, tax or
+account details, deployment schedules, personal decision rules and watchlist
+rationale.
+
+Allocation weights are ratios, so the exact portfolio size is not inferable
+from anything in this repository. The private plan remains the source of
+truth; the values in `assets/portfolio.js` are a public-safe projection of it.
+
+Do not add the excluded details to `assets/portfolio.js`, `data/snapshot.json`,
+the README or the footer. The exclusion list is restated in the header comment
+of `assets/portfolio.js` so it survives future edits.
 
 ## Data sources
 
@@ -78,6 +102,7 @@ committed so the page works offline and cannot break because of a CDN.
 index.html                 page shell
 assets/style.css           design system (dark, Linear-inspired)
 assets/app.js              data layer + rendering + chart wiring
+assets/portfolio.js        public-safe portfolio allocation (weights only)
 assets/vendor/uPlot.min.js vendored chart library (MIT)
 scripts/make-snapshot.js   writes data/snapshot.json
 data/snapshot.json         last known good quotes

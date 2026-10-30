@@ -68,6 +68,32 @@
     { symbol: 'JPY=X',    name: 'USD / Japanese Yen', group: 'fx' }
   ];
 
+  /**
+   * Portfolio holdings are merged into the fetch universe so their live
+   * quotes come from the same request. Only allocation weights are public —
+   * no position sizes or cost basis.
+   */
+  function portfolioSymbols() {
+    return (window.PORTFOLIO && window.PORTFOLIO.holdings || []).map(function (h) {
+      return h.symbol;
+    });
+  }
+
+  function allSymbols() {
+    var seen = {};
+    var out = [];
+    UNIVERSE.concat(
+      (window.PORTFOLIO && window.PORTFOLIO.holdings || []).map(function (h) {
+        return { symbol: h.symbol, name: h.symbol, group: 'portfolio' };
+      })
+    ).forEach(function (u) {
+      if (seen[u.symbol]) return;
+      seen[u.symbol] = true;
+      out.push(u.symbol);
+    });
+    return out;
+  }
+
   var RANGES = {
     '1d':  { range: '1d',  interval: '5m',  label: 'Intraday · 5m' },
     '5d':  { range: '5d',  interval: '15m', label: '5 days · 15m' },
@@ -85,6 +111,7 @@
     range: '1d',
     sortKey: 'changePct',
     sortAsc: false,
+    tableSort: null,      // per-table sort state, set up in bindEvents()
     auto: true,
     timer: null,
     lastUpdate: null,
@@ -225,7 +252,7 @@
 
   /** Pull live quotes for the whole universe, respecting Yahoo's 20-symbol cap. */
   function fetchQuotes() {
-    var symbols = UNIVERSE.map(function (u) { return u.symbol; });
+    var symbols = allSymbols();
     var groups = chunk(symbols, SPARK_MAX_SYMBOLS);
 
     return Promise.all(groups.map(function (group) {
@@ -297,6 +324,129 @@
       });
   }
 
+  // ------------------------------------------------------------- portfolio
+
+  function portfolioHoldings() {
+    var p = window.PORTFOLIO;
+    if (!p || !p.holdings) return [];
+    return p.holdings.map(function (h) {
+      var q = state.quotes[h.symbol] || {};
+      return {
+        symbol: h.symbol,
+        role: h.role,
+        sector: h.sector,
+        group: h.group,
+        weight: h.weight,
+        price: q.price,
+        changePct: q.changePct,
+        dayHigh: q.dayHigh,
+        dayLow: q.dayLow,
+        closes: q.closes
+      };
+    });
+  }
+
+  function renderSectorStrip() {
+    var p = window.PORTFOLIO;
+    if (!p) return;
+    var holdings = portfolioHoldings();
+
+    // Sum weights per sector bucket.
+    var bySector = {};
+    holdings.forEach(function (h) {
+      bySector[h.sector] = (bySector[h.sector] || 0) + h.weight;
+    });
+
+    var order = p.sectorOrder || Object.keys(bySector);
+    var total = holdings.reduce(function (a, h) { return a + h.weight; }, 0) || 1;
+
+    var segs = order.filter(function (s) { return bySector[s]; }).map(function (s) {
+      var pct = (bySector[s] / total) * 100;
+      return '<div class="sector-seg sector-' + escapeHtml(s.toLowerCase().replace(/[^a-z]/g, '')) + '" ' +
+        'style="flex-grow:' + bySector[s].toFixed(2) + '" ' +
+        'title="' + escapeHtml(s) + ' — ' + pct.toFixed(2) + '%">' +
+        '<span class="sector-seg-label">' + escapeHtml(s) + '</span>' +
+        '<span class="sector-seg-pct">' + pct.toFixed(1) + '%</span>' +
+        '</div>';
+    }).join('');
+
+    els.sectorStrip.innerHTML = segs;
+  }
+
+  function renderPortfolio() {
+    if (!window.PORTFOLIO) return;
+    var holdings = portfolioHoldings();
+
+    // Summary figures.
+    var tech = 0, nonTech = 0, weightedSum = 0, weightedBase = 0;
+    holdings.forEach(function (h) {
+      if (h.group === 'tech') tech += h.weight; else nonTech += h.weight;
+      if (h.changePct !== null && h.changePct !== undefined) {
+        weightedSum += h.changePct * h.weight;
+        weightedBase += h.weight;
+      }
+    });
+
+    els.techExposure.textContent = tech.toFixed(2) + '%';
+    els.nonTechExposure.textContent = nonTech.toFixed(2) + '%';
+    els.holdingCount.textContent = String(holdings.length);
+
+    if (weightedBase > 0) {
+      var wm = weightedSum / weightedBase;
+      els.weightedMove.textContent = fmtPct(wm);
+      els.weightedMove.className = 'alloc-figure-value ' + dirClass(wm);
+    } else {
+      els.weightedMove.textContent = '—';
+      els.weightedMove.className = 'alloc-figure-value';
+    }
+
+    renderSectorStrip();
+
+    // Table, sorted by this table's own sort key when it applies.
+    var rows = holdings.slice();
+    var st = (state.tableSort && state.tableSort.portfolio) || { key: 'weight', asc: false };
+    var key = st.key;
+    if (key === 'weight' || key === 'symbol' || key === 'role' || key === 'price' || key === 'changePct') {
+      var dir = st.asc ? 1 : -1;
+      if (key === 'symbol' || key === 'role') {
+        rows.sort(function (a, b) { return String(a[key]).localeCompare(String(b[key])) * dir; });
+      } else {
+        rows.sort(function (a, b) {
+          var av = a[key], bv = b[key];
+          if (av === null || av === undefined) return 1;
+          if (bv === null || bv === undefined) return -1;
+          return (av - bv) * dir;
+        });
+      }
+    }
+
+    els.portfolioBody.innerHTML = rows.map(function (h) {
+      var cls = dirClass(h.changePct);
+      var rangeHtml = '';
+      if (h.dayLow !== null && h.dayLow !== undefined && h.dayHigh !== null && h.dayHigh !== undefined && h.dayHigh !== h.dayLow) {
+        var span = h.dayHigh - h.dayLow;
+        var pos = Math.max(0, Math.min(100, ((h.price - h.dayLow) / span) * 100));
+        var fillCls = h.price >= (h.dayLow + h.dayHigh) / 2 ? 'up' : 'down';
+        rangeHtml = '<div class="range-wrap"><span class="range-txt">' + fmtPrice(h.dayLow) + '</span>' +
+          '<span class="range-bar"><i class="' + fillCls + '" style="left:0;width:' + pos.toFixed(1) + '%"></i></span>' +
+          '<span class="range-txt">' + fmtPrice(h.dayHigh) + '</span></div>';
+      } else {
+        rangeHtml = '<span class="range-txt">—</span>';
+      }
+
+      return '<tr data-symbol="' + escapeHtml(h.symbol) + '"' +
+        (state.selected === h.symbol ? ' class="is-selected"' : '') + '>' +
+        '<td class="sym-cell">' + escapeHtml(h.symbol) + '</td>' +
+        '<td class="name-cell">' + escapeHtml(h.role) + '</td>' +
+        '<td class="col-num num alloc-weight">' + h.weight.toFixed(2) + '%</td>' +
+        '<td class="col-num num">' + fmtPrice(h.price) + '</td>' +
+        '<td class="col-num num ' + cls + '">' + fmtPct(h.changePct) + '</td>' +
+        '<td class="col-range">' + rangeHtml + '</td>' +
+        '<td class="col-spark">' + sparkline(h.closes, 72, 22) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
   // ------------------------------------------------------------- rendering
 
   function renderIndices() {
@@ -353,8 +503,9 @@
   }
 
   function sortQuotes(list) {
-    var key = state.sortKey;
-    var dir = state.sortAsc ? 1 : -1;
+    var st = (state.tableSort && state.tableSort.watchlist) || { key: 'changePct', asc: false };
+    var key = st.key;
+    var dir = st.asc ? 1 : -1;
     return list.slice().sort(function (a, b) {
       var av = a[key], bv = b[key];
       if (av === null || av === undefined) return 1;
@@ -364,15 +515,31 @@
     });
   }
 
+  /**
+   * Symbols that belong only to the portfolio (not the general market
+   * watchlist). They are shown in the portfolio table instead, so they are
+   * excluded from the watchlist table to avoid showing the same holding twice.
+   */
+  function portfolioOnlySymbols() {
+    var inUniverse = {};
+    UNIVERSE.forEach(function (u) { inUniverse[u.symbol] = true; });
+    var out = {};
+    portfolioSymbols().forEach(function (s) {
+      if (!inUniverse[s]) out[s] = true;
+    });
+    return out;
+  }
+
   function renderWatchlist() {
     var body = els.watchlistBody;
+    var portfolioOnly = portfolioOnlySymbols();
     var list = Object.keys(state.quotes).map(function (s) {
       var q = state.quotes[s];
       var meta = UNIVERSE.filter(function (u) { return u.symbol === s; })[0];
       q.group = meta ? meta.group : 'equity';
       q.displayName = meta ? meta.name : q.name;
       return q;
-    });
+    }).filter(function (q) { return !portfolioOnly[q.symbol]; });
     list = sortQuotes(list);
 
     var html = list.map(function (q) {
@@ -405,8 +572,15 @@
   }
 
   function renderMovers() {
-    var list = Object.keys(state.quotes).map(function (s) { return state.quotes[s]; })
-      .filter(function (q) { return q.group !== 'fx'; });
+    var list = Object.keys(state.quotes).map(function (s) {
+      var q = state.quotes[s];
+      // Group matters here: FX pairs are excluded from the movers lists.
+      // Assign it locally rather than relying on renderWatchlist() having
+      // run first.
+      var meta = UNIVERSE.filter(function (u) { return u.symbol === s; })[0];
+      q.group = meta ? meta.group : 'equity';
+      return q;
+    }).filter(function (q) { return q.group !== 'fx'; });
 
     var byPct = list.slice().sort(function (a, b) {
       return (b.changePct || 0) - (a.changePct || 0);
@@ -514,6 +688,7 @@
   function renderAll() {
     renderIndices();
     renderTicker();
+    renderPortfolio();
     renderWatchlist();
     renderMovers();
     renderAux();
@@ -783,6 +958,7 @@
     state.selected = symbol;
     renderIndices();
     renderWatchlist();
+    renderPortfolio();
     renderChartHeader();
     loadChart(symbol, state.range);
   }
@@ -802,6 +978,13 @@
       var row = e.target.closest('tr[data-symbol]');
       if (row) selectSymbol(row.getAttribute('data-symbol'));
     });
+
+    if (els.portfolioBody) {
+      els.portfolioBody.addEventListener('click', function (e) {
+        var row = e.target.closest('tr[data-symbol]');
+        if (row) selectSymbol(row.getAttribute('data-symbol'));
+      });
+    }
 
     [els.gainersList, els.losersList, els.activeList].forEach(function (list) {
       list.addEventListener('click', function (e) {
@@ -824,21 +1007,36 @@
       loadChart(state.selected, range);
     });
 
-    document.querySelectorAll('.quote-table th[data-sort]').forEach(function (th) {
-      th.addEventListener('click', function () {
-        var key = th.getAttribute('data-sort');
-        if (state.sortKey === key) {
-          state.sortAsc = !state.sortAsc;
-        } else {
-          state.sortKey = key;
-          state.sortAsc = key === 'symbol' || key === 'name';
-        }
-        document.querySelectorAll('.quote-table th[data-sort]').forEach(function (other) {
-          other.classList.remove('is-sorted', 'is-asc');
+    // Each table sorts independently — scope the handlers to their own
+    // <thead>, and keep separate sort state per table so clicking a
+    // portfolio header does not re-sort the watchlist.
+    var sortState = {
+      watchlist: { key: 'changePct', asc: false },
+      portfolio: { key: 'weight', asc: false }
+    };
+    state.tableSort = sortState;
+
+    document.querySelectorAll('.quote-table').forEach(function (table) {
+      var which = table.classList.contains('portfolio-table') ? 'portfolio' : 'watchlist';
+      var heads = table.querySelectorAll('th[data-sort]');
+      heads.forEach(function (th) {
+        th.addEventListener('click', function () {
+          var key = th.getAttribute('data-sort');
+          var st = sortState[which];
+          if (st.key === key) {
+            st.asc = !st.asc;
+          } else {
+            st.key = key;
+            st.asc = key === 'symbol' || key === 'name' || key === 'role';
+          }
+          heads.forEach(function (other) {
+            other.classList.remove('is-sorted', 'is-asc');
+          });
+          th.classList.add('is-sorted');
+          if (st.asc) th.classList.add('is-asc');
+          renderWatchlist();
+          renderPortfolio();
         });
-        th.classList.add('is-sorted');
-        if (state.sortAsc) th.classList.add('is-asc');
-        renderWatchlist();
       });
     });
 
@@ -896,6 +1094,12 @@
       chartLoading: $('chartLoading'),
       chartStats: $('chartStats'),
       rangeTabs: $('rangeTabs'),
+      portfolioBody: $('portfolioBody'),
+      sectorStrip: $('sectorStrip'),
+      techExposure: $('techExposure'),
+      nonTechExposure: $('nonTechExposure'),
+      holdingCount: $('holdingCount'),
+      weightedMove: $('weightedMove'),
       watchlistBody: $('watchlistBody'),
       gainersList: $('gainersList'),
       losersList: $('losersList'),
@@ -904,9 +1108,11 @@
       auxNote: $('auxNote')
     };
 
-    // Default sort marker on the Change % column.
-    var pctTh = document.querySelector('.quote-table th[data-sort="changePct"]');
-    if (pctTh) pctTh.classList.add('is-sorted');
+    // Default sort markers on the initial sort column of each table.
+    var watchTh = document.querySelector('.quote-table:not(.portfolio-table) th[data-sort="changePct"]');
+    if (watchTh) watchTh.classList.add('is-sorted');
+    var portTh = document.querySelector('.portfolio-table th[data-sort="weight"]');
+    if (portTh) portTh.classList.add('is-sorted');
 
     bindEvents();
     refresh(true).then(function () {

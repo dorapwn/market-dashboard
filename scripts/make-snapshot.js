@@ -23,7 +23,10 @@ const SYMBOLS = [
   'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA', 'AVGO',
   'AMD', 'NFLX', 'CRM', 'PLTR', 'JPM', 'XOM',
   'BTC-USD', 'ETH-USD', 'SOL-USD',
-  'EURUSD=X', 'GBPUSD=X', 'JPY=X'
+  'EURUSD=X', 'GBPUSD=X', 'JPY=X',
+  // Portfolio holdings (allocation weights stay in assets/portfolio.js;
+  // only quotes are cached here).
+  'VGT', 'SMH', 'VST', 'NEE', 'ARKX', 'SPCX', 'XLV', 'IHI'
 ];
 
 function get(url) {

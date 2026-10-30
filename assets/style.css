@@ -180,6 +180,7 @@ button { font-family: inherit; cursor: pointer; }
   grid-template-areas:
     "indices   chart"
     "movers    chart"
+    "portfolio portfolio"
     "watchlist watchlist"
     "aux       aux";
   gap: 16px;
@@ -191,6 +192,7 @@ button { font-family: inherit; cursor: pointer; }
 .panel-watchlist  { grid-area: watchlist; }
 .panel-movers     { grid-area: movers; }
 .panel-aux        { grid-area: aux; }
+.panel-portfolio  { grid-area: portfolio; }
 
 .panel {
   background: var(--panel);
@@ -347,6 +349,70 @@ button { font-family: inherit; cursor: pointer; }
 .spark { display: block; }
 .spark path { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
+/* ------------------------------------------------------------- portfolio */
+
+.alloc-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 12px 18px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.alloc-figure { display: flex; flex-direction: column; gap: 3px; }
+.alloc-figure-value {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.4px;
+}
+
+.sector-strip {
+  display: flex;
+  gap: 2px;
+  height: 42px;
+  margin-bottom: 14px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.sector-seg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 0 6px;
+  background: var(--surface);
+  overflow: hidden;
+  transition: background 140ms ease;
+}
+.sector-seg:hover { background: var(--surface-hover); }
+.sector-seg-label {
+  font-size: 10px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.sector-seg-pct {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.sector-techetf    { background: rgba(113, 112, 255, 0.22); }
+.sector-tech       { background: rgba(113, 112, 255, 0.38); }
+.sector-utility    { background: rgba(63, 185, 80, 0.26); }
+.sector-healthcare { background: rgba(210, 153, 34, 0.28); }
+.sector-space      { background: rgba(248, 81, 73, 0.24); }
+
+.alloc-weight { color: var(--accent); font-weight: 500; }
+.portfolio-table .name-cell { max-width: 200px; }
+
 /* ---------------------------------------------------------------- movers */
 
 .movers-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -417,7 +483,7 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 1180px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "chart" "indices" "watchlist" "movers" "aux";
+    grid-template-areas: "chart" "indices" "portfolio" "watchlist" "movers" "aux";
   }
   .panel-chart { order: -1; }
 }
@@ -437,6 +503,9 @@ button { font-family: inherit; cursor: pointer; }
   .col-range { display: none; }
   .chart-price { font-size: 25px; }
   .meta-block { display: none; }
+  .sector-seg-label { display: none; }
+  .sector-strip { height: 26px; }
+  .portfolio-table .name-cell { display: block; max-width: 130px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

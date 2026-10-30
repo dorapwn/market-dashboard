@@ -35,13 +35,39 @@ jobs:
           test -f index.html
           test -f assets/style.css
           test -f assets/app.js
+          test -f assets/portfolio.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
           grep -q 'assets/app.js' index.html || { echo 'ERROR: app.js not referenced'; exit 1; }
           grep -q 'assets/style.css' index.html || { echo 'ERROR: style.css not referenced'; exit 1; }
           grep -q 'uPlot.min.js' index.html || { echo 'ERROR: uPlot not referenced'; exit 1; }
+          grep -q 'assets/portfolio.js' index.html || { echo 'ERROR: portfolio.js not referenced'; exit 1; }
           echo "asset check OK"
+
+      - name: Guard against publishing sensitive portfolio data
+        run: |
+          set -euo pipefail
+          # The portfolio section may only carry allocation weights (ratios).
+          # Absolute dollar amounts, share counts, valuation figures and
+          # account details must never reach this public repository.
+          #
+          # These patterns target JS *value* positions (after ':' or '='), not
+          # prose — the portfolio.js header comment deliberately names the
+          # excluded fields, so a naive keyword scan would flag its own docs.
+          if grep -rnE '\$[0-9]' assets/portfolio.js index.html; then
+            echo "ERROR: dollar amount found in published portfolio data"; exit 1
+          fi
+          if grep -rnE '[:=][[:space:]]*[0-9]{3,}' assets/portfolio.js; then
+            echo "ERROR: absolute-looking value found in portfolio data"; exit 1
+          fi
+          if grep -rniE '["'"'"']?(shares|quantity|units|costbasis|cost_basis|amount)["'"'"']?[[:space:]]*[:=]' assets/portfolio.js; then
+            echo "ERROR: position size field found in published portfolio data"; exit 1
+          fi
+          if grep -rniE '(fwd|forward)[ _-]?p/?e["'"'"']?[[:space:]]*[:=]' assets/portfolio.js; then
+            echo "ERROR: valuation multiple found in published portfolio data"; exit 1
+          fi
+          echo "privacy check OK"
 
       - name: Validate JSON snapshot
         run: |

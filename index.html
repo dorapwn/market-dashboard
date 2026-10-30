@@ -91,6 +91,51 @@
     <div class="chart-stats" id="chartStats"></div>
   </section>
 
+  <section class="panel panel-portfolio" aria-labelledby="portfolioHeading">
+    <div class="panel-head">
+      <h2 id="portfolioHeading">Portfolio Allocation</h2>
+      <span class="panel-note">Allocation weights &amp; live market data · no position sizes</span>
+    </div>
+
+    <div class="alloc-summary">
+      <div class="alloc-figure">
+        <span class="stat-label">Total tech exposure</span>
+        <span class="alloc-figure-value" id="techExposure">—</span>
+      </div>
+      <div class="alloc-figure">
+        <span class="stat-label">Total non-tech</span>
+        <span class="alloc-figure-value" id="nonTechExposure">—</span>
+      </div>
+      <div class="alloc-figure">
+        <span class="stat-label">Holdings</span>
+        <span class="alloc-figure-value" id="holdingCount">—</span>
+      </div>
+      <div class="alloc-figure">
+        <span class="stat-label">Weighted day move</span>
+        <span class="alloc-figure-value" id="weightedMove">—</span>
+      </div>
+    </div>
+
+    <div class="sector-strip" id="sectorStrip" aria-label="Sector allocation"></div>
+
+    <div class="table-scroll">
+      <table class="quote-table portfolio-table">
+        <thead>
+          <tr>
+            <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+            <th class="col-name" data-sort="role" scope="col">Role</th>
+            <th class="col-num" data-sort="weight" scope="col">Allocation</th>
+            <th class="col-num" data-sort="price" scope="col">Last</th>
+            <th class="col-num" data-sort="changePct" scope="col">Change %</th>
+            <th class="col-range" scope="col">Day range</th>
+            <th class="col-spark" scope="col">Trend</th>
+          </tr>
+        </thead>
+        <tbody id="portfolioBody"></tbody>
+      </table>
+    </div>
+  </section>
+
   <section class="panel panel-watchlist" aria-labelledby="watchlistHeading">
     <div class="panel-head">
       <h2 id="watchlistHeading">Watchlist</h2>
@@ -166,11 +211,11 @@
       </ul>
     </div>
     <div class="footer-block">
-      <h3>Good to know</h3>
+      <h3>Portfolio data</h3>
       <ul class="footer-list">
-        <li>Quotes may be delayed by the upstream provider.</li>
-        <li>When live feeds fail, the last committed snapshot is shown and clearly marked stale.</li>
-        <li>Market hours follow each exchange's local timezone.</li>
+        <li>Allocation weights and roles only — no position sizes or cost basis.</li>
+        <li>Position amounts, valuation figures and account details are not published.</li>
+        <li>Live prices for every holding come from the same feeds as the rest of the page.</li>
       </ul>
     </div>
   </div>
@@ -183,6 +228,7 @@
 </footer>
 
 <script src="assets/vendor/uPlot.min.js"></script>
+<script src="assets/portfolio.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>
