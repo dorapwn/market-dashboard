@@ -1,0 +1,13 @@
+{
+  "name": "market-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live stock-market dashboard published with GitHub Pages. No build step, no framework, no bundler.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test 'test/*.test.js'",
+    "mutation-check": "./test/mutation-check.sh",
+    "snapshot": "node scripts/make-snapshot.js",
+    "serve": "python3 -m http.server 8765"
+  }
+}
