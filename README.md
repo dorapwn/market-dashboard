@@ -7,6 +7,8 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ![Dashboard](docs/screenshot.png)
 
+![Market heatmap](docs/heatmap.png)
+
 ![Portfolio allocation panel](docs/portfolio-panel.png)
 
 ## What it shows
@@ -14,6 +16,12 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 - **Portfolio** — the actual holding with its role, live price, day change
   and intraday sparkline; holding count and weighted day move. Click any row
   to chart it.
+- **Market heatmap** — the whole S&P 500 as a treemap: the canvas is split
+  into **Tech** and **Non-tech** halves, each containing **sector** tiles,
+  each sector containing **industry** tiles, each industry containing the
+  individual **stock** tiles. A tile's area is the company's market cap and
+  its colour is the day's move, on a four-step diverging scale either side
+  of neutral. Hover a tile for the detail, click it to chart the stock.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
 - **Watchlist** — every tracked instrument (indices, large-cap equities,
@@ -27,6 +35,35 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 - **Market status** — open / pre-market / after-hours / closed, in US Eastern
 
 The page refreshes itself every 60 seconds. The `Auto` button pauses that.
+
+## The market heatmap
+
+The heatmap is a squarified treemap over the whole S&P 500, laid out in
+three nested levels:
+
+1. **Tech** vs **Non-tech** — the canvas is split into two halves, sized by
+   the total market cap of each. "Tech" covers the GICS sectors Information
+   Technology and Communication Services; everything else is non-tech.
+2. **Sector** — inside each half, the GICS sectors, again sized by market cap.
+3. **Industry** — inside each sector, the GICS sub-industries.
+4. **Stock** — inside each industry, the individual stocks.
+
+Tile area is market cap, so AAPL and NVDA dominate the technology half and
+the smallest names are a few pixels across. Tile colour is the day's change
+on a diverging scale: four steps of red below neutral, four of green above.
+
+The layout lives in `assets/heatmap-model.js` — pure geometry, shared by the
+browser and the unit tests, exactly like `assets/portfolio-model.js`. A
+treemap that silently overlaps or overflows its container is invisible to a
+unit test but obvious on screen, so the tests assert that no two tiles
+overlap, that no tile leaves the canvas, and that the label bands stay
+clear of the tiles.
+
+`data/heatmap.json` holds the dataset: 502 constituents with their GICS
+classification, market cap and last change. It is rebuilt by
+`scripts/build-heatmap.py` in the refresh workflow, which pulls the
+classification from Wikipedia and the market caps from Yahoo's timeseries
+API.
 
 ## Portfolio data and what is deliberately not published
 

@@ -357,6 +357,194 @@
       });
   }
 
+  // --------------------------------------------------------------- heatmap
+
+  /**
+   * The heatmap dataset: every S&P 500 constituent with its GICS sector and
+   * sub-industry, market cap and last change.
+   *
+   * It is a separate file from the quote snapshot because it is much larger
+   * and changes far less often (the index membership moves quarterly, the
+   * prices every minute).
+   */
+  var heatmapData = null;
+  var heatmapLayout = null;
+
+  function fetchHeatmap() {
+    return fetch('data/heatmap.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('no heatmap'); return r.json(); })
+      .then(function (d) {
+        if (!d || !d.items || !d.items.length) throw new Error('heatmap empty');
+        return d;
+      });
+  }
+
+  /**
+   * Merge the live quotes over the heatmap's own snapshot values.
+   *
+   * The heatmap covers 500+ symbols, but the page's live feed only carries
+   * the tracked universe, so most tiles keep the value from the dataset and
+   * the tracked ones get the fresher live number.
+   */
+  function heatmapItems() {
+    if (!heatmapData) return [];
+    return heatmapData.items.map(function (it) {
+      var q = state.quotes[it.symbol];
+      if (!q) return it;
+      return {
+        symbol: it.symbol,
+        name: it.name,
+        sector: it.sector,
+        industry: it.industry,
+        marketCap: it.marketCap,
+        price: q.price !== undefined && q.price !== null ? q.price : it.price,
+        changePct: q.changePct !== undefined && q.changePct !== null ? q.changePct : it.changePct
+      };
+    });
+  }
+
+  function renderHeatmap() {
+    var canvas = els.heatmapCanvas;
+    if (!canvas || !heatmapData) return;
+
+    // clientWidth/Height are the layout box, excluding any border or
+    // scrollbar. getBoundingClientRect() can still report the OLD size
+    // while the browser is applying a new viewport, which lays the treemap
+    // out for the wrong width and pushes tiles off the edge.
+    var w = Math.max(320, canvas.clientWidth || 0);
+    var h = Math.max(280, canvas.clientHeight || 0);
+    if (!w || !h) return;
+
+    var items = heatmapItems();
+    if (!items.length) return;
+
+    var layout = window.HeatmapModel.layout(items, w, h);
+    heatmapLayout = layout;
+
+    var html = [];
+
+    // The two halves (tech / non-tech) get a label and a divider.
+    ['tech', 'nontech'].forEach(function (key) {
+      var g = layout[key];
+      if (!g || !g.sectors.length) return;
+      html.push('<div class="hm-group-label" style="left:' + g.x.toFixed(1) + 'px">' +
+        (key === 'tech' ? 'Tech' : 'Non-tech') + ' · ' + g.sectors.length + ' sectors</div>');
+      html.push('<div class="hm-group-rule" style="left:' + (g.x + g.w).toFixed(1) + 'px;top:0;height:' +
+        h + 'px"></div>');
+    });
+
+    // Sector tiles, then the industry tiles inside them, then the stocks.
+    layout.sectors.forEach(function (sector) {
+      html.push('<div class="hm-sector" style="left:' + sector.x.toFixed(1) + 'px;top:' + sector.y.toFixed(1) +
+        'px;width:' + sector.w.toFixed(1) + 'px;height:' + sector.h.toFixed(1) + 'px">');
+      html.push('<span class="hm-sector-label">' + escapeHtml(sector.sector) + '</span>');
+
+      sector.industries.forEach(function (ind) {
+        html.push('<div class="hm-industry" style="left:' + (ind.x - sector.x).toFixed(1) + 'px;top:' +
+          (ind.y - sector.y).toFixed(1) + 'px;width:' + ind.w.toFixed(1) + 'px;height:' + ind.h.toFixed(1) + 'px">');
+        // The industry label is only worth drawing if the cell can hold it.
+        // The model already reserved a band for it, so the label and the
+        // largest stock tile never overlap.
+        if (ind.w > 52 && ind.h > 30) {
+          html.push('<span class="hm-industry-label">' + escapeHtml(ind.industry) + '</span>');
+        }
+
+        ind.stocks.forEach(function (t) {
+          var cls = 'hm-tile' + (t.showLabel ? ' has-label' : '') +
+            (state.selected === t.symbol ? ' is-selected' : '');
+          // Big tiles get bigger type, otherwise a mega-cap like AAPL is a
+          // large expanse of colour with 10px text in the corner.
+          if (t.area >= 20000) cls += ' is-lg';
+          else if (t.area >= 6000) cls += ' is-md';
+          var bg = window.HeatmapModel.heatColor(t.changePct);
+          var style = 'left:' + (t.x - ind.x).toFixed(1) + 'px;top:' + (t.y - ind.y).toFixed(1) +
+            'px;width:' + t.w.toFixed(1) + 'px;height:' + t.h.toFixed(1) + 'px;background:' + bg;
+          var label = '';
+          if (t.showLabel) {
+            label = '<span class="hm-sym">' + escapeHtml(t.symbol) + '</span>' +
+              '<span class="hm-chg">' + fmtPct(t.changePct) + '</span>';
+          }
+          html.push('<button type="button" class="' + cls + '" style="' + style + '" ' +
+            'data-symbol="' + escapeHtml(t.symbol) + '" ' +
+            'data-sector="' + escapeHtml(t.sector) + '" ' +
+            'data-industry="' + escapeHtml(t.industry) + '" ' +
+            'data-name="' + escapeHtml(t.name || '') + '" ' +
+            'data-price="' + (t.price === null || t.price === undefined ? '' : t.price) + '" ' +
+            'data-change="' + (t.changePct === null || t.changePct === undefined ? '' : t.changePct) + '" ' +
+            'data-cap="' + (t.marketCap || 0) + '" ' +
+            'aria-label="' + escapeHtml(t.symbol + ' ' + (t.name || '') + ' ' + fmtPct(t.changePct)) + '">' +
+            label + '</button>');
+        });
+
+        html.push('</div>');
+      });
+
+      html.push('</div>');
+    });
+
+    canvas.innerHTML = html.join('');
+    els.heatmapLoading.hidden = true;
+
+    var stats = layout.stats;
+    els.heatmapNote.textContent = stats.techCount + ' tech + ' + stats.nonTechCount + ' non-tech · ' +
+      stats.industries + ' industries · S&P 500 by market cap';
+  }
+
+  /**
+   * The tooltip follows the pointer and shows the full detail for a tile.
+   */
+  function showHeatmapTip(tile, evt) {
+    var tip = els.heatmapTip;
+    var wrap = els.heatmapCanvas.parentElement;
+    if (!tile || !tip || !wrap) return;
+
+    var symbol = tile.getAttribute('data-symbol');
+    var price = tile.getAttribute('data-price');
+    var cap = parseFloat(tile.getAttribute('data-cap')) || 0;
+    var changePct = tile.getAttribute('data-change');
+    var q = state.quotes[symbol];
+    if (q && q.changePct !== undefined && q.changePct !== null) changePct = q.changePct;
+
+    tip.innerHTML =
+      '<div class="hm-tip-sym">' + escapeHtml(symbol) + '</div>' +
+      '<div class="hm-tip-name">' + escapeHtml(tile.getAttribute('data-name') || '') + '</div>' +
+      '<div class="hm-tip-row"><span>Last</span><span>' + (price ? fmtPrice(parseFloat(price)) : '—') + '</span></div>' +
+      '<div class="hm-tip-row"><span>Change</span><span class="' + dirClass(parseFloat(changePct)) + '">' +
+        fmtPct(parseFloat(changePct)) + '</span></div>' +
+      '<div class="hm-tip-row"><span>Market cap</span><span>' + fmtCompact(cap) + '</span></div>' +
+      '<div class="hm-tip-path">' + escapeHtml(tile.getAttribute('data-sector') || '') +
+        ' › ' + escapeHtml(tile.getAttribute('data-industry') || '') + '</div>';
+
+    tip.hidden = false;
+
+    // Keep the tooltip inside the panel.
+    var wrapRect = wrap.getBoundingClientRect();
+    var tipRect = tip.getBoundingClientRect();
+    var x = evt.clientX - wrapRect.left + 14;
+    var y = evt.clientY - wrapRect.top + 14;
+    if (x + tipRect.width > wrapRect.width) x = evt.clientX - wrapRect.left - tipRect.width - 14;
+    if (y + tipRect.height > wrapRect.height) y = evt.clientY - wrapRect.top - tipRect.height - 14;
+    tip.style.left = Math.max(4, x) + 'px';
+    tip.style.top = Math.max(4, y) + 'px';
+  }
+
+  function hideHeatmapTip() {
+    if (els.heatmapTip) els.heatmapTip.hidden = true;
+  }
+
+  function initHeatmap() {
+    fetchHeatmap().then(function (d) {
+      heatmapData = d;
+      renderHeatmap();
+    }).catch(function (err) {
+      // The heatmap is an addition, not the page's core: if it cannot load,
+      // the rest of the dashboard must still work.
+      console.warn('[market-dashboard] heatmap unavailable:', err.message);
+      els.heatmapLoading.textContent = 'Heatmap unavailable';
+      els.heatmapNote.textContent = 'S&P 500 heatmap unavailable';
+    });
+  }
+
   // ------------------------------------------------------------- portfolio
 
   function renderSectorStrip(holdings, summary) {
@@ -708,6 +896,10 @@
     renderMovers();
     renderAux();
     renderStatus();
+    // The heatmap carries its own snapshot values for the long tail of the
+    // index, so it is re-rendered to pick up the live numbers for the
+    // symbols this page actually tracks.
+    if (heatmapData) renderHeatmap();
     els.lastUpdate.textContent = state.lastUpdate
       ? state.lastUpdate.toLocaleTimeString('en-US', { hour12: false })
       : '—';
@@ -994,6 +1186,8 @@
     renderIndices();
     renderWatchlist();
     renderPortfolio();
+    // Re-render the treemap so the selected tile picks up its highlight.
+    if (heatmapData) renderHeatmap();
     renderChartHeader();
     loadChart(symbol, state.range);
   }
@@ -1078,6 +1272,52 @@
     els.refreshBtn.addEventListener('click', function () {
       refresh(false);
     });
+
+    // ------------------------------------------------------------ heatmap
+
+    if (els.heatmapCanvas) {
+      // Delegated so it keeps working after the treemap is re-rendered.
+      els.heatmapCanvas.addEventListener('mouseover', function (e) {
+        var tile = e.target.closest('.hm-tile');
+        if (tile) showHeatmapTip(tile, e);
+      });
+      els.heatmapCanvas.addEventListener('mousemove', function (e) {
+        var tile = e.target.closest('.hm-tile');
+        if (tile) showHeatmapTip(tile, e);
+        else hideHeatmapTip();
+      });
+      els.heatmapCanvas.addEventListener('mouseout', function (e) {
+        var tile = e.target.closest('.hm-tile');
+        if (tile && !e.relatedTarget) hideHeatmapTip();
+      });
+      els.heatmapCanvas.addEventListener('click', function (e) {
+        var tile = e.target.closest('.hm-tile');
+        if (tile) selectSymbol(tile.getAttribute('data-symbol'));
+      });
+      els.heatmapCanvas.addEventListener('mouseleave', hideHeatmapTip);
+    }
+
+    // The treemap geometry depends on the panel's pixel size, so it has to
+    // be recomputed when the element actually changes size.
+    //
+    // A ResizeObserver is used rather than the window's resize event: the
+    // observer fires when the canvas's own box changes, which is exactly
+    // the measurement the layout needs. The window event can fire before
+    // the browser has applied the new viewport, so measuring there yields
+    // the OLD width and lays the treemap out for the wrong size.
+    if (typeof ResizeObserver !== 'undefined' && els.heatmapCanvas) {
+      var lastW = 0, lastH = 0;
+      var ro = new ResizeObserver(function (entries) {
+        var box = entries[0] && entries[0].contentRect;
+        if (!box) return;
+        // Ignore sub-pixel jitter.
+        if (Math.abs(box.width - lastW) < 1 && Math.abs(box.height - lastH) < 1) return;
+        lastW = box.width;
+        lastH = box.height;
+        if (heatmapData) renderHeatmap();
+      });
+      ro.observe(els.heatmapCanvas);
+    }
 
     els.autoToggle.addEventListener('click', function () {
       state.auto = !state.auto;
@@ -1165,7 +1405,11 @@
       losersList: $('losersList'),
       activeList: $('activeList'),
       auxGrid: $('auxGrid'),
-      auxNote: $('auxNote')
+      auxNote: $('auxNote'),
+      heatmapCanvas: $('heatmapCanvas'),
+      heatmapLoading: $('heatmapLoading'),
+      heatmapNote: $('heatmapNote'),
+      heatmapTip: $('heatmapTip')
     };
 
     // Default sort markers on the initial sort column of each table.
@@ -1176,6 +1420,7 @@
 
     bindEvents();
     checkPortfolioData();
+    initHeatmap();
     refresh(true).then(function () {
       scheduleRefresh();
     });

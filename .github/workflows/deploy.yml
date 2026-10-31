@@ -37,14 +37,17 @@ jobs:
           test -f assets/app.js
           test -f assets/portfolio.js
           test -f assets/portfolio-model.js
+          test -f assets/heatmap-model.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
+          test -f data/heatmap.json
           grep -q 'assets/app.js' index.html || { echo 'ERROR: app.js not referenced'; exit 1; }
           grep -q 'assets/style.css' index.html || { echo 'ERROR: style.css not referenced'; exit 1; }
           grep -q 'uPlot.min.js' index.html || { echo 'ERROR: uPlot not referenced'; exit 1; }
           grep -q 'assets/portfolio.js' index.html || { echo 'ERROR: portfolio.js not referenced'; exit 1; }
           grep -q 'assets/portfolio-model.js' index.html || { echo 'ERROR: portfolio-model.js not referenced'; exit 1; }
+          grep -q 'assets/heatmap-model.js' index.html || { echo 'ERROR: heatmap-model.js not referenced'; exit 1; }
           echo "asset check OK"
 
       - name: Run unit tests
@@ -108,12 +111,43 @@ jobs:
             console.log('snapshot OK: ' + Object.keys(s.quotes).length + ' quotes, updated ' + s.updated);
           "
 
+      - name: Validate heatmap dataset
+        run: |
+          set -euo pipefail
+          # The heatmap is the whole S&P 500, so it is far larger than the
+          # tracked universe. Check it is well formed and that the treemap
+          # model can actually lay it out — a dataset that breaks the layout
+          # would render as an empty panel.
+          node -e "
+            const d = require('./data/heatmap.json');
+            const model = require('./assets/heatmap-model.js');
+            if (!d.items || !d.items.length) {
+              console.error('ERROR: heatmap has no items'); process.exit(1);
+            }
+            const bad = d.items.filter(it =>
+              !it.symbol || !it.sector || !it.industry ||
+              !(typeof it.marketCap === 'number' && isFinite(it.marketCap) && it.marketCap > 0));
+            if (bad.length) {
+              console.error('ERROR: ' + bad.length + ' heatmap items are malformed');
+              bad.slice(0, 5).forEach(b => console.error('  - ' + JSON.stringify(b)));
+              process.exit(1);
+            }
+            const res = model.layout(d.items, 1358, 620);
+            if (!res.tiles.length) {
+              console.error('ERROR: heatmap layout produced no tiles'); process.exit(1);
+            }
+            console.log('heatmap OK: ' + d.items.length + ' items -> ' +
+              res.tiles.length + ' tiles, ' + res.stats.sectors + ' sectors, ' +
+              res.stats.industries + ' industries');
+          "
+
       - name: Syntax check JavaScript
         run: |
           set -euo pipefail
           node --check assets/app.js
           node --check assets/portfolio-model.js
           node --check assets/portfolio.js
+          node --check assets/heatmap-model.js
           node --check scripts/make-snapshot.js
           echo "js syntax OK"
 

@@ -135,6 +135,38 @@
     </div>
   </section>
 
+  <section class="panel panel-heatmap" aria-labelledby="heatmapHeading">
+    <div class="panel-head">
+      <h2 id="heatmapHeading">Market Heatmap</h2>
+      <span class="panel-note" id="heatmapNote">S&amp;P 500 by market cap · tech vs non-tech</span>
+    </div>
+
+    <div class="heatmap-legend" id="heatmapLegend">
+      <span class="legend-scale">
+        <span class="legend-label">Down</span>
+        <span class="legend-swatches">
+          <i style="background:var(--heat-4)"></i>
+          <i style="background:var(--heat-3)"></i>
+          <i style="background:var(--heat-2)"></i>
+          <i style="background:var(--heat-1)"></i>
+          <i style="background:var(--heat-0)"></i>
+          <i style="background:var(--heat-1u)"></i>
+          <i style="background:var(--heat-2u)"></i>
+          <i style="background:var(--heat-3u)"></i>
+          <i style="background:var(--heat-4u)"></i>
+        </span>
+        <span class="legend-label">Up</span>
+      </span>
+      <span class="legend-hint">Tile area = market cap · click a stock to chart it</span>
+    </div>
+
+    <div class="heatmap-wrap">
+      <div class="heatmap-loading" id="heatmapLoading">Loading heatmap…</div>
+      <div class="heatmap-canvas" id="heatmapCanvas" role="img" aria-label="S&P 500 market heatmap"></div>
+      <div class="heatmap-tip" id="heatmapTip" hidden></div>
+    </div>
+  </section>
+
   <section class="panel panel-watchlist" aria-labelledby="watchlistHeading">
     <div class="panel-head">
       <h2 id="watchlistHeading">Watchlist</h2>
@@ -207,6 +239,7 @@
         <li>CoinGecko — crypto spot prices (fallback)</li>
         <li>Frankfurter / European Central Bank — FX reference rates (fallback)</li>
         <li>r.jina.ai — CORS proxy for the Yahoo endpoints</li>
+        <li>Wikipedia — S&amp;P 500 GICS sector and sub-industry classification</li>
       </ul>
     </div>
     <div class="footer-block">
@@ -229,6 +262,7 @@
 <script src="assets/vendor/uPlot.min.js"></script>
 <script src="assets/portfolio-model.js"></script>
 <script src="assets/portfolio.js"></script>
+<script src="assets/heatmap-model.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

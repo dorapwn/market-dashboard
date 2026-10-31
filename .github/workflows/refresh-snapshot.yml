@@ -33,15 +33,24 @@ jobs:
       - name: Generate snapshot
         run: node scripts/make-snapshot.js
 
+      # The heatmap covers the whole S&P 500 and needs GICS classifications
+      # (from Wikipedia) plus market caps (from Yahoo's timeseries API). It
+      # is a separate dataset from the snapshot because it is much larger
+      # and changes far less often.
+      - name: Generate heatmap dataset
+        run: |
+          set -euo pipefail
+          python3 scripts/build-heatmap.py
+
       - name: Commit if changed
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/snapshot.json; then
+          if git diff --quiet -- data/snapshot.json data/heatmap.json; then
             echo "Snapshot unchanged — nothing to commit."
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/snapshot.json
+          git add data/snapshot.json data/heatmap.json
           git commit -m "chore: refresh market snapshot"
           git push

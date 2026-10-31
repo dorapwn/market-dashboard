@@ -181,6 +181,7 @@ button { font-family: inherit; cursor: pointer; }
     "indices   chart"
     "movers    chart"
     "portfolio portfolio"
+    "heatmap   heatmap"
     "watchlist watchlist"
     "aux       aux";
   gap: 16px;
@@ -463,6 +464,196 @@ button { font-family: inherit; cursor: pointer; }
 .aux-px { font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; margin-top: 6px; }
 .aux-chg { font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
 
+/* ---------------------------------------------------------------- heatmap */
+
+/* Heatmap colours: a diverging scale from deep red through flat grey to
+   deep green. Four steps each way, so a small move is visibly different
+   from a large one rather than everything reading as "up" or "down". */
+:root {
+  --heat-4:  #8b1a1a;
+  --heat-3:  #b62b2b;
+  --heat-2:  #d94f4f;
+  --heat-1:  #ec8080;
+  --heat-0:  #2a2c30;
+  --heat-1u: #6ec27a;
+  --heat-2u: #3fb950;
+  --heat-3u: #2a9438;
+  --heat-4u: #1a6b28;
+}
+
+.panel-heatmap { grid-area: heatmap; }
+
+.heatmap-legend {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.legend-scale { display: inline-flex; align-items: center; gap: 8px; }
+.legend-label { font-size: 10.5px; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.5px; }
+.legend-swatches { display: inline-flex; gap: 2px; }
+.legend-swatches i { width: 16px; height: 10px; border-radius: 2px; display: block; }
+.legend-hint { font-size: 11px; color: var(--text-4); }
+
+.heatmap-wrap { position: relative; }
+
+.heatmap-canvas {
+  position: relative;
+  width: 100%;
+  height: 620px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* Each level of the treemap is absolutely positioned by the layout model.
+   The geometry is computed in JS (assets/heatmap-model.js) and written as
+   inline left/top/width/height, so the browser does no layout of its own. */
+.hm-sector {
+  position: absolute;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+.hm-sector-label {
+  position: absolute;
+  top: 3px; left: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.32px;
+  text-transform: uppercase;
+  color: #eef1f4;
+  /* The label sits over coloured tiles, so it needs its own contrast
+     rather than relying on the sector background behind it. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 7px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 10px);
+  z-index: 3;
+}
+.hm-industry {
+  position: absolute;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.022);
+  overflow: hidden;
+}
+.hm-industry-label {
+  position: absolute;
+  top: 2px; left: 4px;
+  font-size: 8.5px;
+  letter-spacing: 0.2px;
+  color: #cfd4da;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 8px);
+  z-index: 2;
+}
+
+.hm-tile {
+  position: absolute;
+  border-radius: 2px;
+  border: 0;
+  padding: 2px 3px;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: #fff;
+  transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease;
+  z-index: 1;
+  /* A button centres its content vertically by default, which puts the
+     label in the middle of a large tile. Anchor it to the top-left
+     instead, so the text always sits in the same corner. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.hm-tile:hover,
+.hm-tile:focus-visible {
+  z-index: 6;
+  filter: brightness(1.32);
+  box-shadow: 0 0 0 1.5px var(--text), 0 6px 16px rgba(0, 0, 0, 0.55);
+  outline: none;
+}
+.hm-tile.is-selected { z-index: 5; box-shadow: 0 0 0 2px var(--accent), 0 6px 16px rgba(0, 0, 0, 0.55); }
+
+.hm-sym { display: block; font-family: var(--mono); font-size: 10px; font-weight: 500; line-height: 1.15; }
+.hm-chg { display: block; font-family: var(--mono); font-size: 9px; line-height: 1.15; opacity: 0.92; }
+/* Bigger tiles get bigger type — a mega-cap is a large expanse of colour
+   and 10px text in the corner reads as an empty box. */
+.hm-tile.is-md .hm-sym { font-size: 11.5px; }
+.hm-tile.is-md .hm-chg { font-size: 10.5px; }
+.hm-tile.is-lg .hm-sym { font-size: 14px; font-weight: 600; }
+.hm-tile.is-lg .hm-chg { font-size: 12.5px; }
+/* Tiles too small for text still render (no holes in the treemap) but show
+   nothing — the model decides which ones via the showLabel flag. */
+.hm-tile:not(.has-label) { padding: 0; }
+
+.hm-group-label {
+  position: absolute;
+  top: 0; left: 0;
+  height: 20px;
+  line-height: 20px;
+  padding-left: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  pointer-events: none;
+  z-index: 7;
+}
+.hm-group-rule {
+  position: absolute;
+  border-left: 1px solid var(--border-strong);
+  z-index: 4;
+}
+
+.heatmap-loading {
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--panel);
+  color: var(--text-3);
+  font-size: 12.5px;
+  z-index: 20;
+}
+.heatmap-loading[hidden] { display: none; }
+
+.heatmap-tip {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  background: #050506;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 9px 11px;
+  min-width: 160px;
+  max-width: 260px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+.heatmap-tip[hidden] { display: none; }
+.hm-tip-sym { font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.hm-tip-name { font-size: 11px; color: var(--text-3); margin-top: 2px; line-height: 1.35; }
+.hm-tip-row {
+  display: flex; justify-content: space-between; gap: 14px;
+  font-family: var(--mono); font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 5px;
+}
+.hm-tip-row span:first-child { color: var(--text-4); font-family: var(--font); }
+.hm-tip-path { font-size: 10px; color: var(--text-4); margin-top: 6px; line-height: 1.4; }
+
+@media (max-width: 720px) {
+  .heatmap-canvas { height: 460px; }
+}
+
 /* ---------------------------------------------------------------- footer */
 
 .footer { border-top: 1px solid var(--border-subtle); background: var(--panel); margin-top: auto; }
@@ -489,7 +680,7 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 1180px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "chart" "indices" "portfolio" "watchlist" "movers" "aux";
+    grid-template-areas: "chart" "indices" "portfolio" "heatmap" "watchlist" "movers" "aux";
   }
   .panel-chart { order: -1; }
 }
