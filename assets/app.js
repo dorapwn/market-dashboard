@@ -79,6 +79,26 @@
     });
   }
 
+  function portfolioHoldings() {
+    var p = window.PORTFOLIO;
+    if (!p || !p.holdings) return [];
+    return p.holdings.map(function (h) {
+      var q = state.quotes[h.symbol] || {};
+      return {
+        symbol: h.symbol,
+        role: h.role,
+        sector: h.sector,
+        group: h.group,
+        weight: h.weight,
+        price: q.price,
+        changePct: q.changePct,
+        dayHigh: q.dayHigh,
+        dayLow: q.dayLow,
+        closes: q.closes
+      };
+    });
+  }
+
   function allSymbols() {
     var seen = {};
     var out = [];
@@ -250,26 +270,39 @@
     };
   }
 
-  /** Pull live quotes for the whole universe, respecting Yahoo's 20-symbol cap. */
+  /**
+   * Pull live quotes for the whole universe, respecting Yahoo's 20-symbol cap.
+   *
+   * Chunks are settled independently: one chunk timing out or being
+   * rate-limited must not discard the chunks that succeeded. Only when
+   * every chunk fails does this fall back to the committed snapshot.
+   */
   function fetchQuotes() {
     var symbols = allSymbols();
     var groups = chunk(symbols, SPARK_MAX_SYMBOLS);
 
     return Promise.all(groups.map(function (group) {
       var q = 'symbols=' + encodeURIComponent(group.join(',')) + '&range=1d&interval=5m';
-      return fetchYahoo(YAHOO_SPARK, q);
-    })).then(function (payloads) {
-      var quotes = {};
-      payloads.forEach(function (payload) {
-        var results = (payload.spark && payload.spark.result) || [];
-        results.forEach(function (entry) {
-          var resp = entry.response && entry.response[0];
-          if (!resp || !resp.meta) return;
-          quotes[entry.symbol] = quoteFromSpark(entry.symbol, resp.meta, resp.indicators && resp.indicators.quote && resp.indicators.quote[0]);
+      return fetchYahoo(YAHOO_SPARK, q)
+        .then(function (payload) {
+          var results = (payload.spark && payload.spark.result) || [];
+          return results.map(function (entry) {
+            var resp = entry.response && entry.response[0];
+            if (!resp || !resp.meta) return null;
+            return quoteFromSpark(entry.symbol, resp.meta, resp.indicators && resp.indicators.quote && resp.indicators.quote[0]);
+          }).filter(Boolean);
+        })
+        .catch(function () {
+          // This chunk failed; the others may still succeed.
+          return null;
         });
-      });
-      if (!Object.keys(quotes).length) throw new Error('no quotes returned');
-      return quotes;
+    })).then(function (chunkResults) {
+      var merged = window.PortfolioModel.mergeQuotes(chunkResults);
+      if (!merged.ok) throw new Error('no quotes returned');
+      if (merged.failedChunks) {
+        console.warn('[market-dashboard] ' + merged.failedChunks + ' quote chunk(s) failed; showing partial data.');
+      }
+      return merged.quotes;
     });
   }
 
@@ -326,37 +359,20 @@
 
   // ------------------------------------------------------------- portfolio
 
-  function portfolioHoldings() {
-    var p = window.PORTFOLIO;
-    if (!p || !p.holdings) return [];
-    return p.holdings.map(function (h) {
-      var q = state.quotes[h.symbol] || {};
-      return {
-        symbol: h.symbol,
-        role: h.role,
-        sector: h.sector,
-        group: h.group,
-        weight: h.weight,
-        price: q.price,
-        changePct: q.changePct,
-        dayHigh: q.dayHigh,
-        dayLow: q.dayLow,
-        closes: q.closes
-      };
-    });
-  }
-
-  function renderSectorStrip() {
+  function renderSectorStrip(holdings, summary) {
     var p = window.PORTFOLIO;
     if (!p) return;
-    var holdings = portfolioHoldings();
 
-    // Sum weights per sector bucket.
-    var bySector = {};
-    holdings.forEach(function (h) {
-      bySector[h.sector] = (bySector[h.sector] || 0) + h.weight;
-    });
+    // A single-sector portfolio has no concentration to show, and a one-cell
+    // strip would just be a coloured bar with nothing to compare against.
+    if (!summary.showSectorStrip) {
+      els.sectorStrip.innerHTML = '';
+      els.sectorStrip.hidden = true;
+      return;
+    }
+    els.sectorStrip.hidden = false;
 
+    var bySector = summary.sectorWeights;
     var order = p.sectorOrder || Object.keys(bySector);
     var total = holdings.reduce(function (a, h) { return a + h.weight; }, 0) || 1;
 
@@ -377,30 +393,23 @@
     if (!window.PORTFOLIO) return;
     var holdings = portfolioHoldings();
 
-    // Summary figures.
-    var tech = 0, nonTech = 0, weightedSum = 0, weightedBase = 0;
-    holdings.forEach(function (h) {
-      if (h.group === 'tech') tech += h.weight; else nonTech += h.weight;
-      if (h.changePct !== null && h.changePct !== undefined) {
-        weightedSum += h.changePct * h.weight;
-        weightedBase += h.weight;
-      }
-    });
+    // All portfolio figures come from the tested model, so the browser and
+    // the unit tests agree on exactly one implementation.
+    var summary = window.PortfolioModel.summarize(holdings, state.quotes);
 
-    els.techExposure.textContent = tech.toFixed(2) + '%';
-    els.nonTechExposure.textContent = nonTech.toFixed(2) + '%';
-    els.holdingCount.textContent = String(holdings.length);
+    els.techExposure.textContent = summary.techExposure.toFixed(2) + '%';
+    els.nonTechExposure.textContent = summary.nonTechExposure.toFixed(2) + '%';
+    els.holdingCount.textContent = String(summary.holdingCount);
 
-    if (weightedBase > 0) {
-      var wm = weightedSum / weightedBase;
-      els.weightedMove.textContent = fmtPct(wm);
-      els.weightedMove.className = 'alloc-figure-value ' + dirClass(wm);
+    if (summary.weightedMove !== null) {
+      els.weightedMove.textContent = fmtPct(summary.weightedMove);
+      els.weightedMove.className = 'alloc-figure-value ' + dirClass(summary.weightedMove);
     } else {
       els.weightedMove.textContent = '—';
       els.weightedMove.className = 'alloc-figure-value';
     }
 
-    renderSectorStrip();
+    renderSectorStrip(holdings, summary);
 
     // Table, sorted by this table's own sort key when it applies.
     var rows = holdings.slice();
@@ -776,6 +785,10 @@
     };
   }
 
+  function trimCloses(closes, n) {
+    return window.PortfolioModel.trimCloses(closes, n);
+  }
+
   function renderChart() {
     var data = state.chartData;
     if (!data || !data.timestamps || !data.timestamps.length) {
@@ -934,7 +947,23 @@
           state.lastUpdate = snap.updated ? new Date(snap.updated) : new Date();
           renderAll();
           renderChartHeader();
-          if (!silent) {
+
+          // Draw the chart from the snapshot's own close series instead of
+          // waiting on a live fetch that has already failed. The snapshot
+          // stores closes but not timestamps, so the axis is reconstructed
+          // backwards from the quote's market time.
+          var q = state.quotes[state.selected];
+          var snapData = q
+            ? window.PortfolioModel.snapshotChartData(q.closes, q.marketTime, 300)
+            : null;
+
+          if (snapData) {
+            snapData.series = [snapData.timestamps, snapData.closes];
+            state.chartData = snapData;
+            renderChart();
+            els.chartLoading.hidden = true;
+            els.chartLoading.classList.remove('chart-error');
+          } else if (!silent) {
             els.chartLoading.hidden = false;
             els.chartLoading.classList.add('chart-error');
             els.chartLoading.textContent = 'Live feed unavailable — showing last snapshot';
@@ -1075,6 +1104,31 @@
 
   // ----------------------------------------------------------------- init
 
+  /**
+   * Validate the published portfolio data before rendering it.
+   *
+   * A violated rule (a sensitive field, weights that do not sum to 100) must
+   * fail visibly rather than silently publishing the wrong thing.
+   */
+  function checkPortfolioData() {
+    var p = window.PORTFOLIO;
+    if (!p || !p.holdings) return;
+
+    var res = window.PortfolioModel.validate(p.holdings);
+    if (res.ok) return;
+
+    console.error('[market-dashboard] portfolio data is invalid:\n  - ' + res.problems.join('\n  - '));
+    els.portfolioBody.innerHTML =
+      '<tr><td colspan="7" class="table-error">Portfolio data failed validation — see the browser console.</td></tr>';
+    els.techExposure.textContent = '—';
+    els.nonTechExposure.textContent = '—';
+    els.holdingCount.textContent = '—';
+    els.weightedMove.textContent = '—';
+    els.weightedMove.className = 'alloc-figure-value';
+    els.sectorStrip.innerHTML = '';
+    els.sectorStrip.hidden = true;
+  }
+
   function init() {
     els = {
       statusDot: $('statusDot'),
@@ -1115,6 +1169,7 @@
     if (portTh) portTh.classList.add('is-sorted');
 
     bindEvents();
+    checkPortfolioData();
     refresh(true).then(function () {
       scheduleRefresh();
     });

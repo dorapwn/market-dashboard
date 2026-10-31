@@ -9,13 +9,14 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ## What it shows
 
-- **Portfolio allocation** — 13 holdings with allocation weight, role, live
-  price, day change and intraday sparkline; sector concentration strip;
-  weighted day move across the portfolio. Click any row to chart it.
+- **Portfolio allocation** — the actual holding with its allocation weight,
+  role, live price, day change and intraday sparkline; tech vs non-tech
+  exposure, holding count and weighted day move. Click any row to chart it.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
-- **Watchlist** — 14 large-cap equities with last price, change, day range bar,
-  volume and an intraday sparkline; sortable by any column
+- **Watchlist** — every tracked instrument (indices, large-cap equities,
+  crypto and FX) with last price, change, day range bar, volume and an
+  intraday sparkline; sortable by any column
 - **Movers** — top gainers, top losers and most-active names
 - **Crypto & FX** — Bitcoin, Ethereum, Solana, EUR/USD, GBP/USD, USD/JPY
 - **Interactive chart** — 1D / 5D / 1M / 6M / 1Y / 5Y ranges for any symbol,
@@ -27,24 +28,35 @@ The page refreshes itself every 60 seconds. The `Auto` button pauses that.
 
 ## Portfolio data and what is deliberately not published
 
-The portfolio section is derived from a **private** investment-plan repository.
-This is a public repo, so only a deliberately narrow slice is published:
+The portfolio section reflects the **actual** holdings — a single position —
+rather than a hypothetical plan.
 
 **Published** — ticker symbols, allocation weights (percentages), a short
 role label per holding, sector buckets, and live market data for each ticker.
 
-**Never published** — absolute dollar amounts, total portfolio value, cost
-basis, share counts, forward P/E and other valuation figures, broker, tax or
-account details, deployment schedules, personal decision rules and watchlist
-rationale.
+**Never published** — share counts, absolute dollar amounts, total portfolio
+value, cost basis, broker, tax or account details, and personal decision
+rules or watchlist rationale.
 
-Allocation weights are ratios, so the exact portfolio size is not inferable
-from anything in this repository. The private plan remains the source of
-truth; the values in `assets/portfolio.js` are a public-safe projection of it.
+Allocation weights are ratios, so the exact position size is not inferable
+from anything in this repository. The values in `assets/portfolio.js` are a
+public-safe projection of the real holdings.
 
 Do not add the excluded details to `assets/portfolio.js`, `data/snapshot.json`,
 the README or the footer. The exclusion list is restated in the header comment
 of `assets/portfolio.js` so it survives future edits.
+
+Two gates enforce this, and both are tested:
+
+- `assets/portfolio-model.js` defines the exact key set a published holding
+  may carry. `validate()` rejects a sensitive field by *name*, which is
+  stronger than matching values — a share count of `100` is caught even
+  though it looks like a harmless number.
+- The deploy workflow re-runs that validation on every push, and greps the
+  published files for currency amounts.
+
+`test/gate-check.sh` proves both directions of the gate: the clean tree
+passes, and a synthetic leak is blocked.
 
 ## Data sources
 
@@ -81,6 +93,11 @@ every 30 minutes by the `Refresh market snapshot` workflow. When every live
 feed fails, the page loads that snapshot and marks the header **"Stale
 snapshot"** in red, so stale numbers are never presented as live.
 
+The snapshot also stores each instrument's intraday close series, so the
+stale view still draws working sparklines and a chart instead of an empty
+panel. The snapshot stores closes but not timestamps, so the chart's time
+axis is reconstructed backwards from the quote's market time.
+
 ## Local development
 
 ```bash
@@ -89,12 +106,23 @@ python3 -m http.server 8765
 
 # open http://127.0.0.1:8765/
 
+# run the unit tests
+npm test
+
+# prove the tests catch the bugs they claim to (mutation check)
+npm run mutation-check
+
+# prove the CI leak gate blocks a synthetic leak
+./test/gate-check.sh
+
 # regenerate the offline snapshot
 node scripts/make-snapshot.js
 ```
 
 There is no build and no dependency install — `assets/vendor/uPlot.min.js` is
-committed so the page works offline and cannot break because of a CDN.
+committed so the page works offline and cannot break because of a CDN. The
+tests use Node's built-in test runner, so there is nothing to install
+either.
 
 ## Project layout
 
@@ -102,10 +130,15 @@ committed so the page works offline and cannot break because of a CDN.
 index.html                 page shell
 assets/style.css           design system (dark, Linear-inspired)
 assets/app.js              data layer + rendering + chart wiring
+assets/portfolio-model.js  pure portfolio logic (tested, shared with CI)
 assets/portfolio.js        public-safe portfolio allocation (weights only)
 assets/vendor/uPlot.min.js vendored chart library (MIT)
 scripts/make-snapshot.js   writes data/snapshot.json
-data/snapshot.json         last known good quotes
+data/snapshot.json         last known good quotes + close series
+test/
+  portfolio-model.test.js  unit tests (node --test)
+  mutation-check.sh        proves the tests detect injected bugs
+  gate-check.sh            proves the CI leak gate blocks real leaks
 .github/workflows/
   deploy.yml               Pages deployment + asset/JSON/JS checks
   refresh-snapshot.yml     scheduled snapshot refresh

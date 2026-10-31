@@ -16,6 +16,7 @@ const path = require('path');
 
 const SPARK = 'https://query1.finance.yahoo.com/v7/finance/spark';
 const CHUNK_SIZE = 20;
+const SPARK_POINTS = 78;   // one trading day of 5-minute bars
 
 const SYMBOLS = [
   '^GSPC', '^IXIC', '^DJI', '^RUT', '^VIX',
@@ -23,10 +24,7 @@ const SYMBOLS = [
   'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA', 'AVGO',
   'AMD', 'NFLX', 'CRM', 'PLTR', 'JPM', 'XOM',
   'BTC-USD', 'ETH-USD', 'SOL-USD',
-  'EURUSD=X', 'GBPUSD=X', 'JPY=X',
-  // Portfolio holdings (allocation weights stay in assets/portfolio.js;
-  // only quotes are cached here).
-  'VGT', 'SMH', 'VST', 'NEE', 'ARKX', 'SPCX', 'XLV', 'IHI'
+  'EURUSD=X', 'GBPUSD=X', 'JPY=X'
 ];
 
 function get(url) {
@@ -89,6 +87,15 @@ async function main() {
       const change = (price !== null && prev !== null) ? price - prev : null;
       const changePct = (change !== null && prev) ? (change / prev) * 100 : null;
 
+      // Keep the intraday close series so the page can still draw sparklines
+      // when it falls back to the snapshot. Trimmed to one trading day of
+      // 5-minute bars (78 points) to keep the file small.
+      const rawCloses = (resp.indicators && resp.indicators.quote &&
+        resp.indicators.quote[0] && resp.indicators.quote[0].close) || [];
+      const closes = rawCloses
+        .filter((c) => typeof c === 'number' && isFinite(c))
+        .slice(-SPARK_POINTS);
+
       quotes[entry.symbol] = {
         symbol: entry.symbol,
         name: m.shortName || m.longName || entry.symbol,
@@ -104,7 +111,8 @@ async function main() {
         currency: m.currency || null,
         timezone: m.exchangeTimezoneName || null,
         gmtoffset: num(m.gmtoffset),
-        marketTime: num(m.regularMarketTime)
+        marketTime: num(m.regularMarketTime),
+        closes: closes
       };
     }
     // be polite to Yahoo between chunks

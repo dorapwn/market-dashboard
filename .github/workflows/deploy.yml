@@ -36,6 +36,7 @@ jobs:
           test -f assets/style.css
           test -f assets/app.js
           test -f assets/portfolio.js
+          test -f assets/portfolio-model.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
@@ -43,7 +44,14 @@ jobs:
           grep -q 'assets/style.css' index.html || { echo 'ERROR: style.css not referenced'; exit 1; }
           grep -q 'uPlot.min.js' index.html || { echo 'ERROR: uPlot not referenced'; exit 1; }
           grep -q 'assets/portfolio.js' index.html || { echo 'ERROR: portfolio.js not referenced'; exit 1; }
+          grep -q 'assets/portfolio-model.js' index.html || { echo 'ERROR: portfolio-model.js not referenced'; exit 1; }
           echo "asset check OK"
+
+      - name: Run unit tests
+        run: |
+          set -euo pipefail
+          node --test 'test/*.test.js'
+          echo "unit tests OK"
 
       - name: Guard against publishing sensitive portfolio data
         run: |
@@ -58,9 +66,6 @@ jobs:
           if grep -rnE '\$[0-9]' assets/portfolio.js index.html; then
             echo "ERROR: dollar amount found in published portfolio data"; exit 1
           fi
-          if grep -rnE '[:=][[:space:]]*[0-9]{3,}' assets/portfolio.js; then
-            echo "ERROR: absolute-looking value found in portfolio data"; exit 1
-          fi
           if grep -rniE '["'"'"']?(shares|quantity|units|costbasis|cost_basis|amount)["'"'"']?[[:space:]]*[:=]' assets/portfolio.js; then
             echo "ERROR: position size field found in published portfolio data"; exit 1
           fi
@@ -68,6 +73,29 @@ jobs:
             echo "ERROR: valuation multiple found in published portfolio data"; exit 1
           fi
           echo "privacy check OK"
+
+      - name: Validate portfolio data against the publication rules
+        run: |
+          set -euo pipefail
+          # Structural check: the model knows the exact key set a published
+          # holding may carry, so a sensitive field fails here even when its
+          # value happens to look innocuous — and a legitimate allocation
+          # weight of 100 is not mistaken for a balance.
+          node -e "
+            const model = require('./assets/portfolio-model.js');
+            const fs = require('fs');
+            const src = fs.readFileSync('./assets/portfolio.js', 'utf8');
+            const sandbox = { window: {} };
+            new Function('window', src)(sandbox.window);
+            const holdings = (sandbox.window.PORTFOLIO || {}).holdings || [];
+            const res = model.validate(holdings);
+            if (!res.ok) {
+              console.error('ERROR: portfolio data violates the publication rules:');
+              res.problems.forEach(p => console.error('  - ' + p));
+              process.exit(1);
+            }
+            console.log('portfolio data OK: ' + holdings.length + ' holding(s)');
+          "
 
       - name: Validate JSON snapshot
         run: |
@@ -84,6 +112,8 @@ jobs:
         run: |
           set -euo pipefail
           node --check assets/app.js
+          node --check assets/portfolio-model.js
+          node --check assets/portfolio.js
           node --check scripts/make-snapshot.js
           echo "js syntax OK"
 
