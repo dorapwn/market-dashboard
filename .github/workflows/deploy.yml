@@ -108,7 +108,15 @@ jobs:
             if (!s.quotes || Object.keys(s.quotes).length === 0) {
               console.error('ERROR: snapshot has no quotes'); process.exit(1);
             }
-            console.log('snapshot OK: ' + Object.keys(s.quotes).length + ' quotes, updated ' + s.updated);
+            // The snapshot also carries the GICS classification for every
+            // S&P 500 constituent. The refresh script merges rather than
+            // replaces precisely so this survives — a snapshot that lost it
+            // would mean the heatmap and the watchlist lost their sectors.
+            if (!s.classification || !s.classification.bySymbol) {
+              console.error('ERROR: snapshot lost its classification'); process.exit(1);
+            }
+            console.log('snapshot OK: ' + Object.keys(s.quotes).length + ' quotes, ' +
+              Object.keys(s.classification.bySymbol).length + ' classified, updated ' + s.updated);
           "
 
       - name: Validate heatmap dataset

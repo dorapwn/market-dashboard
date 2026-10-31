@@ -125,16 +125,45 @@ async function main() {
     process.exit(1);
   }
 
-  const snapshot = {
-    updated: new Date().toISOString(),
-    count: count,
-    quotes: quotes
-  };
-
   const outPath = path.join(__dirname, '..', 'data', 'snapshot.json');
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
+
+  // Merge into the existing snapshot rather than replacing it.
+  //
+  // The snapshot carries more than the tracked universe: the GICS
+  // classification for every S&P 500 constituent (from
+  // scripts/build-classification.py) and the extra constituents that the
+  // heatmap needs. Replacing the file wholesale would silently drop all
+  // of that, so only the fields this script owns are overwritten.
+  let existing = {};
+  if (fs.existsSync(outPath)) {
+    try {
+      existing = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    } catch (err) {
+      console.error('existing snapshot is unreadable, starting fresh:', err.message);
+      existing = {};
+    }
+  }
+
+  // Keep every quote we already had that this run did not fetch, and
+  // refresh the ones it did.
+  const mergedQuotes = Object.assign({}, existing.quotes || {}, quotes);
+
+  const snapshot = {
+    updated: new Date().toISOString(),
+    count: Object.keys(mergedQuotes).length,
+    quotes: mergedQuotes
+  };
+
+  // The classification is expensive to rebuild (it is fetched from
+  // Wikipedia) and changes only when the index is rebalanced, so it is
+  // carried over untouched.
+  if (existing.classification) snapshot.classification = existing.classification;
+
   fs.writeFileSync(outPath, JSON.stringify(snapshot, null, 2) + '\n');
-  console.log('Wrote ' + outPath + ' with ' + count + ' quotes at ' + snapshot.updated);
+  console.log('Wrote ' + outPath + ' with ' + Object.keys(mergedQuotes).length +
+    ' quotes (' + count + ' refreshed) at ' + snapshot.updated +
+    (snapshot.classification ? ' + classification preserved' : ''));
 }
 
 main().catch((err) => {
