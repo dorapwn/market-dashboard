@@ -36,7 +36,25 @@ test('validate: rejects weights that do not sum to 100', () => {
 test('validate: rejects a holding carrying a sensitive field', () => {
   const res = model.validate([{ ...MSFT, shares: 100 }]);
   assert.equal(res.ok, false);
-  assert.ok(res.problems.some((p) => /shares/i.test(p)));
+  // The message must distinguish a known-private field from an unknown one,
+  // so the next editor knows whether they leaked something or typo'd a key.
+  assert.ok(
+    res.problems.some((p) => /forbidden field/i.test(p) && /shares/i.test(p)),
+    'expected a forbidden-field problem, got: ' + JSON.stringify(res.problems)
+  );
+});
+
+test('validate: names an unknown field as unexpected, not forbidden', () => {
+  const res = model.validate([{ ...MSFT, color: 'blue' }]);
+  assert.equal(res.ok, false);
+  assert.ok(
+    res.problems.some((p) => /unexpected field/i.test(p) && /color/i.test(p)),
+    'expected an unexpected-field problem, got: ' + JSON.stringify(res.problems)
+  );
+  assert.ok(
+    !res.problems.some((p) => /forbidden/i.test(p)),
+    'an unknown field must not be reported as private data: ' + JSON.stringify(res.problems)
+  );
 });
 
 test('validate: rejects a non-positive weight', () => {

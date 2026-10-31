@@ -7,6 +7,8 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ![Dashboard](docs/screenshot.png)
 
+![Portfolio allocation panel](docs/portfolio-panel.png)
+
 ## What it shows
 
 - **Portfolio allocation** — the actual holding with its allocation weight,
