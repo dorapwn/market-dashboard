@@ -37,6 +37,7 @@ jobs:
           test -f assets/app.js
           test -f assets/portfolio.js
           test -f assets/portfolio-model.js
+          test -f assets/market-tables-model.js
           test -f assets/heatmap-model.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
@@ -46,6 +47,7 @@ jobs:
           grep -q 'assets/style.css' index.html || { echo 'ERROR: style.css not referenced'; exit 1; }
           grep -q 'uPlot.min.js' index.html || { echo 'ERROR: uPlot not referenced'; exit 1; }
           grep -q 'assets/portfolio.js' index.html || { echo 'ERROR: portfolio.js not referenced'; exit 1; }
+          grep -q 'assets/market-tables-model.js' index.html || { echo 'ERROR: market-tables-model.js not referenced'; exit 1; }
           grep -q 'assets/portfolio-model.js' index.html || { echo 'ERROR: portfolio-model.js not referenced'; exit 1; }
           grep -q 'assets/heatmap-model.js' index.html || { echo 'ERROR: heatmap-model.js not referenced'; exit 1; }
           echo "asset check OK"

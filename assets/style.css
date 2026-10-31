@@ -179,7 +179,7 @@ button { font-family: inherit; cursor: pointer; }
   grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
   grid-template-areas:
     "indices   chart"
-    "movers    chart"
+    "indices   movers"
     "portfolio portfolio"
     "heatmap   heatmap"
     "watchlist watchlist"
@@ -212,36 +212,23 @@ button { font-family: inherit; cursor: pointer; }
 .panel-head h2 { font-size: 14px; letter-spacing: -0.18px; }
 .panel-note { font-size: 11px; color: var(--text-4); font-variant-numeric: tabular-nums; }
 
-/* ----------------------------------------------------------- index cards */
+/* ----------------------------------------------------------- index table */
 
-.index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.indices-table { font-size: 12.5px; }
+.indices-table td { padding: 7px 10px; }
+.indices-table .sym-cell { font-family: var(--font); font-size: 12.5px; font-weight: 500; color: var(--text-2); }
 
-.index-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
-  padding: 11px 12px;
-  text-align: left;
-  color: inherit;
-  width: 100%;
-  transition: background 140ms ease, border-color 140ms ease;
-}
-.index-card:hover { background: var(--surface-hover); border-color: var(--border); }
-.index-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.index-card.is-selected { border-color: var(--accent); background: rgba(113, 112, 255, 0.08); }
-
-.index-sym { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.3px; }
-.index-name {
-  font-size: 11px; color: var(--text-4);
+/* The symbol sits under the index name — Yahoo's own names are noise
+   ("Yahoo S&P 500"), so the curated name leads and the ticker follows. */
+.cell-sub {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-4);
+  letter-spacing: 0.2px;
   margin-top: 1px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.index-px {
-  font-family: var(--mono); font-size: 17px; font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  margin-top: 7px; letter-spacing: -0.4px;
-}
-.index-chg { font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums; margin-top: 2px; }
 
 .up   { color: var(--up); }
 .down { color: var(--down); }
@@ -427,42 +414,17 @@ button { font-family: inherit; cursor: pointer; }
 .mover-up   { color: var(--up); }
 .mover-down { color: var(--down); }
 .mover-vol  { color: var(--text-3); }
-.mover-list li {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 6px 8px;
-  border-radius: var(--radius-sm);
-  font-size: 12.5px;
-  cursor: pointer;
-}
-.mover-list li:hover { background: rgba(255, 255, 255, 0.04); }
-.mover-sym { font-family: var(--mono); font-size: 12px; }
-.mover-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 11.5px; }
 
-/* The symbol can be long (^STOXX50E); let it wrap instead of pushing the
+.movers-table { font-size: 12.5px; }
+.movers-table th { padding: 0 8px 6px; }
+.movers-table td { padding: 6px 8px; }
+/* The symbol can be long (^STOXX50E) — let it wrap rather than push the
    value out of the column. */
-.mover-list li .mover-sym {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.mover-list li .mover-val { flex: none; }
+.movers-table .sym-cell { overflow-wrap: anywhere; }
 
 /* ------------------------------------------------------------ aux (crypto) */
 
-.aux-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 9px; }
-.aux-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
-  padding: 11px 12px;
-  text-align: left; color: inherit; width: 100%;
-  transition: background 140ms ease, border-color 140ms ease;
-}
-.aux-card:hover { background: var(--surface-hover); border-color: var(--border); }
-.aux-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.aux-sym { font-family: var(--mono); font-size: 11.5px; color: var(--text-2); }
-.aux-name { font-size: 10.5px; color: vartext-4; color: var(--text-4); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.aux-px { font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; margin-top: 6px; }
-.aux-chg { font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.aux-table { font-size: 13px; }
 
 /* ---------------------------------------------------------------- heatmap */
 
@@ -680,7 +642,7 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 1180px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "chart" "indices" "portfolio" "heatmap" "watchlist" "movers" "aux";
+    grid-template-areas: "chart" "indices" "movers" "portfolio" "heatmap" "watchlist" "aux";
   }
   .panel-chart { order: -1; }
 }
@@ -695,7 +657,6 @@ button { font-family: inherit; cursor: pointer; }
   .topbar-right { justify-content: space-between; }
   .layout { padding: 16px 14px 30px; }
   .footer-main, .footer-bottom { padding-left: 14px; padding-right: 14px; }
-  .index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .name-cell { display: none; }
   .col-range { display: none; }
   .chart-price { font-size: 25px; }

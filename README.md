@@ -24,6 +24,8 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
   of neutral. Hover a tile for the detail, click it to chart the stock.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
+- **Movers** — top gainers, top losers and most active, each its own table
+- **Crypto & FX** — Bitcoin, Ethereum, Solana and the major currency pairs
 - **Watchlist** — every tracked instrument (indices, large-cap equities,
   crypto and FX) with last price, change, day range bar, volume and an
   intraday sparkline; sortable by any column
@@ -178,11 +180,17 @@ assets/style.css           design system (dark, Linear-inspired)
 assets/app.js              data layer + rendering + chart wiring
 assets/portfolio-model.js  pure portfolio logic (tested, shared with CI)
 assets/portfolio.js        public-safe portfolio allocation (weights only)
+assets/market-tables-model.js  pure grouping/sorting for the instrument tables
+assets/heatmap-model.js    pure treemap geometry (tested, shared with CI)
 assets/vendor/uPlot.min.js vendored chart library (MIT)
 scripts/make-snapshot.js   writes data/snapshot.json
+scripts/build-heatmap.py   writes data/heatmap.json
 data/snapshot.json         last known good quotes + close series
+data/heatmap.json          S&P 500 constituents with GICS classification
 test/
   portfolio-model.test.js  unit tests (node --test)
+  market-tables-model.test.js
+  heatmap-model.test.js
   mutation-check.sh        proves the tests detect injected bugs
   gate-check.sh            proves the CI leak gate blocks real leaks
 .github/workflows/
@@ -209,6 +217,15 @@ Things that are easy to get wrong and are worth knowing if you edit this:
 - **uPlot draws on a deferred tick.** Reading the canvas immediately after
   construction shows zero pixels; measure after a tick, or call
   `u.redraw(true, true)`.
+- **Every table is `<table class="quote-table" data-table="NAME">`.** The
+  table name drives its own sort state, so a new table needs only markup —
+  no code change to become sortable, and clicking one table's header never
+  re-sorts another. The grouping and ordering rules live in
+  `assets/market-tables-model.js` so they can be tested without a browser.
+- **Three tables in a 360px column do not fit.** The Movers panel spans
+  the full page width for exactly this reason; three side-by-side tables
+  truncated their own headers ("CHG %" rendered as "C") and their values
+  ("+12.91%" as "+12").
 
 ## Licence
 

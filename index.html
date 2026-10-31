@@ -62,7 +62,18 @@
       <h2 id="indicesHeading">Global Indices</h2>
       <span class="panel-note" id="indicesNote">—</span>
     </div>
-    <div class="index-grid" id="indexGrid"></div>
+    <div class="table-scroll">
+      <table class="quote-table indices-table" data-table="indices">
+        <thead>
+          <tr>
+            <th class="col-sym" data-sort="name" scope="col">Index</th>
+            <th class="col-num" data-sort="price" scope="col">Last</th>
+            <th class="col-num" data-sort="changePct" scope="col">Chg %</th>
+          </tr>
+        </thead>
+        <tbody id="indexBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="panel panel-chart" aria-labelledby="chartHeading">
@@ -119,7 +130,7 @@
     <div class="sector-strip" id="sectorStrip" aria-label="Sector allocation" hidden></div>
 
     <div class="table-scroll">
-      <table class="quote-table portfolio-table">
+      <table class="quote-table portfolio-table" data-table="portfolio">
         <thead>
           <tr>
             <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
@@ -173,7 +184,7 @@
       <span class="panel-note">Click any row to chart it · click a header to sort</span>
     </div>
     <div class="table-scroll">
-      <table class="quote-table">
+      <table class="quote-table watchlist-table" data-table="watchlist">
         <thead>
           <tr>
             <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
@@ -199,15 +210,45 @@
     <div class="movers-grid">
       <div class="mover-col">
         <h3 class="mover-head mover-up">Top gainers</h3>
-        <ul class="mover-list" id="gainersList"></ul>
+        <div class="table-scroll">
+          <table class="quote-table movers-table" data-table="gainers">
+            <thead>
+              <tr>
+                <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+                <th class="col-num" data-sort="changePct" scope="col">Chg %</th>
+              </tr>
+            </thead>
+            <tbody id="gainersBody"></tbody>
+          </table>
+        </div>
       </div>
       <div class="mover-col">
         <h3 class="mover-head mover-down">Top losers</h3>
-        <ul class="mover-list" id="losersList"></ul>
+        <div class="table-scroll">
+          <table class="quote-table movers-table" data-table="losers">
+            <thead>
+              <tr>
+                <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+                <th class="col-num" data-sort="changePct" scope="col">Chg %</th>
+              </tr>
+            </thead>
+            <tbody id="losersBody"></tbody>
+          </table>
+        </div>
       </div>
       <div class="mover-col">
         <h3 class="mover-head mover-vol">Most active</h3>
-        <ul class="mover-list" id="activeList"></ul>
+        <div class="table-scroll">
+          <table class="quote-table movers-table" data-table="active">
+            <thead>
+              <tr>
+                <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+                <th class="col-num" data-sort="volume" scope="col">Volume</th>
+              </tr>
+            </thead>
+            <tbody id="activeBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -217,7 +258,19 @@
       <h2 id="auxHeading">Crypto &amp; Foreign Exchange</h2>
       <span class="panel-note" id="auxNote">—</span>
     </div>
-    <div class="aux-grid" id="auxGrid"></div>
+    <div class="table-scroll">
+      <table class="quote-table aux-table" data-table="aux">
+        <thead>
+          <tr>
+            <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
+            <th class="col-name" data-sort="name" scope="col">Name</th>
+            <th class="col-num" data-sort="price" scope="col">Last</th>
+            <th class="col-num" data-sort="changePct" scope="col">Chg %</th>
+          </tr>
+        </thead>
+        <tbody id="auxBody"></tbody>
+      </table>
+    </div>
   </section>
 
 </main>
@@ -262,6 +315,7 @@
 <script src="assets/vendor/uPlot.min.js"></script>
 <script src="assets/portfolio-model.js"></script>
 <script src="assets/portfolio.js"></script>
+<script src="assets/market-tables-model.js"></script>
 <script src="assets/heatmap-model.js"></script>
 <script src="assets/app.js"></script>
 </body>

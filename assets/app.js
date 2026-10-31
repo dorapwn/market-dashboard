@@ -652,22 +652,61 @@
 
   // ------------------------------------------------------------- rendering
 
-  function renderIndices() {
-    var grid = els.indexGrid;
-    var idx = UNIVERSE.filter(function (u) { return u.group === 'index'; });
-    var html = idx.map(function (u) {
-      var q = state.quotes[u.symbol];
-      if (!q) return '';
-      var cls = dirClass(q.changePct);
-      return '<button class="index-card' + (state.selected === u.symbol ? ' is-selected' : '') +
-        '" type="button" data-symbol="' + escapeHtml(u.symbol) + '">' +
-        '<div class="index-sym">' + escapeHtml(u.symbol) + '</div>' +
-        '<div class="index-name">' + escapeHtml(u.name) + '</div>' +
-        '<div class="index-px">' + fmtPrice(q.price) + '</div>' +
-        '<div class="index-chg ' + cls + '">' + fmtSigned(q.change, 2) + ' (' + fmtPct(q.changePct) + ')</div>' +
-        '</button>';
+  /**
+   * The sort state of one table.
+   *
+   * Each table sorts independently — clicking an indices header must not
+   * re-sort the watchlist — so the state is keyed by table name.
+   */
+  function tableSortKey(which) {
+    var st = (state.tableSort && state.tableSort[which]) || null;
+    return st ? st.key : null;
+  }
+
+  function tableSortAsc(which) {
+    var st = (state.tableSort && state.tableSort[which]) || null;
+    return st ? st.asc : false;
+  }
+
+  /**
+   * Render one instrument table.
+   *
+   * Every table on the page (indices, movers, crypto/FX, watchlist,
+   * portfolio) is the same shape, so they share one renderer and one
+   * sorting mechanism.
+   */
+  function renderTable(body, rows, columns) {
+    var html = rows.map(function (row) {
+      var cls = dirClass(row.changePct);
+      var cells = columns.map(function (col) {
+        var value = col.render(row);
+        var cellCls = col.cls ? ' ' + col.cls : '';
+        if (col.num) cellCls += ' col-num';
+        if (col.num) cellCls += ' num';
+        return '<td class="' + cellCls.trim() + '">' + value + '</td>';
+      }).join('');
+
+      return '<tr data-symbol="' + escapeHtml(row.symbol) + '"' +
+        (state.selected === row.symbol ? ' class="is-selected"' : '') + '>' +
+        cells + '</tr>';
     }).join('');
-    grid.innerHTML = html;
+    body.innerHTML = html;
+  }
+
+  function renderIndices() {
+    var rows = window.MarketTablesModel.buildRows(state.quotes, UNIVERSE, 'index');
+    rows = window.MarketTablesModel.sortRows(rows, tableSortKey('indices'), tableSortAsc('indices'));
+
+    renderTable(els.indexBody, rows, [
+      {
+        cls: 'sym-cell',
+        render: function (r) {
+          return escapeHtml(r.name) + '<span class="cell-sub">' + escapeHtml(r.symbol) + '</span>';
+        }
+      },
+      { num: true, render: function (r) { return fmtPrice(r.price); } },
+      { num: true, render: function (r) { return '<span class="' + dirClass(r.changePct) + '">' + fmtPct(r.changePct) + '</span>'; } }
+    ]);
   }
 
   function renderTicker() {
@@ -775,62 +814,35 @@
   }
 
   function renderMovers() {
-    var list = Object.keys(state.quotes).map(function (s) {
-      var q = state.quotes[s];
-      // Group matters here: FX pairs are excluded from the movers lists.
-      // Assign it locally rather than relying on renderWatchlist() having
-      // run first.
-      var meta = UNIVERSE.filter(function (u) { return u.symbol === s; })[0];
-      q.group = meta ? meta.group : 'equity';
-      return q;
-    }).filter(function (q) { return q.group !== 'fx'; });
+    var m = window.MarketTablesModel.buildMovers(state.quotes, UNIVERSE, 5);
 
-    var byPct = list.slice().sort(function (a, b) {
-      return (b.changePct || 0) - (a.changePct || 0);
-    });
-    var gainers = byPct.slice(0, 5);
-    var losers = byPct.slice(-5).reverse();
+    var columns = [
+      { cls: 'sym-cell', render: function (r) { return escapeHtml(r.symbol); } }
+    ];
 
-    var byVol = list.slice().sort(function (a, b) {
-      return (b.volume || 0) - (a.volume || 0);
-    }).slice(0, 5);
+    renderTable(els.gainersBody, m.gainers, columns.concat([
+      { num: true, render: function (r) { return '<span class="' + dirClass(r.changePct) + '">' + fmtPct(r.changePct) + '</span>'; } }
+    ]));
 
-    function li(q, valueText, valueClass) {
-      return '<li data-symbol="' + escapeHtml(q.symbol) + '">' +
-        '<span class="mover-sym">' + escapeHtml(q.symbol) + '</span>' +
-        '<span class="mover-val ' + (valueClass || '') + '">' + valueText + '</span></li>';
-    }
+    renderTable(els.losersBody, m.losers, columns.concat([
+      { num: true, render: function (r) { return '<span class="' + dirClass(r.changePct) + '">' + fmtPct(r.changePct) + '</span>'; } }
+    ]));
 
-    els.gainersList.innerHTML = gainers.map(function (q) {
-      return li(q, fmtPct(q.changePct), dirClass(q.changePct));
-    }).join('');
-
-    els.losersList.innerHTML = losers.map(function (q) {
-      return li(q, fmtPct(q.changePct), dirClass(q.changePct));
-    }).join('');
-
-    els.activeList.innerHTML = byVol.map(function (q) {
-      return li(q, fmtCompact(q.volume), '');
-    }).join('');
+    renderTable(els.activeBody, m.active, columns.concat([
+      { num: true, render: function (r) { return fmtCompact(r.volume); } }
+    ]));
   }
 
   function renderAux() {
-    var crypto = UNIVERSE.filter(function (u) { return u.group === 'crypto'; });
-    var fx = UNIVERSE.filter(function (u) { return u.group === 'fx'; });
-    var all = crypto.concat(fx);
+    var rows = window.MarketTablesModel.buildRows(state.quotes, UNIVERSE, ['crypto', 'fx']);
+    rows = window.MarketTablesModel.sortRows(rows, tableSortKey('aux'), tableSortAsc('aux'));
 
-    els.auxGrid.innerHTML = all.map(function (u) {
-      var q = state.quotes[u.symbol];
-      if (!q) return '';
-      var cls = dirClass(q.changePct);
-      var chg = q.changePct === null || q.changePct === undefined ? '—' : fmtPct(q.changePct);
-      return '<button class="aux-card" type="button" data-symbol="' + escapeHtml(u.symbol) + '">' +
-        '<div class="aux-sym">' + escapeHtml(u.symbol) + '</div>' +
-        '<div class="aux-name">' + escapeHtml(u.name) + '</div>' +
-        '<div class="aux-px">' + fmtPrice(q.price) + '</div>' +
-        '<div class="aux-chg ' + cls + '">' + chg + '</div>' +
-        '</button>';
-    }).join('');
+    renderTable(els.auxBody, rows, [
+      { cls: 'sym-cell', render: function (r) { return escapeHtml(r.symbol); } },
+      { cls: 'name-cell', render: function (r) { return escapeHtml(r.name); } },
+      { num: true, render: function (r) { return fmtPrice(r.price); } },
+      { num: true, render: function (r) { return '<span class="' + dirClass(r.changePct) + '">' + fmtPct(r.changePct) + '</span>'; } }
+    ]);
   }
 
   /**
@@ -1193,15 +1205,16 @@
   }
 
   function bindEvents() {
-    els.indexGrid.addEventListener('click', function (e) {
-      var card = e.target.closest('.index-card');
-      if (card) selectSymbol(card.getAttribute('data-symbol'));
-    });
-
-    els.auxGrid.addEventListener('click', function (e) {
-      var card = e.target.closest('.aux-card');
-      if (card) selectSymbol(card.getAttribute('data-symbol'));
-    });
+    // Every instrument table shares one delegated click handler: a row
+    // carries data-symbol, so clicking it selects that instrument.
+    [els.indexBody, els.auxBody, els.gainersBody, els.losersBody, els.activeBody]
+      .forEach(function (body) {
+        if (!body) return;
+        body.addEventListener('click', function (e) {
+          var row = e.target.closest('tr[data-symbol]');
+          if (row) selectSymbol(row.getAttribute('data-symbol'));
+        });
+      });
 
     els.watchlistBody.addEventListener('click', function (e) {
       var row = e.target.closest('tr[data-symbol]');
@@ -1214,13 +1227,6 @@
         if (row) selectSymbol(row.getAttribute('data-symbol'));
       });
     }
-
-    [els.gainersList, els.losersList, els.activeList].forEach(function (list) {
-      list.addEventListener('click', function (e) {
-        var item = e.target.closest('li[data-symbol]');
-        if (item) selectSymbol(item.getAttribute('data-symbol'));
-      });
-    });
 
     els.rangeTabs.addEventListener('click', function (e) {
       var tab = e.target.closest('.range-tab');
@@ -1241,12 +1247,17 @@
     // portfolio header does not re-sort the watchlist.
     var sortState = {
       watchlist: { key: 'changePct', asc: false },
-      portfolio: { key: 'changePct', asc: false }
+      portfolio: { key: 'changePct', asc: false },
+      indices: { key: 'name', asc: true },
+      aux: { key: 'symbol', asc: true }
     };
     state.tableSort = sortState;
 
-    document.querySelectorAll('.quote-table').forEach(function (table) {
-      var which = table.classList.contains('portfolio-table') ? 'portfolio' : 'watchlist';
+    // The table name comes from data-table, so a new table needs only
+    // markup — no code change to become sortable.
+    document.querySelectorAll('.quote-table[data-table]').forEach(function (table) {
+      var which = table.getAttribute('data-table');
+      if (!sortState[which]) sortState[which] = { key: null, asc: false };
       var heads = table.querySelectorAll('th[data-sort]');
       heads.forEach(function (th) {
         th.addEventListener('click', function () {
@@ -1263,8 +1274,7 @@
           });
           th.classList.add('is-sorted');
           if (st.asc) th.classList.add('is-asc');
-          renderWatchlist();
-          renderPortfolio();
+          renderAll();
         });
       });
     });
@@ -1401,10 +1411,11 @@
       holdingCount: $('holdingCount'),
       weightedMove: $('weightedMove'),
       watchlistBody: $('watchlistBody'),
-      gainersList: $('gainersList'),
-      losersList: $('losersList'),
-      activeList: $('activeList'),
-      auxGrid: $('auxGrid'),
+      indexBody: $('indexBody'),
+      gainersBody: $('gainersBody'),
+      losersBody: $('losersBody'),
+      activeBody: $('activeBody'),
+      auxBody: $('auxBody'),
       auxNote: $('auxNote'),
       heatmapCanvas: $('heatmapCanvas'),
       heatmapLoading: $('heatmapLoading'),
@@ -1412,13 +1423,20 @@
       heatmapTip: $('heatmapTip')
     };
 
-    // Default sort markers on the initial sort column of each table.
-    var watchTh = document.querySelector('.quote-table:not(.portfolio-table) th[data-sort="changePct"]');
-    if (watchTh) watchTh.classList.add('is-sorted');
-    var portTh = document.querySelector('.portfolio-table th[data-sort="changePct"]');
-    if (portTh) portTh.classList.add('is-sorted');
-
     bindEvents();
+
+    // Default sort markers on the initial sort column of each table.
+    // The column is driven by the same state the renderer reads, so the
+    // marker and the row order can never disagree.
+    Object.keys(state.tableSort || {}).forEach(function (which) {
+      var st = state.tableSort[which];
+      if (!st || !st.key) return;
+      var th = document.querySelector('.quote-table[data-table="' + which + '"] th[data-sort="' + st.key + '"]');
+      if (!th) return;
+      th.classList.add('is-sorted');
+      if (st.asc) th.classList.add('is-asc');
+    });
+
     checkPortfolioData();
     initHeatmap();
     refresh(true).then(function () {
