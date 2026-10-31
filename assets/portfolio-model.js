@@ -20,6 +20,10 @@
   /**
    * The only fields a published holding may carry. Anything else is a bug
    * that would leak private portfolio data into a public repository.
+   *
+   * `weight` is optional: when the true allocation is not known, the
+   * holding is published without one rather than with a fabricated
+   * percentage. A share count is not an allocation weight.
    */
   var ALLOWED_KEYS = ['symbol', 'role', 'sector', 'group', 'weight'];
 
@@ -63,6 +67,7 @@
 
     var seen = {};
     var weightSum = 0;
+    var withWeight = 0;
 
     holdings.forEach(function (h, i) {
       var where = 'holding ' + i + (h && h.symbol ? ' (' + h.symbol + ')' : '');
@@ -93,6 +98,16 @@
         seen[h.symbol] = true;
       }
 
+      // A weight is optional, but it is all-or-nothing: mixing weighted and
+      // unweighted holdings would make the percentages meaningless.
+      var hasWeight = Object.prototype.hasOwnProperty.call(h, 'weight') &&
+        h.weight !== undefined && h.weight !== null;
+
+      if (!hasWeight) {
+        return;
+      }
+
+      withWeight++;
       if (typeof h.weight !== 'number' || !isFinite(h.weight)) {
         problems.push(where + ': weight must be a finite number');
       } else {
@@ -106,7 +121,13 @@
       }
     });
 
-    if (Math.abs(weightSum - 100) > WEIGHT_SUM_TOLERANCE) {
+    if (withWeight > 0 && withWeight < holdings.length) {
+      problems.push(
+        'every holding must carry a weight or none may (the allocation is unknown)'
+      );
+    }
+
+    if (withWeight > 0 && Math.abs(weightSum - 100) > WEIGHT_SUM_TOLERANCE) {
       problems.push(
         'allocation weights must sum to 100 (got ' +
         weightSum.toFixed(2) + ')'
@@ -118,6 +139,11 @@
 
   /**
    * Aggregate holdings into the figures the summary strip shows.
+   *
+   * When no holding carries a weight, the allocation is unknown: the
+   * exposure figures are reported as null and the caller shows "—" rather
+   * than a fabricated percentage. A share count is not an allocation
+   * weight and must never be used as one.
    *
    * @param {Array} holdings published holdings
    * @param {Object} quotes symbol -> { changePct }
@@ -131,33 +157,46 @@
     var weightedSum = 0;
     var weightedBase = 0;
     var sectorWeights = {};
+    var hasWeights = false;
 
     list.forEach(function (h) {
-      if (h.group === 'tech') tech += h.weight;
-      else nonTech += h.weight;
+      if (typeof h.weight === 'number' && isFinite(h.weight)) {
+        hasWeights = true;
+        if (h.group === 'tech') tech += h.weight;
+        else nonTech += h.weight;
 
-      sectorWeights[h.sector] = (sectorWeights[h.sector] || 0) + h.weight;
+        sectorWeights[h.sector] = (sectorWeights[h.sector] || 0) + h.weight;
+      }
 
       var quote = q[h.symbol];
       var pct = quote ? quote.changePct : null;
       if (pct !== null && pct !== undefined && !isNaN(pct)) {
-        weightedSum += pct * h.weight;
-        weightedBase += h.weight;
+        // Unweighted holdings contribute equally; weighted ones by weight.
+        var w = hasWeightFor(h) ? h.weight : 1;
+        weightedSum += pct * w;
+        weightedBase += w;
       }
     });
 
     var sectorCount = Object.keys(sectorWeights).length;
 
     return {
-      techExposure: round2(tech),
-      nonTechExposure: round2(nonTech),
+      // null means "not published", which the UI renders as an em dash.
+      techExposure: hasWeights ? round2(tech) : null,
+      nonTechExposure: hasWeights ? round2(nonTech) : null,
       holdingCount: list.length,
       // Weighted by allocation: a 10% position moving 5% is not a 5% portfolio move.
       weightedMove: weightedBase > 0 ? round2(weightedSum / weightedBase) : null,
       sectorWeights: sectorWeights,
       // A one-sector portfolio has no concentration to show.
-      showSectorStrip: sectorCount > 1
+      showSectorStrip: hasWeights && sectorCount > 1,
+      // The UI needs to know whether to show percentages at all.
+      hasWeights: hasWeights
     };
+  }
+
+  function hasWeightFor(h) {
+    return typeof h.weight === 'number' && isFinite(h.weight);
   }
 
   /**

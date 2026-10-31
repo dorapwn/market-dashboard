@@ -70,8 +70,8 @@
 
   /**
    * Portfolio holdings are merged into the fetch universe so their live
-   * quotes come from the same request. Only allocation weights are public —
-   * no position sizes or cost basis.
+   * quotes come from the same request. Only the holding itself is public —
+   * no position sizes, share counts or cost basis.
    */
   function portfolioSymbols() {
     return (window.PORTFOLIO && window.PORTFOLIO.holdings || []).map(function (h) {
@@ -374,7 +374,10 @@
 
     var bySector = summary.sectorWeights;
     var order = p.sectorOrder || Object.keys(bySector);
-    var total = holdings.reduce(function (a, h) { return a + h.weight; }, 0) || 1;
+    // The strip only renders when the holdings carry weights, so the
+    // denominator is the published total.
+    var total = summary.techExposure + summary.nonTechExposure;
+    if (!total || !isFinite(total)) total = 1;
 
     var segs = order.filter(function (s) { return bySector[s]; }).map(function (s) {
       var pct = (bySector[s] / total) * 100;
@@ -397,8 +400,12 @@
     // the unit tests agree on exactly one implementation.
     var summary = window.PortfolioModel.summarize(holdings, state.quotes);
 
-    els.techExposure.textContent = summary.techExposure.toFixed(2) + '%';
-    els.nonTechExposure.textContent = summary.nonTechExposure.toFixed(2) + '%';
+    // The allocation percentage is only published when it is known. When it
+    // is not, the figures read "—" rather than showing a fabricated share.
+    els.techExposure.textContent = summary.techExposure === null
+      ? '—' : summary.techExposure.toFixed(2) + '%';
+    els.nonTechExposure.textContent = summary.nonTechExposure === null
+      ? '—' : summary.nonTechExposure.toFixed(2) + '%';
     els.holdingCount.textContent = String(summary.holdingCount);
 
     if (summary.weightedMove !== null) {
@@ -413,9 +420,9 @@
 
     // Table, sorted by this table's own sort key when it applies.
     var rows = holdings.slice();
-    var st = (state.tableSort && state.tableSort.portfolio) || { key: 'weight', asc: false };
+    var st = (state.tableSort && state.tableSort.portfolio) || { key: 'changePct', asc: false };
     var key = st.key;
-    if (key === 'weight' || key === 'symbol' || key === 'role' || key === 'price' || key === 'changePct') {
+    if (key === 'symbol' || key === 'role' || key === 'price' || key === 'changePct') {
       var dir = st.asc ? 1 : -1;
       if (key === 'symbol' || key === 'role') {
         rows.sort(function (a, b) { return String(a[key]).localeCompare(String(b[key])) * dir; });
@@ -447,7 +454,6 @@
         (state.selected === h.symbol ? ' class="is-selected"' : '') + '>' +
         '<td class="sym-cell">' + escapeHtml(h.symbol) + '</td>' +
         '<td class="name-cell">' + escapeHtml(h.role) + '</td>' +
-        '<td class="col-num num alloc-weight">' + h.weight.toFixed(2) + '%</td>' +
         '<td class="col-num num">' + fmtPrice(h.price) + '</td>' +
         '<td class="col-num num ' + cls + '">' + fmtPct(h.changePct) + '</td>' +
         '<td class="col-range">' + rangeHtml + '</td>' +
@@ -1041,7 +1047,7 @@
     // portfolio header does not re-sort the watchlist.
     var sortState = {
       watchlist: { key: 'changePct', asc: false },
-      portfolio: { key: 'weight', asc: false }
+      portfolio: { key: 'changePct', asc: false }
     };
     state.tableSort = sortState;
 
@@ -1119,7 +1125,7 @@
 
     console.error('[market-dashboard] portfolio data is invalid:\n  - ' + res.problems.join('\n  - '));
     els.portfolioBody.innerHTML =
-      '<tr><td colspan="7" class="table-error">Portfolio data failed validation — see the browser console.</td></tr>';
+      '<tr><td colspan="6" class="table-error">Portfolio data failed validation — see the browser console.</td></tr>';
     els.techExposure.textContent = '—';
     els.nonTechExposure.textContent = '—';
     els.holdingCount.textContent = '—';
@@ -1165,7 +1171,7 @@
     // Default sort markers on the initial sort column of each table.
     var watchTh = document.querySelector('.quote-table:not(.portfolio-table) th[data-sort="changePct"]');
     if (watchTh) watchTh.classList.add('is-sorted');
-    var portTh = document.querySelector('.portfolio-table th[data-sort="weight"]');
+    var portTh = document.querySelector('.portfolio-table th[data-sort="changePct"]');
     if (portTh) portTh.classList.add('is-sorted');
 
     bindEvents();

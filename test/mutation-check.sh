@@ -56,7 +56,7 @@ mutate "validate stops rejecting sensitive fields" \
   "if (false)"
 
 mutate "validate stops rejecting bad weight sums" \
-  "if (Math.abs(weightSum - 100) > WEIGHT_SUM_TOLERANCE)" \
+  "if (withWeight > 0 && Math.abs(weightSum - 100) > WEIGHT_SUM_TOLERANCE)" \
   "if (false)"
 
 mutate "validate stops rejecting duplicate symbols" \
@@ -78,6 +78,14 @@ mutate "trimCloses keeps the oldest points instead of the newest" \
 mutate "summarize returns a weighted move when nothing was quoted" \
   "weightedMove: weightedBase > 0 ? round2(weightedSum / weightedBase) : null" \
   "weightedMove: weightedSum"
+
+mutate "summarize fabricates an exposure percentage with no weights" \
+  "techExposure: hasWeights ? round2(tech) : null" \
+  "techExposure: round2(tech)"
+
+mutate "validate accepts a mix of weighted and unweighted holdings" \
+  "if (withWeight > 0 && withWeight < holdings.length) {" \
+  "if (false) {"
 
 restore
 trap - EXIT

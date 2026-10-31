@@ -11,9 +11,9 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ## What it shows
 
-- **Portfolio allocation** — the actual holding with its allocation weight,
-  role, live price, day change and intraday sparkline; tech vs non-tech
-  exposure, holding count and weighted day move. Click any row to chart it.
+- **Portfolio** — the actual holding with its role, live price, day change
+  and intraday sparkline; holding count and weighted day move. Click any row
+  to chart it.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
 - **Watchlist** — every tracked instrument (indices, large-cap equities,
@@ -30,19 +30,26 @@ The page refreshes itself every 60 seconds. The `Auto` button pauses that.
 
 ## Portfolio data and what is deliberately not published
 
-The portfolio section reflects the **actual** holdings — a single position —
-rather than a hypothetical plan.
+The portfolio section reflects the **actual** holdings — currently a single
+position.
 
-**Published** — ticker symbols, allocation weights (percentages), a short
-role label per holding, sector buckets, and live market data for each ticker.
+**Published** — ticker symbols, a short role label per holding, sector
+buckets, and live market data for each ticker.
 
 **Never published** — share counts, absolute dollar amounts, total portfolio
 value, cost basis, broker, tax or account details, and personal decision
 rules or watchlist rationale.
 
-Allocation weights are ratios, so the exact position size is not inferable
-from anything in this repository. The values in `assets/portfolio.js` are a
-public-safe projection of the real holdings.
+**Allocation percentages are not published either.** The position size is
+known privately, but the allocation *share* is not, and a share count is not
+an allocation weight. Rather than publish a number that is not established,
+the holdings carry no `weight` field at all: the tech / non-tech exposure
+figures render as "—" and the sector concentration strip stays hidden.
+
+The model treats `weight` as optional but all-or-nothing — every holding
+carries one or none do — so the percentages can never be half-published. If
+the true allocation ever becomes publishable, adding a `weight` to each
+holding turns the exposure figures and the sector strip on automatically.
 
 Do not add the excluded details to `assets/portfolio.js`, `data/snapshot.json`,
 the README or the footer. The exclusion list is restated in the header comment

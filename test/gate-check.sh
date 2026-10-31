@@ -67,10 +67,16 @@ inject "forward P/E field"    "    { symbol: 'AAPL', role: 'x', sector: 'Tech', 
 
 echo
 echo "=== DIRECTION 3: legitimate data must NOT be blocked ==="
-# The regression this gate must not cause: a truthful 100% allocation weight
-# and the file's own documentation comment are both legitimate.
+# The regression this gate must not cause: a truthful allocation weight and
+# the file's own documentation comment are both legitimate.
 cp assets/portfolio.js "$WORK/legit.js"
 if run_gate "$WORK/legit.js"; then actual=pass; else actual=block; fi
+expect "a published holding with no weight passes the gate" pass "$actual"
+
+# A legitimate allocation weight of 100 must not be treated as a balance.
+cp assets/portfolio.js "$WORK/weighted.js"
+sed -i "s/group: 'tech' }/group: 'tech', weight: 100 }/" "$WORK/weighted.js"
+if run_gate "$WORK/weighted.js"; then actual=pass; else actual=block; fi
 expect "allocation weight of 100 is not treated as a balance" pass "$actual"
 
 # The header comment names the excluded fields in prose. The gate must match
@@ -78,6 +84,35 @@ expect "allocation weight of 100 is not treated as a balance" pass "$actual"
 if grep -q 'cost basis' assets/portfolio.js; then
   echo "  NOTE  portfolio.js prose does mention 'cost basis' (gate must ignore it)"
 fi
+
+echo
+echo "=== DIRECTION 4: the model must reject what the grep gate might miss ==="
+# The structural check is the stronger layer: it rejects by field NAME, so a
+# share count of 100 is caught even though it looks like a harmless number.
+model_rejects() {
+  local line="$1"
+  cp assets/portfolio.js "$WORK/m.js"
+  printf '%s\n' "$line" >> "$WORK/m.js"
+  if node -e "
+    const model = require('./assets/portfolio-model.js');
+    const src = require('fs').readFileSync(process.argv[1], 'utf8');
+    const sandbox = { window: {} };
+    new Function('window', src)(sandbox.window);
+    const holdings = (sandbox.window.PORTFOLIO || {}).holdings || [];
+    process.exit(model.validate(holdings).ok ? 0 : 1);
+  " "$WORK/m.js" 2>/dev/null; then
+    echo "  FAIL  $2 was NOT rejected by the model"; FAIL=$((FAIL+1))
+  else
+    echo "  PASS  $2 is rejected by the model"; PASS=$((PASS+1))
+  fi
+}
+
+model_rejects "    { symbol: 'AAPL', role: 'x', sector: 'Tech', group: 'tech', shares: 100 }," \
+  "a share count of 100"
+model_rejects "    { symbol: 'AAPL', role: 'x', sector: 'Tech', group: 'tech', costBasis: 250 }," \
+  "a cost basis"
+model_rejects "    { symbol: 'AAPL', role: 'x', sector: 'Tech', group: 'tech', weight: 60 }," \
+  "weights that do not sum to 100"
 
 echo
 echo "=== SUMMARY: $PASS passed, $FAIL failed ==="

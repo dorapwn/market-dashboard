@@ -93,22 +93,22 @@
 
   <section class="panel panel-portfolio" aria-labelledby="portfolioHeading">
     <div class="panel-head">
-      <h2 id="portfolioHeading">Portfolio Allocation</h2>
-      <span class="panel-note">Allocation weights &amp; live market data · no position sizes</span>
+      <h2 id="portfolioHeading">Portfolio</h2>
+      <span class="panel-note">Holdings &amp; live market data · no position sizes</span>
     </div>
 
     <div class="alloc-summary">
       <div class="alloc-figure">
-        <span class="stat-label">Total tech exposure</span>
+        <span class="stat-label">Holdings</span>
+        <span class="alloc-figure-value" id="holdingCount">—</span>
+      </div>
+      <div class="alloc-figure">
+        <span class="stat-label">Tech exposure</span>
         <span class="alloc-figure-value" id="techExposure">—</span>
       </div>
       <div class="alloc-figure">
-        <span class="stat-label">Total non-tech</span>
+        <span class="stat-label">Non-tech exposure</span>
         <span class="alloc-figure-value" id="nonTechExposure">—</span>
-      </div>
-      <div class="alloc-figure">
-        <span class="stat-label">Holdings</span>
-        <span class="alloc-figure-value" id="holdingCount">—</span>
       </div>
       <div class="alloc-figure">
         <span class="stat-label">Weighted day move</span>
@@ -116,7 +116,7 @@
       </div>
     </div>
 
-    <div class="sector-strip" id="sectorStrip" aria-label="Sector allocation"></div>
+    <div class="sector-strip" id="sectorStrip" aria-label="Sector allocation" hidden></div>
 
     <div class="table-scroll">
       <table class="quote-table portfolio-table">
@@ -124,7 +124,6 @@
           <tr>
             <th class="col-sym" data-sort="symbol" scope="col">Symbol</th>
             <th class="col-name" data-sort="role" scope="col">Role</th>
-            <th class="col-num" data-sort="weight" scope="col">Allocation</th>
             <th class="col-num" data-sort="price" scope="col">Last</th>
             <th class="col-num" data-sort="changePct" scope="col">Change %</th>
             <th class="col-range" scope="col">Day range</th>
@@ -213,8 +212,8 @@
     <div class="footer-block">
       <h3>Portfolio data</h3>
       <ul class="footer-list">
-        <li>Allocation weights and roles only — no share counts, position sizes or cost basis.</li>
-        <li>Position amounts, valuation figures and account details are not published.</li>
+        <li>Holding symbols and roles only — no share counts, position sizes or cost basis.</li>
+        <li>Allocation percentages are not published; exposure figures read as "—" for that reason.</li>
         <li>Live prices for every holding come from the same feeds as the rest of the page.</li>
       </ul>
     </div>

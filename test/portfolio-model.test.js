@@ -21,6 +21,34 @@ test('validate: accepts a single holding at 100%', () => {
   assert.deepEqual(res.problems, []);
 });
 
+test('validate: accepts holdings with no weight at all', () => {
+  // A share count is not an allocation weight. When the true allocation is
+  // unknown, the published data must be allowed to omit the weight rather
+  // than publish a fabricated percentage.
+  const res = model.validate([
+    { symbol: 'MSFT', role: 'Mega-cap software & cloud', sector: 'Tech', group: 'tech' }
+  ]);
+  assert.equal(res.ok, true, 'expected valid: ' + JSON.stringify(res.problems));
+});
+
+test('validate: rejects weights on only some holdings', () => {
+  const res = model.validate([
+    { symbol: 'A', role: 'a', sector: 'Tech', group: 'tech', weight: 60 },
+    { symbol: 'B', role: 'b', sector: 'Utility', group: 'nontech' }
+  ]);
+  assert.equal(res.ok, false);
+  assert.ok(res.problems.some((p) => /weight/i.test(p)), JSON.stringify(res.problems));
+});
+
+test('validate: rejects a missing weight when others carry one', () => {
+  const res = model.validate([
+    { symbol: 'A', role: 'a', sector: 'Tech', group: 'tech', weight: 100 },
+    { symbol: 'B', role: 'b', sector: 'Utility', group: 'nontech' }
+  ]);
+  assert.equal(res.ok, false);
+  assert.ok(res.problems.some((p) => /weight/i.test(p)), JSON.stringify(res.problems));
+});
+
 test('validate: rejects duplicate symbols', () => {
   const res = model.validate([MSFT, { ...MSFT, weight: 0 }]);
   assert.equal(res.ok, false);
@@ -110,6 +138,41 @@ test('summarize: reports sector weights for the concentration strip', () => {
 test('summarize: a single sector means no meaningful concentration strip', () => {
   const s = model.summarize([MSFT], {});
   assert.equal(s.showSectorStrip, false);
+});
+
+test('summarize: unweighted holdings report no exposure percentages', () => {
+  // The allocation is unknown, so the UI must show "—" rather than a
+  // fabricated percentage. A share count is not an allocation weight.
+  const s = model.summarize(
+    [{ symbol: 'MSFT', role: 'r', sector: 'Tech', group: 'tech' }],
+    { MSFT: { changePct: -1.55 } }
+  );
+  assert.equal(s.techExposure, null);
+  assert.equal(s.nonTechExposure, null);
+  assert.equal(s.hasWeights, false);
+  assert.equal(s.holdingCount, 1);
+});
+
+test('summarize: unweighted holdings still report a day move', () => {
+  const s = model.summarize(
+    [{ symbol: 'MSFT', role: 'r', sector: 'Tech', group: 'tech' }],
+    { MSFT: { changePct: -1.55 } }
+  );
+  assert.equal(s.weightedMove, -1.55);
+});
+
+test('summarize: an unweighted portfolio has no sector strip', () => {
+  const s = model.summarize(
+    [{ symbol: 'MSFT', role: 'r', sector: 'Tech', group: 'tech' }],
+    {}
+  );
+  assert.equal(s.showSectorStrip, false);
+});
+
+test('summarize: weighted holdings still report exposure percentages', () => {
+  const s = model.summarize([MSFT], { MSFT: { changePct: 2.5 } });
+  assert.equal(s.hasWeights, true);
+  assert.equal(s.techExposure, 100);
 });
 
 test('mergeQuotes: merges successful chunks', () => {
