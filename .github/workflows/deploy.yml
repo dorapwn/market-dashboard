@@ -39,6 +39,7 @@ jobs:
           test -f assets/portfolio-model.js
           test -f assets/market-tables-model.js
           test -f assets/heatmap-model.js
+          test -f assets/tabs-model.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
@@ -50,6 +51,7 @@ jobs:
           grep -q 'assets/market-tables-model.js' index.html || { echo 'ERROR: market-tables-model.js not referenced'; exit 1; }
           grep -q 'assets/portfolio-model.js' index.html || { echo 'ERROR: portfolio-model.js not referenced'; exit 1; }
           grep -q 'assets/heatmap-model.js' index.html || { echo 'ERROR: heatmap-model.js not referenced'; exit 1; }
+          grep -q 'assets/tabs-model.js' index.html || { echo 'ERROR: tabs-model.js not referenced'; exit 1; }
           echo "asset check OK"
 
       - name: Run unit tests
@@ -119,6 +121,44 @@ jobs:
             }
             console.log('snapshot OK: ' + Object.keys(s.quotes).length + ' quotes, ' +
               Object.keys(s.classification.bySymbol).length + ' classified, updated ' + s.updated);
+          "
+
+      - name: Validate the tab workspace
+        run: |
+          set -euo pipefail
+          # Every tab in the model must have exactly one button and one
+          # panel in the markup. A tab button with no panel is a dead end,
+          # and a panel with no button can never be reached.
+          node -e "
+            const fs = require('fs');
+            const model = require('./assets/tabs-model.js');
+            const html = fs.readFileSync('./index.html', 'utf8');
+            const keys = model.TABS.map(t => t.key);
+
+            const buttons = [...html.matchAll(/class=\"tab[^\"]*\"[^>]*data-tab=\"([^\"]+)\"/g)].map(m => m[1]);
+            const panels = [...html.matchAll(/data-panel=\"([^\"]+)\"/g)].map(m => m[1]);
+
+            const missingBtn = keys.filter(k => !buttons.includes(k));
+            const missingPanel = keys.filter(k => !panels.includes(k));
+            const extraBtn = buttons.filter(k => !keys.includes(k));
+            const extraPanel = panels.filter(k => !keys.includes(k));
+
+            if (missingBtn.length || missingPanel.length || extraBtn.length || extraPanel.length) {
+              console.error('ERROR: the tab bar and the model disagree.');
+              if (missingBtn.length)  console.error('  tabs with no button: ' + missingBtn.join(', '));
+              if (missingPanel.length) console.error('  tabs with no panel: ' + missingPanel.join(', '));
+              if (extraBtn.length)  console.error('  buttons with no tab: ' + extraBtn.join(', '));
+              if (extraPanel.length) console.error('  panels with no tab: ' + extraPanel.join(', '));
+              process.exit(1);
+            }
+
+            if (new Set(buttons).size !== buttons.length) {
+              console.error('ERROR: duplicate tab buttons'); process.exit(1);
+            }
+            if (new Set(panels).size !== panels.length) {
+              console.error('ERROR: duplicate tab panels'); process.exit(1);
+            }
+            console.log('tabs OK: ' + keys.length + ' tabs, each with a button and a panel');
           "
 
       - name: Validate heatmap dataset

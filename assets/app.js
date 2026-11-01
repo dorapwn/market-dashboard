@@ -138,6 +138,7 @@
     source: 'live',
     chart: null,           // uPlot instance
     chartData: null,
+    activeTab: 'indices',  // which tab of the workspace is showing
     stale: false
   };
 
@@ -407,12 +408,13 @@
     var canvas = els.heatmapCanvas;
     if (!canvas || !heatmapData) return;
 
-    // clientWidth/Height are the layout box, excluding any border or
-    // scrollbar. getBoundingClientRect() can still report the OLD size
-    // while the browser is applying a new viewport, which lays the treemap
-    // out for the wrong width and pushes tiles off the edge.
-    var w = Math.max(320, canvas.clientWidth || 0);
-    var h = Math.max(280, canvas.clientHeight || 0);
+    // The canvas must have a layout box to be measured. A panel that is
+    // not the active tab is display:none, so it has no size at all —
+    // laying the treemap out then would use a fallback width and produce
+    // a treemap for the wrong size. The panel re-renders when it is
+    // shown (see onTabShown), so skipping here is correct.
+    var w = canvas.clientWidth;
+    var h = canvas.clientHeight;
     if (!w || !h) return;
 
     var items = heatmapItems();
@@ -542,6 +544,100 @@
       console.warn('[market-dashboard] heatmap unavailable:', err.message);
       els.heatmapLoading.textContent = 'Heatmap unavailable';
       els.heatmapNote.textContent = 'S&P 500 heatmap unavailable';
+    });
+  }
+
+  // ------------------------------------------------------------------ tabs
+
+  /**
+   * Switch the workspace to one tab.
+   *
+   * Exactly one panel is visible at a time. The panel that is being
+   * hidden may hold a canvas or a chart that was sized while it was
+   * visible, so it is re-measured when it comes back.
+   */
+  function activateTab(key, opts) {
+    var resolved = window.TabsModel.activate(key, state.activeTab);
+    if (resolved === state.activeTab && !(opts && opts.force)) return resolved;
+
+    state.activeTab = resolved;
+
+    var tabs = document.querySelectorAll('.tab-bar .tab');
+    var panels = document.querySelectorAll('.tab-panel');
+
+    Array.prototype.forEach.call(tabs, function (t) {
+      var on = t.getAttribute('data-tab') === resolved;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      // Roving tabindex: only the active tab is in the tab order, which is
+      // the standard pattern for a tablist.
+      t.setAttribute('tabindex', on ? '0' : '-1');
+    });
+
+    Array.prototype.forEach.call(panels, function (p) {
+      var on = p.getAttribute('data-panel') === resolved;
+      p.classList.toggle('is-active', on);
+      p.hidden = !on;
+    });
+
+    onTabShown(resolved);
+    return resolved;
+  }
+
+  /**
+   * A panel that was hidden has a stale size for anything measured in
+   * pixels. Re-measure it now that it is visible again.
+   */
+  function onTabShown(key) {
+    if (key === 'chart') {
+      // uPlot was sized while the panel was hidden, so it drew into a
+      // zero-width canvas. Re-fit it to the now-visible host.
+      if (state.chart && els.chartHost) {
+        state.chart.setSize({
+          width: els.chartHost.clientWidth,
+          height: els.chartHost.clientHeight
+        });
+      } else {
+        renderChart();
+      }
+    } else if (key === 'heatmap') {
+      if (heatmapData) renderHeatmap();
+    }
+  }
+
+  function bindTabEvents() {
+    var bar = document.querySelector('.tab-bar');
+    if (!bar) return;
+
+    bar.addEventListener('click', function (e) {
+      var tab = e.target.closest('.tab');
+      if (!tab) return;
+      activateTab(tab.getAttribute('data-tab'));
+    });
+
+    // Arrow keys move between tabs, Home/End jump to the ends.
+    bar.addEventListener('keydown', function (e) {
+      var tab = e.target.closest('.tab');
+      if (!tab) return;
+      var current = tab.getAttribute('data-tab');
+      var target = null;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        target = window.TabsModel.next(current);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        target = window.TabsModel.prev(current);
+      } else if (e.key === 'Home') {
+        target = window.TabsModel.defaultTab();
+      } else if (e.key === 'End') {
+        target = window.TabsModel.TABS[window.TabsModel.TABS.length - 1].key;
+      } else {
+        return;
+      }
+
+      e.preventDefault();
+      activateTab(target);
+      var nextBtn = document.querySelector('.tab-bar .tab[data-tab="' + target + '"]');
+      if (nextBtn) nextBtn.focus();
     });
   }
 
@@ -1010,6 +1106,11 @@
     els.chartLoading.hidden = true;
     els.chartLoading.classList.remove('chart-error');
 
+    // A hidden panel has no layout box, so uPlot would be sized against
+    // zero and draw nothing. The chart is re-rendered when its tab is
+    // shown (see onTabShown).
+    if (!els.chartHost.clientWidth) return;
+
     var meta = state.quotes[state.selected] || {};
     var opts = buildChartOptions(data, meta);
     opts.series[1].label = state.selected;
@@ -1424,6 +1525,11 @@
     };
 
     bindEvents();
+    bindTabEvents();
+
+    // The tab state is applied before the first render so the chart and
+    // the heatmap are measured against a visible panel from the start.
+    activateTab(window.TabsModel.defaultTab(), { force: true });
 
     // Default sort markers on the initial sort column of each table.
     // The column is driven by the same state the renderer reads, so the

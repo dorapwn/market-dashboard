@@ -57,6 +57,27 @@
 
 <main class="layout">
 
+  <div class="tab-bar" role="tablist" aria-label="Dashboard sections">
+    <button class="tab is-active" id="tab-indices" role="tab" type="button"
+            data-tab="indices" aria-controls="panel-indices" aria-selected="true">Global Indices</button>
+    <button class="tab" id="tab-chart" role="tab" type="button"
+            data-tab="chart" aria-controls="panel-chart" aria-selected="false">Chart</button>
+    <button class="tab" id="tab-portfolio" role="tab" type="button"
+            data-tab="portfolio" aria-controls="panel-portfolio" aria-selected="false">Portfolio</button>
+    <button class="tab" id="tab-heatmap" role="tab" type="button"
+            data-tab="heatmap" aria-controls="panel-heatmap" aria-selected="false">Heatmap</button>
+    <button class="tab" id="tab-watchlist" role="tab" type="button"
+            data-tab="watchlist" aria-controls="panel-watchlist" aria-selected="false">Watchlist</button>
+    <button class="tab" id="tab-movers" role="tab" type="button"
+            data-tab="movers" aria-controls="panel-movers" aria-selected="false">Movers</button>
+    <button class="tab" id="tab-aux" role="tab" type="button"
+            data-tab="aux" aria-controls="panel-aux" aria-selected="false">Crypto &amp; FX</button>
+  </div>
+
+  <div class="tab-panels">
+
+  <div class="tab-panel is-active" id="panel-indices" data-panel="indices"
+       role="tabpanel" aria-labelledby="tab-indices">
   <section class="panel panel-indices" aria-labelledby="indicesHeading">
     <div class="panel-head">
       <h2 id="indicesHeading">Global Indices</h2>
@@ -75,7 +96,10 @@
       </table>
     </div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-chart" data-panel="chart"
+       role="tabpanel" aria-labelledby="tab-chart" hidden>
   <section class="panel panel-chart" aria-labelledby="chartHeading">
     <div class="panel-head chart-head">
       <div class="chart-title">
@@ -101,7 +125,10 @@
     </div>
     <div class="chart-stats" id="chartStats"></div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-portfolio" data-panel="portfolio"
+       role="tabpanel" aria-labelledby="tab-portfolio" hidden>
   <section class="panel panel-portfolio" aria-labelledby="portfolioHeading">
     <div class="panel-head">
       <h2 id="portfolioHeading">Portfolio</h2>
@@ -145,7 +172,10 @@
       </table>
     </div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-heatmap" data-panel="heatmap"
+       role="tabpanel" aria-labelledby="tab-heatmap" hidden>
   <section class="panel panel-heatmap" aria-labelledby="heatmapHeading">
     <div class="panel-head">
       <h2 id="heatmapHeading">Market Heatmap</h2>
@@ -177,7 +207,10 @@
       <div class="heatmap-tip" id="heatmapTip" hidden></div>
     </div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-watchlist" data-panel="watchlist"
+       role="tabpanel" aria-labelledby="tab-watchlist" hidden>
   <section class="panel panel-watchlist" aria-labelledby="watchlistHeading">
     <div class="panel-head">
       <h2 id="watchlistHeading">Watchlist</h2>
@@ -201,7 +234,10 @@
       </table>
     </div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-movers" data-panel="movers"
+       role="tabpanel" aria-labelledby="tab-movers" hidden>
   <section class="panel panel-movers" aria-labelledby="moversHeading">
     <div class="panel-head">
       <h2 id="moversHeading">Movers</h2>
@@ -252,7 +288,10 @@
       </div>
     </div>
   </section>
+  </div>
 
+  <div class="tab-panel" id="panel-aux" data-panel="aux"
+       role="tabpanel" aria-labelledby="tab-aux" hidden>
   <section class="panel panel-aux" aria-labelledby="auxHeading">
     <div class="panel-head">
       <h2 id="auxHeading">Crypto &amp; Foreign Exchange</h2>
@@ -272,6 +311,9 @@
       </table>
     </div>
   </section>
+  </div>
+
+  </div><!-- /.tab-panels -->
 
 </main>
 
@@ -317,6 +359,7 @@
 <script src="assets/portfolio.js"></script>
 <script src="assets/market-tables-model.js"></script>
 <script src="assets/heatmap-model.js"></script>
+<script src="assets/tabs-model.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

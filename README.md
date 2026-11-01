@@ -13,6 +13,10 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ## What it shows
 
+Everything below is grouped into one tabbed workspace — **Global Indices**,
+**Chart**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
+**Crypto & FX** — with one panel visible at a time.
+
 - **Portfolio** — the actual holding with its role, live price, day change
   and intraday sparkline; holding count and weighted day move. Click any row
   to chart it.
@@ -24,19 +28,39 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
   of neutral. Hover a tile for the detail, click it to chart the stock.
 - **Global indices** — S&P 500, Nasdaq, Dow, Russell 2000, VIX, Hang Seng,
   Nikkei 225, Euro Stoxx 50, FTSE 100, US 10-year yield
-- **Movers** — top gainers, top losers and most active, each its own table
-- **Crypto & FX** — Bitcoin, Ethereum, Solana and the major currency pairs
 - **Watchlist** — every tracked instrument (indices, large-cap equities,
   crypto and FX) with last price, change, day range bar, volume and an
   intraday sparkline; sortable by any column
-- **Movers** — top gainers, top losers and most-active names
+- **Movers** — top gainers, top losers and most active, each its own table
 - **Crypto & FX** — Bitcoin, Ethereum, Solana, EUR/USD, GBP/USD, USD/JPY
 - **Interactive chart** — 1D / 5D / 1M / 6M / 1Y / 5Y ranges for any symbol,
-  clickable from an index card, a watchlist row, a mover or a crypto card
+  clickable from an index row, a watchlist row, a mover, a heatmap tile or
+  a crypto row
 - **Ticker rail** — a scrolling marquee of every tracked instrument
 - **Market status** — open / pre-market / after-hours / closed, in US Eastern
 
 The page refreshes itself every 60 seconds. The `Auto` button pauses that.
+
+## The tabbed workspace
+
+The dashboard is one tabbed workspace with seven tabs: **Global Indices**,
+**Chart**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
+**Crypto & FX**. Exactly one panel is visible at a time, so the page stays
+short instead of scrolling through seven stacked tables.
+
+The tab rules live in `assets/tabs-model.js` — the tab order, what counts
+as a valid tab, and the wrap-around behaviour of the arrow keys — so they
+are unit tested rather than only exercised by clicking.
+
+Two things need care when a panel is hidden, and both are handled:
+
+- A `display:none` panel has **no layout box**, so anything measured in
+  pixels inside it is zero. uPlot would size the chart against nothing,
+  and the treemap would be laid out for the wrong width. Both re-render
+  when their tab is opened.
+- The keyboard follows the standard tablist pattern: arrow keys move
+  between tabs, Home and End jump to the ends, and only the active tab is
+  in the tab order (roving tabindex).
 
 ## The market heatmap
 
