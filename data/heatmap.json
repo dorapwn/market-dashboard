@@ -982,12 +982,12 @@
    "symbol": "MCK"
   },
   {
-   "changePct": -1.7439,
+   "changePct": -1.7629,
    "group": "nontech",
    "industry": "Restaurants",
-   "marketCap": 118163066000,
+   "marketCap": 118140270000,
    "name": "Starbucks",
-   "price": 103.67,
+   "price": 103.65,
    "sector": "Consumer Discretionary",
    "symbol": "SBUX"
   },
@@ -7425,12 +7425,12 @@
      "symbol": "TJX"
     },
     {
-     "changePct": -1.7439,
+     "changePct": -1.7629,
      "group": "nontech",
      "industry": "Restaurants",
-     "marketCap": 118163066000,
+     "marketCap": 118140270000,
      "name": "Starbucks",
-     "price": 103.67,
+     "price": 103.65,
      "sector": "Consumer Discretionary",
      "symbol": "SBUX"
     },
@@ -7845,7 +7845,7 @@
      "symbol": "MGM"
     }
    ],
-   "marketCap": 6758955662946,
+   "marketCap": 6758932866946,
    "sector": "Consumer Discretionary"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-01T16:28:24Z"
+ "updated": "2026-11-01T20:52:41Z"
 }
