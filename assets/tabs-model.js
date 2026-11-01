@@ -22,10 +22,13 @@
    * The key matches the `data-tab` on the button and the `data-panel` on
    * the panel, so the markup drives the switch and the model only decides
    * what is valid.
+   *
+   * The chart is NOT a tab. It sits above the tab bar and is always
+   * visible, because every table below it selects the symbol the chart
+   * shows — hiding it would mean clicking a row had no visible result.
    */
   var TABS = [
     { key: 'indices',   label: 'Global Indices' },
-    { key: 'chart',     label: 'Chart' },
     { key: 'portfolio', label: 'Portfolio' },
     { key: 'heatmap',   label: 'Heatmap' },
     { key: 'watchlist', label: 'Watchlist' },

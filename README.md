@@ -13,9 +13,10 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ## What it shows
 
-Everything below is grouped into one tabbed workspace — **Global Indices**,
-**Chart**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
-**Crypto & FX** — with one panel visible at a time.
+Everything below is grouped into one tabbed workspace — the chart is always
+visible at the top, and below it are the tabs **Global Indices**,
+**Portfolio**, **Heatmap**, **Watchlist**, **Movers** and **Crypto & FX**,
+with one panel visible at a time.
 
 - **Portfolio** — the actual holding with its role, live price, day change
   and intraday sparkline; holding count and weighted day move. Click any row
@@ -43,10 +44,12 @@ The page refreshes itself every 60 seconds. The `Auto` button pauses that.
 
 ## The tabbed workspace
 
-The dashboard is one tabbed workspace with seven tabs: **Global Indices**,
-**Chart**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
+The chart sits **above** the tab bar and is always visible, because every
+table below it selects the symbol the chart shows — clicking a row has to
+have a visible result. Below the chart is a row of six tabs: **Global
+Indices**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
 **Crypto & FX**. Exactly one panel is visible at a time, so the page stays
-short instead of scrolling through seven stacked tables.
+short instead of scrolling through six stacked tables.
 
 The tab rules live in `assets/tabs-model.js` — the tab order, what counts
 as a valid tab, and the wrap-around behaviour of the arrow keys — so they
@@ -55,9 +58,8 @@ are unit tested rather than only exercised by clicking.
 Two things need care when a panel is hidden, and both are handled:
 
 - A `display:none` panel has **no layout box**, so anything measured in
-  pixels inside it is zero. uPlot would size the chart against nothing,
-  and the treemap would be laid out for the wrong width. Both re-render
-  when their tab is opened.
+  pixels inside it is zero. The treemap would be laid out for the wrong
+  width; it now re-renders when its tab is opened.
 - The keyboard follows the standard tablist pattern: arrow keys move
   between tabs, Home and End jump to the ends, and only the active tab is
   in the tab order (roving tabindex).

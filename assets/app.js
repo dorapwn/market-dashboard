@@ -587,22 +587,12 @@
   /**
    * A panel that was hidden has a stale size for anything measured in
    * pixels. Re-measure it now that it is visible again.
+   *
+   * The chart is not a tab — it is always visible above the tab bar — so
+   * only the treemap needs this.
    */
   function onTabShown(key) {
-    if (key === 'chart') {
-      // uPlot was sized while the panel was hidden, so it drew into a
-      // zero-width canvas. Re-fit it to the now-visible host.
-      if (state.chart && els.chartHost) {
-        state.chart.setSize({
-          width: els.chartHost.clientWidth,
-          height: els.chartHost.clientHeight
-        });
-      } else {
-        renderChart();
-      }
-    } else if (key === 'heatmap') {
-      if (heatmapData) renderHeatmap();
-    }
+    if (key === 'heatmap' && heatmapData) renderHeatmap();
   }
 
   function bindTabEvents() {
@@ -1106,9 +1096,9 @@
     els.chartLoading.hidden = true;
     els.chartLoading.classList.remove('chart-error');
 
-    // A hidden panel has no layout box, so uPlot would be sized against
-    // zero and draw nothing. The chart is re-rendered when its tab is
-    // shown (see onTabShown).
+    // The chart is always visible above the tab bar, so its host always
+    // has a layout box. The guard is only here to catch a layout that has
+    // not settled yet.
     if (!els.chartHost.clientWidth) return;
 
     var meta = state.quotes[state.selected] || {};

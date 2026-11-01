@@ -158,7 +158,26 @@ jobs:
             if (new Set(panels).size !== panels.length) {
               console.error('ERROR: duplicate tab panels'); process.exit(1);
             }
-            console.log('tabs OK: ' + keys.length + ' tabs, each with a button and a panel');
+
+            // The chart must sit above the tab bar, not inside a tab.
+            // Every table below it selects the symbol the chart shows, so
+            // hiding the chart would mean clicking a row had no visible
+            // result.
+            const chartAt = html.indexOf('panel-chart');
+            const barAt = html.indexOf('class=\"tab-bar\"');
+            const panelsAt = html.indexOf('class=\"tab-panels\"');
+            if (chartAt === -1) {
+              console.error('ERROR: the chart panel is missing'); process.exit(1);
+            }
+            if (chartAt > barAt || chartAt > panelsAt) {
+              console.error('ERROR: the chart must sit above the tab bar'); process.exit(1);
+            }
+            if (/data-panel=\"chart\"/.test(html)) {
+              console.error('ERROR: the chart must not be a tab'); process.exit(1);
+            }
+
+            console.log('tabs OK: ' + keys.length + ' tabs, each with a button and a panel; ' +
+              'the chart sits above the tab bar');
           "
 
       - name: Validate heatmap dataset

@@ -228,8 +228,11 @@ button { font-family: inherit; cursor: pointer; }
 
 .tab-panels { display: block; }
 
+/* The chart is always visible above the tab bar; the panels below the tab
+   bar are swapped in and out. There is no grid any more — the layout is
+   a single column stack. */
+
 .panel-indices    { grid-area: indices; }
-.panel-chart      { grid-area: chart; }
 .panel-watchlist  { grid-area: watchlist; }
 .panel-movers     { grid-area: movers; }
 .panel-aux        { grid-area: aux; }
@@ -678,10 +681,6 @@ button { font-family: inherit; cursor: pointer; }
 .footer-disclaimer { color: var(--text-4); }
 
 /* ------------------------------------------------------------ responsive */
-
-@media (max-width: 1180px) {
-  .panel-chart { order: -1; }
-}
 
 @media (max-width: 900px) {
   .movers-grid { grid-template-columns: minmax(0, 1fr); }

@@ -57,11 +57,35 @@
 
 <main class="layout">
 
+  <section class="panel panel-chart" aria-labelledby="chartHeading">
+    <div class="panel-head chart-head">
+      <div class="chart-title">
+        <h2 id="chartHeading">—</h2>
+        <p class="chart-sub" id="chartSub">—</p>
+      </div>
+      <div class="range-tabs" id="rangeTabs" role="tablist" aria-label="Chart range">
+        <button class="range-tab is-active" data-range="1d" role="tab" aria-selected="true">1D</button>
+        <button class="range-tab" data-range="5d" role="tab" aria-selected="false">5D</button>
+        <button class="range-tab" data-range="1mo" role="tab" aria-selected="false">1M</button>
+        <button class="range-tab" data-range="6mo" role="tab" aria-selected="false">6M</button>
+        <button class="range-tab" data-range="1y" role="tab" aria-selected="false">1Y</button>
+        <button class="range-tab" data-range="5y" role="tab" aria-selected="false">5Y</button>
+      </div>
+    </div>
+    <div class="chart-price-row">
+      <span class="chart-price" id="chartPrice">—</span>
+      <span class="chart-change" id="chartChange">—</span>
+      <span class="chart-currency" id="chartCurrency"></span>
+    </div>
+    <div class="chart-host" id="chartHost">
+      <div class="chart-loading" id="chartLoading">Loading chart…</div>
+    </div>
+    <div class="chart-stats" id="chartStats"></div>
+  </section>
+
   <div class="tab-bar" role="tablist" aria-label="Dashboard sections">
     <button class="tab is-active" id="tab-indices" role="tab" type="button"
             data-tab="indices" aria-controls="panel-indices" aria-selected="true">Global Indices</button>
-    <button class="tab" id="tab-chart" role="tab" type="button"
-            data-tab="chart" aria-controls="panel-chart" aria-selected="false">Chart</button>
     <button class="tab" id="tab-portfolio" role="tab" type="button"
             data-tab="portfolio" aria-controls="panel-portfolio" aria-selected="false">Portfolio</button>
     <button class="tab" id="tab-heatmap" role="tab" type="button"
@@ -95,35 +119,6 @@
         <tbody id="indexBody"></tbody>
       </table>
     </div>
-  </section>
-  </div>
-
-  <div class="tab-panel" id="panel-chart" data-panel="chart"
-       role="tabpanel" aria-labelledby="tab-chart" hidden>
-  <section class="panel panel-chart" aria-labelledby="chartHeading">
-    <div class="panel-head chart-head">
-      <div class="chart-title">
-        <h2 id="chartHeading">—</h2>
-        <p class="chart-sub" id="chartSub">—</p>
-      </div>
-      <div class="range-tabs" id="rangeTabs" role="tablist" aria-label="Chart range">
-        <button class="range-tab is-active" data-range="1d" role="tab" aria-selected="true">1D</button>
-        <button class="range-tab" data-range="5d" role="tab" aria-selected="false">5D</button>
-        <button class="range-tab" data-range="1mo" role="tab" aria-selected="false">1M</button>
-        <button class="range-tab" data-range="6mo" role="tab" aria-selected="false">6M</button>
-        <button class="range-tab" data-range="1y" role="tab" aria-selected="false">1Y</button>
-        <button class="range-tab" data-range="5y" role="tab" aria-selected="false">5Y</button>
-      </div>
-    </div>
-    <div class="chart-price-row">
-      <span class="chart-price" id="chartPrice">—</span>
-      <span class="chart-change" id="chartChange">—</span>
-      <span class="chart-currency" id="chartCurrency"></span>
-    </div>
-    <div class="chart-host" id="chartHost">
-      <div class="chart-loading" id="chartLoading">Loading chart…</div>
-    </div>
-    <div class="chart-stats" id="chartStats"></div>
   </section>
   </div>
 
