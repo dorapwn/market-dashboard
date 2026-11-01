@@ -25,7 +25,7 @@
    "changePct": -1.5524,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3876225570000,
+   "marketCap": 3876974356364,
    "name": "Microsoft",
    "price": 521.91,
    "sector": "Information Technology",
@@ -825,7 +825,7 @@
    "changePct": -6.0322,
    "group": "nontech",
    "industry": "Electrical Components & Equipment",
-   "marketCap": 143696348000,
+   "marketCap": 143659351000,
    "name": "Eaton Corporation",
    "price": 369.97,
    "sector": "Industrials",
@@ -1185,7 +1185,7 @@
    "changePct": 1.1835,
    "group": "nontech",
    "industry": "Electric Utilities",
-   "marketCap": 99364200000,
+   "marketCap": 99137021846,
    "name": "Duke Energy",
    "price": 127.39,
    "sector": "Utilities",
@@ -1892,16 +1892,6 @@
    "symbol": "APO"
   },
   {
-   "changePct": -1.2082,
-   "group": "nontech",
-   "industry": "Data Center REITs",
-   "marketCap": 66860806999,
-   "name": "Digital Realty",
-   "price": 180.7,
-   "sector": "Real Estate",
-   "symbol": "DLR"
-  },
-  {
    "changePct": -2.4023,
    "group": "tech",
    "industry": "Semiconductors",
@@ -1972,6 +1962,16 @@
    "symbol": "OXY"
   },
   {
+   "changePct": -1.2082,
+   "group": "nontech",
+   "industry": "Data Center REITs",
+   "marketCap": 63050566799,
+   "name": "Digital Realty",
+   "price": 180.7,
+   "sector": "Real Estate",
+   "symbol": "DLR"
+  },
+  {
    "changePct": -4.3679,
    "group": "tech",
    "industry": "Electronic Manufacturing Services",
@@ -1995,7 +1995,7 @@
    "changePct": -1.6632,
    "group": "nontech",
    "industry": "Health Care Equipment",
-   "marketCap": 62256353307,
+   "marketCap": 62394634839,
    "name": "Boston Scientific",
    "price": 41.98,
    "sector": "Health Care",
@@ -2105,7 +2105,7 @@
    "changePct": 2.3034,
    "group": "nontech",
    "industry": "Multi-Utilities",
-   "marketCap": 58593121684,
+   "marketCap": 58558980000,
    "name": "Dominion Energy",
    "price": 66.62,
    "sector": "Utilities",
@@ -2385,7 +2385,7 @@
    "changePct": -1.047,
    "group": "nontech",
    "industry": "Regional Banks",
-   "marketCap": 48837067847,
+   "marketCap": 48796661091,
    "name": "Fifth Third Bancorp",
    "price": 53.87,
    "sector": "Financials",
@@ -3062,16 +3062,6 @@
    "symbol": "EXR"
   },
   {
-   "changePct": -7.0807,
-   "group": "tech",
-   "industry": "Electronic Manufacturing Services",
-   "marketCap": 31944631864,
-   "name": "Flex Ltd.",
-   "price": 86.48,
-   "sector": "Information Technology",
-   "symbol": "FLEX"
-  },
-  {
    "changePct": -1.1897,
    "group": "nontech",
    "industry": "Regional Banks",
@@ -3090,6 +3080,16 @@
    "price": 82.29,
    "sector": "Health Care",
    "symbol": "DXCM"
+  },
+  {
+   "changePct": -7.0807,
+   "group": "tech",
+   "industry": "Electronic Manufacturing Services",
+   "marketCap": 31624896365,
+   "name": "Flex Ltd.",
+   "price": 86.48,
+   "sector": "Information Technology",
+   "symbol": "FLEX"
   },
   {
    "changePct": -2.1744,
@@ -3575,7 +3575,7 @@
    "changePct": 1.1604,
    "group": "nontech",
    "industry": "Household Products",
-   "marketCap": 25428190001,
+   "marketCap": 25401825897,
    "name": "Church & Dwight",
    "price": 107.23,
    "sector": "Consumer Staples",
@@ -4075,7 +4075,7 @@
    "changePct": -0.377,
    "group": "nontech",
    "industry": "Industrial Conglomerates",
-   "marketCap": 19102607264,
+   "marketCap": 19133977203,
    "name": "DuPont",
    "price": 140.05,
    "sector": "Industrials",
@@ -5050,7 +5050,7 @@
      "changePct": -1.5524,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3876225570000,
+     "marketCap": 3876974356364,
      "name": "Microsoft",
      "price": 521.91,
      "sector": "Information Technology",
@@ -5550,7 +5550,7 @@
      "changePct": -7.0807,
      "group": "tech",
      "industry": "Electronic Manufacturing Services",
-     "marketCap": 31944631864,
+     "marketCap": 31624896365,
      "name": "Flex Ltd.",
      "price": 86.48,
      "sector": "Information Technology",
@@ -5777,7 +5777,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 25019857317013,
+   "marketCap": 25020286367878,
    "sector": "Information Technology"
   },
   {
@@ -6354,7 +6354,7 @@
      "changePct": -1.047,
      "group": "nontech",
      "industry": "Regional Banks",
-     "marketCap": 48837067847,
+     "marketCap": 48796661091,
      "name": "Fifth Third Bancorp",
      "price": 53.87,
      "sector": "Financials",
@@ -6761,7 +6761,7 @@
      "symbol": "BRK-B"
     }
    ],
-   "marketCap": 7507433653585,
+   "marketCap": 7507393246829,
    "sector": "Financials"
   },
   {
@@ -7011,7 +7011,7 @@
      "changePct": -1.6632,
      "group": "nontech",
      "industry": "Health Care Equipment",
-     "marketCap": 62256353307,
+     "marketCap": 62394634839,
      "name": "Boston Scientific",
      "price": 41.98,
      "sector": "Health Care",
@@ -7368,7 +7368,7 @@
      "symbol": "HSIC"
     }
    ],
-   "marketCap": 6961503669298,
+   "marketCap": 6961641950830,
    "sector": "Health Care"
   },
   {
@@ -7925,7 +7925,7 @@
      "changePct": -6.0322,
      "group": "nontech",
      "industry": "Electrical Components & Equipment",
-     "marketCap": 143696348000,
+     "marketCap": 143659351000,
      "name": "Eaton Corporation",
      "price": 369.97,
      "sector": "Industrials",
@@ -8505,7 +8505,7 @@
      "changePct": -0.377,
      "group": "nontech",
      "industry": "Industrial Conglomerates",
-     "marketCap": 19102607264,
+     "marketCap": 19133977203,
      "name": "DuPont",
      "price": 140.05,
      "sector": "Industrials",
@@ -8682,7 +8682,7 @@
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5507862376363,
+   "marketCap": 5507856749302,
    "sector": "Industrials"
   },
   {
@@ -8922,7 +8922,7 @@
      "changePct": 1.1604,
      "group": "nontech",
      "industry": "Household Products",
-     "marketCap": 25428190001,
+     "marketCap": 25401825897,
      "name": "Church & Dwight",
      "price": 107.23,
      "sector": "Consumer Staples",
@@ -9029,7 +9029,7 @@
      "symbol": "CLX"
     }
    ],
-   "marketCap": 3818621922921,
+   "marketCap": 3818595558817,
    "sector": "Consumer Staples"
   },
   {
@@ -9276,7 +9276,7 @@
      "changePct": 1.1835,
      "group": "nontech",
      "industry": "Electric Utilities",
-     "marketCap": 99364200000,
+     "marketCap": 99137021846,
      "name": "Duke Energy",
      "price": 127.39,
      "sector": "Utilities",
@@ -9306,7 +9306,7 @@
      "changePct": 2.3034,
      "group": "nontech",
      "industry": "Multi-Utilities",
-     "marketCap": 58593121684,
+     "marketCap": 58558980000,
      "name": "Dominion Energy",
      "price": 66.62,
      "sector": "Utilities",
@@ -9563,7 +9563,7 @@
      "symbol": "AES"
     }
    ],
-   "marketCap": 1387189682674,
+   "marketCap": 1386928362836,
    "sector": "Utilities"
   },
   {
@@ -9623,7 +9623,7 @@
      "changePct": -1.2082,
      "group": "nontech",
      "industry": "Data Center REITs",
-     "marketCap": 66860806999,
+     "marketCap": 63050566799,
      "name": "Digital Realty",
      "price": 180.7,
      "sector": "Real Estate",
@@ -9870,7 +9870,7 @@
      "symbol": "ARE"
     }
    ],
-   "marketCap": 1177516781834,
+   "marketCap": 1173706541634,
    "sector": "Real Estate"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-01T09:24:59Z"
+ "updated": "2026-11-01T16:28:24Z"
 }
