@@ -55,7 +55,7 @@
    "changePct": 2.1968,
    "group": "nontech",
    "industry": "Broadline Retail",
-   "marketCap": 2641566869388,
+   "marketCap": 2655505930000,
    "name": "Amazon",
    "price": 245.63,
    "sector": "Consumer Discretionary",
@@ -585,7 +585,7 @@
    "changePct": 0.681,
    "group": "tech",
    "industry": "Electronic Components",
-   "marketCap": 196821568000,
+   "marketCap": 197077056000,
    "name": "Amphenol",
    "price": 79.84,
    "sector": "Information Technology",
@@ -2825,7 +2825,7 @@
    "changePct": -1.8177,
    "group": "nontech",
    "industry": "Biotechnology",
-   "marketCap": 36778777000,
+   "marketCap": 36792223041,
    "name": "Biogen",
    "price": 249.01,
    "sector": "Health Care",
@@ -3905,7 +3905,7 @@
    "changePct": -2.5641,
    "group": "nontech",
    "industry": "Specialty Chemicals",
-   "marketCap": 21602509793,
+   "marketCap": 21615737520,
    "name": "LyondellBasell",
    "price": 66.88,
    "sector": "Materials",
@@ -4112,6 +4112,16 @@
    "symbol": "ZBH"
   },
   {
+   "changePct": 1.9121,
+   "group": "nontech",
+   "industry": "Electric Utilities",
+   "marketCap": 18938587829,
+   "name": "Alliant Energy",
+   "price": 73.02,
+   "sector": "Utilities",
+   "symbol": "LNT"
+  },
+  {
    "changePct": 2.6458,
    "group": "nontech",
    "industry": "Industrial Machinery & Supplies & Components",
@@ -4120,16 +4130,6 @@
    "price": 365.07,
    "sector": "Industrials",
    "symbol": "SNA"
-  },
-  {
-   "changePct": 1.9121,
-   "group": "nontech",
-   "industry": "Electric Utilities",
-   "marketCap": 18859389241,
-   "name": "Alliant Energy",
-   "price": 73.02,
-   "sector": "Utilities",
-   "symbol": "LNT"
   },
   {
    "changePct": 1.5217,
@@ -4632,6 +4632,16 @@
    "symbol": "MKC"
   },
   {
+   "changePct": 0.5502,
+   "group": "nontech",
+   "industry": "Apparel, Accessories & Luxury Goods",
+   "marketCap": 13113413549,
+   "name": "Lululemon Athletica",
+   "price": 107.83,
+   "sector": "Consumer Discretionary",
+   "symbol": "LULU"
+  },
+  {
    "changePct": 0.5648,
    "group": "nontech",
    "industry": "Multi-Utilities",
@@ -4672,16 +4682,6 @@
    "symbol": "GL"
   },
   {
-   "changePct": 0.5502,
-   "group": "nontech",
-   "industry": "Apparel, Accessories & Luxury Goods",
-   "marketCap": 12561759474,
-   "name": "Lululemon Athletica",
-   "price": 107.83,
-   "sector": "Consumer Discretionary",
-   "symbol": "LULU"
-  },
-  {
    "changePct": -6.5035,
    "group": "tech",
    "industry": "Internet Services & Infrastructure",
@@ -4695,7 +4695,7 @@
    "changePct": 5.3043,
    "group": "nontech",
    "industry": "Health Care Equipment",
-   "marketCap": 12521640722,
+   "marketCap": 12530173113,
    "name": "Baxter International",
    "price": 24.22,
    "sector": "Health Care",
@@ -4945,7 +4945,7 @@
    "changePct": 3.726,
    "group": "nontech",
    "industry": "Building Products",
-   "marketCap": 9071980463,
+   "marketCap": 9063451004,
    "name": "A. O. Smith",
    "price": 65.42,
    "sector": "Industrials",
@@ -5240,7 +5240,7 @@
      "changePct": 0.681,
      "group": "tech",
      "industry": "Electronic Components",
-     "marketCap": 196821568000,
+     "marketCap": 197077056000,
      "name": "Amphenol",
      "price": 79.84,
      "sector": "Information Technology",
@@ -5777,7 +5777,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 24336373490797,
+   "marketCap": 24336628978797,
    "sector": "Information Technology"
   },
   {
@@ -7111,7 +7111,7 @@
      "changePct": -1.8177,
      "group": "nontech",
      "industry": "Biotechnology",
-     "marketCap": 36778777000,
+     "marketCap": 36792223041,
      "name": "Biogen",
      "price": 249.01,
      "sector": "Health Care",
@@ -7301,7 +7301,7 @@
      "changePct": 5.3043,
      "group": "nontech",
      "industry": "Health Care Equipment",
-     "marketCap": 12521640722,
+     "marketCap": 12530173113,
      "name": "Baxter International",
      "price": 24.22,
      "sector": "Health Care",
@@ -7368,7 +7368,7 @@
      "symbol": "HSIC"
     }
    ],
-   "marketCap": 6949980983003,
+   "marketCap": 6950002961435,
    "sector": "Health Care"
   },
   {
@@ -7378,7 +7378,7 @@
      "changePct": 2.1968,
      "group": "nontech",
      "industry": "Broadline Retail",
-     "marketCap": 2641566869388,
+     "marketCap": 2655505930000,
      "name": "Amazon",
      "price": 245.63,
      "sector": "Consumer Discretionary",
@@ -7778,7 +7778,7 @@
      "changePct": 0.5502,
      "group": "nontech",
      "industry": "Apparel, Accessories & Luxury Goods",
-     "marketCap": 12561759474,
+     "marketCap": 13113413549,
      "name": "Lululemon Athletica",
      "price": 107.83,
      "sector": "Consumer Discretionary",
@@ -7845,7 +7845,7 @@
      "symbol": "MGM"
     }
    ],
-   "marketCap": 6907724612773,
+   "marketCap": 6922215327460,
    "sector": "Consumer Discretionary"
   },
   {
@@ -8675,14 +8675,14 @@
      "changePct": 3.726,
      "group": "nontech",
      "industry": "Building Products",
-     "marketCap": 9071980463,
+     "marketCap": 9063451004,
      "name": "A. O. Smith",
      "price": 65.42,
      "sector": "Industrials",
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5583995582018,
+   "marketCap": 5583987052559,
    "sector": "Industrials"
   },
   {
@@ -9536,7 +9536,7 @@
      "changePct": 1.9121,
      "group": "nontech",
      "industry": "Electric Utilities",
-     "marketCap": 18859389241,
+     "marketCap": 18938587829,
      "name": "Alliant Energy",
      "price": 73.02,
      "sector": "Utilities",
@@ -9563,7 +9563,7 @@
      "symbol": "AES"
     }
    ],
-   "marketCap": 1394330511948,
+   "marketCap": 1394409710536,
    "sector": "Utilities"
   },
   {
@@ -10050,7 +10050,7 @@
      "changePct": -2.5641,
      "group": "nontech",
      "industry": "Specialty Chemicals",
-     "marketCap": 21602509793,
+     "marketCap": 21615737520,
      "name": "LyondellBasell",
      "price": 66.88,
      "sector": "Materials",
@@ -10117,10 +10117,10 @@
      "symbol": "MOS"
     }
    ],
-   "marketCap": 1184390836231,
+   "marketCap": 1184404063958,
    "sector": "Materials"
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-03T00:05:05Z"
+ "updated": "2026-11-03T06:53:47Z"
 }
