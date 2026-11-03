@@ -11,6 +11,8 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ![Portfolio allocation panel](docs/portfolio-panel.png)
 
+![FX & Crypto panel](docs/fx-crypto-panel.png)
+
 ## What it shows
 
 Everything below is grouped into one tabbed workspace — the chart is always
