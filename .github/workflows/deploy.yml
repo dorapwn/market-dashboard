@@ -40,6 +40,7 @@ jobs:
           test -f assets/market-tables-model.js
           test -f assets/heatmap-model.js
           test -f assets/tabs-model.js
+          test -f assets/universe.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
@@ -52,6 +53,7 @@ jobs:
           grep -q 'assets/portfolio-model.js' index.html || { echo 'ERROR: portfolio-model.js not referenced'; exit 1; }
           grep -q 'assets/heatmap-model.js' index.html || { echo 'ERROR: heatmap-model.js not referenced'; exit 1; }
           grep -q 'assets/tabs-model.js' index.html || { echo 'ERROR: tabs-model.js not referenced'; exit 1; }
+          grep -q 'assets/universe.js' index.html || { echo 'ERROR: universe.js not referenced'; exit 1; }
           echo "asset check OK"
 
       - name: Run unit tests
@@ -123,6 +125,53 @@ jobs:
               Object.keys(s.classification.bySymbol).length + ' classified, updated ' + s.updated);
           "
 
+      - name: Validate the tracked universe against the snapshot
+        run: |
+          set -euo pipefail
+          # Every instrument the page tracks must be in the committed
+          # snapshot. One that is missing would simply vanish from the page
+          # whenever Yahoo is unreachable — the page would look fine and be
+          # quietly wrong.
+          node -e "
+            const s = require('./data/snapshot.json');
+            const universe = require('./assets/universe.js');
+            const missing = universe.symbols().filter(sym => !s.quotes[sym]);
+            if (missing.length) {
+              console.error('ERROR: ' + missing.length + ' tracked instruments are missing from the snapshot:');
+              missing.forEach(m => console.error('  - ' + m));
+              console.error('Run: node scripts/make-snapshot.js');
+              process.exit(1);
+            }
+            console.log('universe OK: ' + universe.symbols().length +
+              ' tracked instruments, all present in the snapshot');
+          "
+
+      - name: Validate the FX pairs are quotable
+        run: |
+          set -euo pipefail
+          # The FX fallback derives every pair from one Frankfurter table,
+          # so a pair whose currencies are not both in that table would be
+          # a row that can never be filled in.
+          node -e "
+            const universe = require('./assets/universe.js');
+            const SUPPORTED = ['EUR', 'GBP', 'JPY', 'HKD', 'CNY', 'USD'];
+            const bad = Object.keys(universe.FX_FALLBACK).filter(sym => {
+              const spec = universe.FX_FALLBACK[sym];
+              return SUPPORTED.indexOf(spec.base) === -1 || SUPPORTED.indexOf(spec.quote) === -1;
+            });
+            if (bad.length) {
+              console.error('ERROR: these FX pairs cannot be derived: ' + bad.join(', '));
+              process.exit(1);
+            }
+            const tracked = universe.ofGroup('fx').map(u => u.symbol);
+            const uncovered = tracked.filter(sym => !universe.FX_FALLBACK[sym]);
+            if (uncovered.length) {
+              console.error('ERROR: these FX pairs have no fallback: ' + uncovered.join(', '));
+              process.exit(1);
+            }
+            console.log('FX OK: ' + tracked.length + ' pairs, all derivable from Frankfurter');
+          "
+
       - name: Validate the tab workspace
         run: |
           set -euo pipefail
@@ -176,6 +225,19 @@ jobs:
               console.error('ERROR: the chart must not be a tab'); process.exit(1);
             }
 
+            // The button text must match the model's label, or the model
+            // and the page would disagree about what the tab is called.
+            model.TABS.forEach(t => {
+              const btn = html.match(new RegExp('data-tab=\"' + t.key + '\"[^>]*>([^<]*)<'));
+              if (!btn) return;
+              const shown = btn[1].replace(/&amp;/g, '&').trim();
+              if (shown !== t.label) {
+                console.error('ERROR: the ' + t.key + ' tab says \"' + shown +
+                  '\" but the model calls it \"' + t.label + '\"');
+                process.exit(1);
+              }
+            });
+
             console.log('tabs OK: ' + keys.length + ' tabs, each with a button and a panel; ' +
               'the chart sits above the tab bar');
           "
@@ -217,6 +279,7 @@ jobs:
           node --check assets/portfolio-model.js
           node --check assets/portfolio.js
           node --check assets/heatmap-model.js
+          node --check assets/universe.js
           node --check scripts/make-snapshot.js
           echo "js syntax OK"
 

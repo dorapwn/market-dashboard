@@ -1,7 +1,7 @@
 /*
  * Market tables model — pure logic, shared by the browser and the tests.
  *
- * The instrument tables (Global Indices, Movers, Crypto & FX) are all the
+ * The instrument tables (Global Indices, Movers, FX & Crypto) are all the
  * same shape: take a set of quotes, group them, sort them, and render.
  * The grouping and ordering rules live here so they can be unit-tested
  * without a browser.
@@ -105,10 +105,34 @@
    * Rows whose value is missing sort LAST in both directions — a missing
    * price is not "the smallest", it is unknown, and burying it at the
    * bottom is less misleading than showing it as a loser.
+   *
+   * `groupOrder` puts whole groups ahead of each other — the FX & Crypto
+   * panel lists the FX pairs first, then the crypto. Sorting by symbol
+   * alone cannot do this: the symbols share no common prefix, so
+   * "BTC-USD" and "CNYHKD=X" interleave.
+   *
+   * The group order only decides which block a row is in; the sort key
+   * still decides the order inside the block.
    */
-  function sortRows(rows, key, asc) {
+  function sortRows(rows, key, asc, groupOrder) {
     var dir = asc ? 1 : -1;
+    var groupRank = null;
+    if (Array.isArray(groupOrder) && groupOrder.length) {
+      groupRank = {};
+      groupOrder.forEach(function (g, i) { groupRank[g] = i; });
+    }
+
     return (rows || []).slice().sort(function (a, b) {
+      if (groupRank) {
+        var ar = groupRank[a.group];
+        var br = groupRank[b.group];
+        // A row whose group is not in the order list goes last, so an
+        // unknown group can never displace a listed one.
+        if (ar === undefined && br !== undefined) return 1;
+        if (br === undefined && ar !== undefined) return -1;
+        if (ar !== undefined && br !== undefined && ar !== br) return ar - br;
+      }
+
       var av = a[key], bv = b[key];
       var aMissing = av === null || av === undefined || av === '';
       var bMissing = bv === null || bv === undefined || bv === '';

@@ -15,7 +15,7 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 Everything below is grouped into one tabbed workspace — the chart is always
 visible at the top, and below it are the tabs **Global Indices**,
-**Portfolio**, **Heatmap**, **Watchlist**, **Movers** and **Crypto & FX**,
+**Portfolio**, **Heatmap**, **Watchlist**, **Movers** and **FX & Crypto**,
 with one panel visible at a time.
 
 - **Portfolio** — the actual holding with its role, live price, day change
@@ -33,7 +33,9 @@ with one panel visible at a time.
   crypto and FX) with last price, change, day range bar, volume and an
   intraday sparkline; sortable by any column
 - **Movers** — top gainers, top losers and most active, each its own table
-- **Crypto & FX** — Bitcoin, Ethereum, Solana, EUR/USD, GBP/USD, USD/JPY
+- **FX & Crypto** — EUR/USD, GBP/USD, USD/JPY, HKD/CNY, CNY/HKD, USD/HKD,
+  Bitcoin, Ethereum and Solana. The FX pairs are listed first, then the
+  crypto.
 - **Interactive chart** — 1D / 5D / 1M / 6M / 1Y / 5Y ranges for any symbol,
   clickable from an index row, a watchlist row, a mover, a heatmap tile or
   a crypto row
@@ -42,13 +44,32 @@ with one panel visible at a time.
 
 The page refreshes itself every 60 seconds. The `Auto` button pauses that.
 
+## The tracked instruments
+
+`assets/universe.js` is the single list of everything the dashboard
+follows: the eleven indices, fourteen equities, three crypto and six FX
+pairs. Three places need that list and must never disagree — the browser
+(which fetches quotes for it), `scripts/make-snapshot.js` (which writes the
+offline fallback) and CI (which checks the committed snapshot still
+covers all of it). So it lives in one module that all three read.
+
+That last check matters: a symbol added to the universe but missing from
+the snapshot would simply **vanish** from the page whenever Yahoo is
+unreachable. The page would look fine and be quietly wrong. CI fails the
+deploy instead.
+
+Each FX pair also records how it can be rebuilt from the Frankfurter
+fallback (ECB reference rates). The Hong Kong and Chinese yuan pairs are
+cross rates — `HKD/CNY` is `CNY/USD ÷ HKD/USD` — so one request against
+a single rate table fills the whole FX block.
+
 ## The tabbed workspace
 
 The chart sits **above** the tab bar and is always visible, because every
 table below it selects the symbol the chart shows — clicking a row has to
 have a visible result. Below the chart is a row of six tabs: **Global
 Indices**, **Portfolio**, **Heatmap**, **Watchlist**, **Movers** and
-**Crypto & FX**. Exactly one panel is visible at a time, so the page stays
+**FX & Crypto**. Exactly one panel is visible at a time, so the page stays
 short instead of scrolling through six stacked tables.
 
 The tab rules live in `assets/tabs-model.js` — the tab order, what counts
@@ -189,6 +210,10 @@ npm run mutation-check
 # prove the CI leak gate blocks a synthetic leak
 ./test/gate-check.sh
 
+# run the browser probes (needs Playwright from the toolchain venv)
+export PLAYWRIGHT_BROWSERS_PATH=/opt/data/.toolchain/pw-browsers
+./test/browser/run-all.sh
+
 # regenerate the offline snapshot
 node scripts/make-snapshot.js
 ```
@@ -197,6 +222,14 @@ There is no build and no dependency install — `assets/vendor/uPlot.min.js` is
 committed so the page works offline and cannot break because of a CDN. The
 tests use Node's built-in test runner, so there is nothing to install
 either.
+
+The **browser probes** in `test/browser/` are the half of the verification
+that unit tests cannot do: that the chart is actually painted, that the
+heatmap tiles do not overlap, that clicking a row changes the visible
+selection. They drive a real Chromium, so they need Playwright — which is
+not a project dependency but lives in the toolchain venv. They are not run
+by CI (the runners have no browser) and are the local half of the check,
+run before pushing.
 
 ## Project layout
 
@@ -208,6 +241,8 @@ assets/portfolio-model.js  pure portfolio logic (tested, shared with CI)
 assets/portfolio.js        public-safe portfolio allocation (weights only)
 assets/market-tables-model.js  pure grouping/sorting for the instrument tables
 assets/heatmap-model.js    pure treemap geometry (tested, shared with CI)
+assets/tabs-model.js      pure tab-state rules (tested, shared with CI)
+assets/universe.js        the tracked instruments (shared with CI)
 assets/vendor/uPlot.min.js vendored chart library (MIT)
 scripts/make-snapshot.js   writes data/snapshot.json
 scripts/build-heatmap.py   writes data/heatmap.json
@@ -217,8 +252,11 @@ test/
   portfolio-model.test.js  unit tests (node --test)
   market-tables-model.test.js
   heatmap-model.test.js
+  tabs-model.test.js
+  universe-model.test.js
   mutation-check.sh        proves the tests detect injected bugs
   gate-check.sh            proves the CI leak gate blocks real leaks
+  browser/                 real-Chromium probes (not run by CI)
 .github/workflows/
   deploy.yml               Pages deployment + asset/JSON/JS checks
   refresh-snapshot.yml     scheduled snapshot refresh
@@ -252,6 +290,15 @@ Things that are easy to get wrong and are worth knowing if you edit this:
   the full page width for exactly this reason; three side-by-side tables
   truncated their own headers ("CHG %" rendered as "C") and their values
   ("+12.91%" as "+12").
+- **Sorting by symbol cannot order whole groups.** The FX and crypto
+  symbols share no common prefix, so a plain symbol sort interleaves
+  them ("BTC-USD", "CNYHKD=X", "ETH-USD"). `sortRows()` takes an optional
+  group order that puts the FX block ahead of the crypto block while
+  still sorting inside each block.
+- **`td.col-num:last-child` does not select the last cell.** `:last-child`
+  means "last child of its parent", and every `td` is the last child of
+  its own row only — so the selector matches nothing. Pick the cell by
+  position instead.
 
 ## Licence
 

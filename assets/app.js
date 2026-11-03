@@ -24,49 +24,11 @@
   var SPARK_MAX_SYMBOLS = 20;   // Yahoo rejects spark requests with > 20 symbols.
   var FETCH_TIMEOUT_MS = 20000;  // never let a stalled request wedge the UI
 
-  var COINGECKO_IDS = {
-    'BTC-USD': 'bitcoin',
-    'ETH-USD': 'ethereum',
-    'SOL-USD': 'solana'
-  };
+  var COINGECKO_IDS = window.Universe.COINGECKO_IDS;
 
-  var UNIVERSE = [
-    // indices
-    { symbol: '^GSPC',     name: 'S&P 500',        group: 'index' },
-    { symbol: '^IXIC',     name: 'Nasdaq Composite', group: 'index' },
-    { symbol: '^DJI',      name: 'Dow Jones',      group: 'index' },
-    { symbol: '^RUT',      name: 'Russell 2000',   group: 'index' },
-    { symbol: '^VIX',      name: 'CBOE Volatility', group: 'index' },
-    { symbol: '^HSI',      name: 'Hang Seng',      group: 'index' },
-    { symbol: '^HSCE',     name: 'Hang Seng China', group: 'index' },
-    { symbol: '^N225',     name: 'Nikkei 225',     group: 'index' },
-    { symbol: '^STOXX50E', name: 'Euro Stoxx 50',  group: 'index' },
-    { symbol: '^FTSE',     name: 'FTSE 100',       group: 'index' },
-    { symbol: '^TNX',      name: 'US 10-Yr Yield', group: 'index' },
-    // equities
-    { symbol: 'AAPL', name: 'Apple',            group: 'equity' },
-    { symbol: 'MSFT', name: 'Microsoft',        group: 'equity' },
-    { symbol: 'NVDA', name: 'NVIDIA',           group: 'equity' },
-    { symbol: 'GOOGL', name: 'Alphabet',         group: 'equity' },
-    { symbol: 'AMZN', name: 'Amazon',           group: 'equity' },
-    { symbol: 'META', name: 'Meta Platforms',   group: 'equity' },
-    { symbol: 'TSLA', name: 'Tesla',            group: 'equity' },
-    { symbol: 'AVGO', name: 'Broadcom',         group: 'equity' },
-    { symbol: 'AMD',  name: 'AMD',              group: 'equity' },
-    { symbol: 'NFLX', name: 'Netflix',          group: 'equity' },
-    { symbol: 'CRM',  name: 'Salesforce',       group: 'equity' },
-    { symbol: 'PLTR', name: 'Palantir',         group: 'equity' },
-    { symbol: 'JPM',  name: 'JPMorgan Chase',   group: 'equity' },
-    { symbol: 'XOM',  name: 'Exxon Mobil',      group: 'equity' },
-    // crypto
-    { symbol: 'BTC-USD', name: 'Bitcoin',  group: 'crypto' },
-    { symbol: 'ETH-USD', name: 'Ethereum', group: 'crypto' },
-    { symbol: 'SOL-USD', name: 'Solana',   group: 'crypto' },
-    // fx
-    { symbol: 'EURUSD=X', name: 'Euro / US Dollar', group: 'fx' },
-    { symbol: 'GBPUSD=X', name: 'Pound / US Dollar', group: 'fx' },
-    { symbol: 'JPY=X',    name: 'USD / Japanese Yen', group: 'fx' }
-  ];
+  // The tracked instruments. The universe module owns the list so the
+  // browser, the snapshot script and CI cannot disagree about it.
+  var UNIVERSE = window.Universe.UNIVERSE;
 
   /**
    * Portfolio holdings are merged into the fetch universe so their live
@@ -333,17 +295,46 @@
       });
   }
 
-  /** Frankfurter / ECB reference rates for FX cards (CORS-enabled, no key). */
+  /**
+   * Frankfurter / ECB reference rates for the FX rows (CORS-enabled, no key).
+   *
+   * Frankfurter quotes everything against a base currency, so the pairs
+   * are derived rather than fetched one by one. Every pair is a ratio of
+   * two rates, and the cross pairs (HKD against CNY) come out of the same
+   * table — no second request.
+   */
   function fetchFxFallback() {
-    var url = 'https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR,GBP,JPY';
+    var url = 'https://api.frankfurter.dev/v1/latest?base=USD&symbols=EUR,GBP,JPY,HKD,CNY';
     return fetch(url, { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (data) {
         var rates = data.rates || {};
         var out = {};
-        if (rates.EUR) out['EURUSD=X'] = { symbol: 'EURUSD=X', name: 'Euro / US Dollar', price: 1 / rates.EUR, changePct: null, currency: 'USD', source: 'frankfurter' };
-        if (rates.GBP) out['GBPUSD=X'] = { symbol: 'GBPUSD=X', name: 'Pound / US Dollar', price: 1 / rates.GBP, changePct: null, currency: 'USD', source: 'frankfurter' };
-        if (rates.JPY) out['JPY=X']    = { symbol: 'JPY=X',    name: 'USD / Japanese Yen', price: rates.JPY, changePct: null, currency: 'JPY', source: 'frankfurter' };
+
+        // rate(base, quote) — how many quote units one base unit buys.
+        function rate(base, quote) {
+          if (base === quote) return 1;
+          if (base === 'USD') return rates[quote];
+          if (quote === 'USD') return rates[base] ? 1 / rates[base] : null;
+          // A cross pair: both legs are priced against USD.
+          if (rates[base] && rates[quote]) return rates[quote] / rates[base];
+          return null;
+        }
+
+        Object.keys(window.Universe.FX_FALLBACK).forEach(function (sym) {
+          var spec = window.Universe.FX_FALLBACK[sym];
+          var value = rate(spec.base, spec.quote);
+          if (value === null || value === undefined || !isFinite(value)) return;
+          var meta = UNIVERSE.filter(function (u) { return u.symbol === sym; })[0] || {};
+          out[sym] = {
+            symbol: sym,
+            name: meta.name || sym,
+            price: value,
+            changePct: null,
+            currency: spec.quote,
+            source: 'frankfurter'
+          };
+        });
         return out;
       });
   }
@@ -921,7 +912,10 @@
 
   function renderAux() {
     var rows = window.MarketTablesModel.buildRows(state.quotes, UNIVERSE, ['crypto', 'fx']);
-    rows = window.MarketTablesModel.sortRows(rows, tableSortKey('aux'), tableSortAsc('aux'));
+    // The panel is called "FX & Crypto", so the FX pairs come first. The
+    // symbols share no common prefix, so sorting by symbol alone would
+    // interleave the two groups.
+    rows = window.MarketTablesModel.sortRows(rows, tableSortKey('aux'), tableSortAsc('aux'), ['fx', 'crypto']);
 
     renderTable(els.auxBody, rows, [
       { cls: 'sym-cell', render: function (r) { return escapeHtml(r.symbol); } },

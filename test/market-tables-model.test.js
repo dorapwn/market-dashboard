@@ -2,7 +2,7 @@
  * Tests for the market tables model.
  *
  * The model owns the grouping and sorting logic behind the instrument
- * tables (Global Indices, Movers, Crypto & FX). Keeping it pure means the
+ * tables (Global Indices, Movers, FX & Crypto). Keeping it pure means the
  * ordering rules are verified without a browser.
  *
  * Run with: npm test   (node --test, no dependencies)
@@ -19,7 +19,12 @@ const UNIVERSE = [
   { symbol: '^VIX', name: 'CBOE Volatility', group: 'index' },
   { symbol: 'AAPL', name: 'Apple', group: 'equity' },
   { symbol: 'BTC-USD', name: 'Bitcoin', group: 'crypto' },
-  { symbol: 'EURUSD=X', name: 'Euro / US Dollar', group: 'fx' }
+  { symbol: 'ETH-USD', name: 'Ethereum', group: 'crypto' },
+  { symbol: 'SOL-USD', name: 'Solana', group: 'crypto' },
+  { symbol: 'EURUSD=X', name: 'Euro / US Dollar', group: 'fx' },
+  { symbol: 'HKDCNY=X', name: 'Hong Kong Dollar / Chinese Yuan', group: 'fx' },
+  { symbol: 'CNYHKD=X', name: 'Chinese Yuan / Hong Kong Dollar', group: 'fx' },
+  { symbol: 'USDHKD=X', name: 'US Dollar / Hong Kong Dollar', group: 'fx' }
 ];
 
 const QUOTES = {
@@ -27,7 +32,12 @@ const QUOTES = {
   '^VIX': { symbol: '^VIX', name: 'Volatility', price: 15.2, change: -1.1, changePct: -6.7, volume: 50 },
   'AAPL': { symbol: 'AAPL', name: 'Apple Inc', price: 344, change: -4, changePct: -1.2, volume: 900 },
   'BTC-USD': { symbol: 'BTC-USD', name: 'Bitcoin', price: 60000, change: 600, changePct: 1.0, volume: 20 },
-  'EURUSD=X': { symbol: 'EURUSD=X', name: 'Euro', price: 1.08, change: 0.002, changePct: 0.2, volume: 7 }
+  'ETH-USD': { symbol: 'ETH-USD', name: 'Ethereum', price: 2300, change: 6, changePct: 0.3, volume: 12 },
+  'SOL-USD': { symbol: 'SOL-USD', name: 'Solana', price: 95, change: 0.5, changePct: 0.5, volume: 8 },
+  'EURUSD=X': { symbol: 'EURUSD=X', name: 'Euro', price: 1.08, change: 0.002, changePct: 0.2, volume: 7 },
+  'HKDCNY=X': { symbol: 'HKDCNY=X', name: 'HKD/CNY', price: 0.8472, change: 0.0001, changePct: 0.01, volume: 0 },
+  'CNYHKD=X': { symbol: 'CNYHKD=X', name: 'CNY/HKD', price: 1.1792, change: 0.0002, changePct: 0.02, volume: 0 },
+  'USDHKD=X': { symbol: 'USDHKD=X', name: 'USD/HKD', price: 7.8464, change: -0.002, changePct: -0.03, volume: 0 }
 };
 
 // ---------------------------------------------------------------- toRow
@@ -65,11 +75,38 @@ test('buildRows: returns only the requested group', () => {
 
 test('buildRows: accepts a list of groups', () => {
   const rows = model.buildRows(QUOTES, UNIVERSE, ['crypto', 'fx']);
-  assert.deepEqual(rows.map(r => r.symbol).sort(), ['BTC-USD', 'EURUSD=X']);
+  assert.equal(rows.length, 7);
+});
+
+test('sortRows: can order whole groups ahead of each other', () => {
+  // The panel is called "FX & Crypto", so the FX rows must come first.
+  // Sorting by symbol alone interleaves them (BTC-USD, CNYHKD=X,
+  // ETH-USD, ...) because the symbols share no common prefix.
+  const rows = model.buildRows(QUOTES, UNIVERSE, ['crypto', 'fx']);
+  const sorted = model.sortRows(rows, 'symbol', true, ['fx', 'crypto']);
+  const groups = sorted.map(r => r.group);
+  const firstFx = groups.indexOf('fx');
+  const lastFx = groups.lastIndexOf('fx');
+  assert.ok(firstFx !== -1, 'no FX rows');
+  assert.ok(lastFx < groups.indexOf('crypto'),
+    'the FX rows are not all ahead of the crypto rows: ' + groups.join(','));
+});
+
+test('sortRows: the group order still sorts within each group', () => {
+  const rows = model.buildRows(QUOTES, UNIVERSE, ['crypto', 'fx']);
+  const sorted = model.sortRows(rows, 'symbol', true, ['fx', 'crypto']);
+  const fx = sorted.filter(r => r.group === 'fx').map(r => r.symbol);
+  assert.deepEqual(fx, [...fx].sort((a, b) => a.localeCompare(b)));
+});
+
+test('sortRows: an unknown group in the order list is ignored', () => {
+  const rows = model.buildRows(QUOTES, UNIVERSE, ['crypto', 'fx']);
+  const sorted = model.sortRows(rows, 'symbol', true, ['nope', 'fx']);
+  assert.equal(sorted[0].group, 'fx');
 });
 
 test('buildRows: with no group filter it returns everything', () => {
-  assert.equal(model.buildRows(QUOTES, UNIVERSE, null).length, 5);
+  assert.equal(model.buildRows(QUOTES, UNIVERSE, null).length, 10);
 });
 
 test('buildRows: no quotes means no rows', () => {

@@ -33,7 +33,7 @@
     { key: 'heatmap',   label: 'Heatmap' },
     { key: 'watchlist', label: 'Watchlist' },
     { key: 'movers',    label: 'Movers' },
-    { key: 'aux',       label: 'Crypto & FX' }
+    { key: 'aux',       label: 'FX & Crypto' }
   ];
 
   var KEYS = TABS.map(function (t) { return t.key; });

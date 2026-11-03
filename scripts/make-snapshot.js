@@ -14,18 +14,16 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+const universe = require('../assets/universe.js');
+
 const SPARK = 'https://query1.finance.yahoo.com/v7/finance/spark';
 const CHUNK_SIZE = 20;
 const SPARK_POINTS = 78;   // one trading day of 5-minute bars
 
-const SYMBOLS = [
-  '^GSPC', '^IXIC', '^DJI', '^RUT', '^VIX',
-  '^HSI', '^HSCE', '^N225', '^STOXX50E', '^FTSE', '^TNX',
-  'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA', 'AVGO',
-  'AMD', 'NFLX', 'CRM', 'PLTR', 'JPM', 'XOM',
-  'BTC-USD', 'ETH-USD', 'SOL-USD',
-  'EURUSD=X', 'GBPUSD=X', 'JPY=X'
-];
+// The same universe the browser fetches. They must not disagree: a symbol
+// the page tracks but the snapshot lacks simply vanishes from the page
+// whenever Yahoo is unreachable.
+const SYMBOLS = universe.symbols();
 
 function get(url) {
   return new Promise((resolve, reject) => {
