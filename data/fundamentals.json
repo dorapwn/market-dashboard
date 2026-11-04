@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-04T16:21:19.196Z",
+  "updated": "2026-11-04T22:14:48.606Z",
   "count": 14,
   "fundamentals": {
     "AAPL": {
@@ -878,9 +878,9 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1551307306718,
-          "date": "2026-11-02",
-          "currency": "USD"
+          "value": 1587870019104,
+          "date": "2026-11-03",
+          "currency": null
         }
       },
       "annual": {
@@ -1040,9 +1040,9 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1596191490384,
-          "date": "2026-11-02",
-          "currency": "USD"
+          "value": 1575162965970,
+          "date": "2026-11-03",
+          "currency": null
         }
       },
       "annual": {
@@ -1787,72 +1787,72 @@
     "PLTR": {
       "symbol": "PLTR",
       "currency": "USD",
-      "asOf": "2026-06-30",
+      "asOf": "2026-09-30",
       "ttm": {
         "revenue": {
-          "value": 6155941000,
-          "date": "2026-06-30",
+          "value": 7288260000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "grossProfit": {
-          "value": 5220000000,
-          "date": "2026-06-30",
+          "value": 6176340000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "operatingIncome": {
-          "value": 2634652000,
-          "date": "2026-06-30",
+          "value": 3326241000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "netIncome": {
-          "value": 3016692000,
-          "date": "2026-06-30",
+          "value": 3669105000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "ebitda": {
-          "value": 2662630000,
-          "date": "2026-06-30",
+          "value": 3355290000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "costOfRevenue": {
-          "value": 935941000,
-          "date": "2026-06-30",
+          "value": 1111920000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "totalExpenses": {
-          "value": 3521289000,
-          "date": "2026-06-30",
+          "value": 3962019000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "operatingCashFlow": {
-          "value": 3400291000,
-          "date": "2026-06-30",
+          "value": 4097197000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "freeCashFlow": {
-          "value": 3358272000,
-          "date": "2026-06-30",
+          "value": 4053956000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "capex": {
-          "value": -42019000,
-          "date": "2026-06-30",
+          "value": -43241000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "dilutedEps": {
-          "value": 1.17,
-          "date": "2026-06-30",
+          "value": 1.42,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "dilutedShares": {
-          "value": 2571154500,
-          "date": "2026-06-30",
+          "value": 2571840500,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "marketCap": {
-          "value": 428561449322,
-          "date": "2026-11-02",
-          "currency": "USD"
+          "value": 421496457391,
+          "date": "2026-11-03",
+          "currency": null
         }
       },
       "annual": {
@@ -1925,23 +1925,23 @@
       },
       "quarterly": {
         "totalAssets": {
-          "value": 11678564000,
-          "date": "2026-06-30",
+          "value": 13412976000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "equity": {
-          "value": 9774194000,
-          "date": "2026-06-30",
+          "value": 11227981000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "cash": {
-          "value": 2030047000,
-          "date": "2026-06-30",
+          "value": 3619414000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "totalDebt": {
-          "value": 211400000,
-          "date": "2026-06-30",
+          "value": 225267000,
+          "date": "2026-09-30",
           "currency": "USD"
         }
       }
