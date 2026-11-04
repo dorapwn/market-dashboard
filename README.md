@@ -13,6 +13,8 @@ framework, no bundler — plain HTML, CSS and one vendored chart library.
 
 ![FX & Crypto panel](docs/fx-crypto-panel.png)
 
+![Fundamentals panel](docs/fundamentals-panel.png)
+
 ## What it shows
 
 Everything below is grouped into one tabbed workspace — the chart is always
@@ -41,6 +43,12 @@ with one panel visible at a time.
 - **Interactive chart** — 1D / 5D / 1M / 6M / 1Y / 5Y ranges for any symbol,
   clickable from an index row, a watchlist row, a mover, a heatmap tile or
   a crypto row
+- **Fundamentals** — under the chart, for any equity: valuation (P/E,
+  P/FCF, FCF yield, EPS), cash flow (operating, free, capex, FCF per
+  share), profitability (revenue, gross/operating/net margin, revenue
+  YoY) and balance sheet (assets, equity, cash, debt, net debt). Indices,
+  FX pairs and crypto have no financial statements, so the panel is simply
+  absent for them.
 - **Ticker rail** — a scrolling marquee of every tracked instrument
 - **Market status** — open / pre-market / after-hours / closed, in US Eastern
 
@@ -161,6 +169,7 @@ passes, and a synthetic leak is blocked.
 |---|---|---|
 | Yahoo Finance `chart` + `spark` | equities, indices, FX, crypto chart data | **No** — needs a proxy |
 | [r.jina.ai](https://r.jina.ai/) | CORS proxy in front of the Yahoo endpoints | Yes |
+| Yahoo `fundamentals-timeseries` | revenue, cash flow, margins, balance sheet | **No** — needs a proxy |
 | [CoinGecko](https://www.coingecko.com/en/api) | crypto spot prices (fallback) | Yes (`ACAO: *`) |
 | [Frankfurter](https://frankfurter.dev/) | ECB FX reference rates (fallback) | Yes (`ACAO: *`) |
 
@@ -242,17 +251,21 @@ assets/app.js              data layer + rendering + chart wiring
 assets/portfolio-model.js  pure portfolio logic (tested, shared with CI)
 assets/portfolio.js        public-safe portfolio allocation (weights only)
 assets/market-tables-model.js  pure grouping/sorting for the instrument tables
+assets/fundamentals-model.js pure fundamentals arithmetic (tested, shared with CI)
 assets/heatmap-model.js    pure treemap geometry (tested, shared with CI)
 assets/tabs-model.js      pure tab-state rules (tested, shared with CI)
 assets/universe.js        the tracked instruments (shared with CI)
 assets/vendor/uPlot.min.js vendored chart library (MIT)
 scripts/make-snapshot.js   writes data/snapshot.json
+scripts/make-fundamentals.js writes data/fundamentals.json
 scripts/build-heatmap.py   writes data/heatmap.json
 data/snapshot.json         last known good quotes + close series
+data/fundamentals.json     last known good financial statements
 data/heatmap.json          S&P 500 constituents with GICS classification
 test/
   portfolio-model.test.js  unit tests (node --test)
   market-tables-model.test.js
+  fundamentals-model.test.js
   heatmap-model.test.js
   tabs-model.test.js
   universe-model.test.js
@@ -301,6 +314,21 @@ Things that are easy to get wrong and are worth knowing if you edit this:
   means "last child of its parent", and every `td` is the last child of
   its own row only — so the selector matches nothing. Pick the cell by
   position instead.
+- **A Hong Kong stock's statements are in CNY and its price is in HKD.**
+  Yahoo reports `trailingTotalRevenue` in CNY but `trailingMarketCap` in
+  HKD, and the traded price is in HKD too. Dividing the HKD price by the
+  CNY earnings per share gives a P/E that is wrong by the CNY/HKD rate
+  — about 18%. The fundamentals model refuses to compute a cross-currency
+  ratio and says why, and CI checks that it still refuses.
+- **The `trailing*` flow series has two points that are not a year
+  apart.** Microsoft returns 2025-06-30 and 2026-09-30, which reads as
+  +22.97% growth when the honest fiscal-year figure is +17.80%. Growth
+  therefore comes from the `annual*` series, which has one point per
+  fiscal year.
+- **A margin is a ratio, not a percentage.** 0.677 means 67.7%. The
+  metric list marks margins as `ratioPercent` and growth as `percent`,
+  because formatting a ratio as a percentage showed "+0.7%" for a 67.7%
+  gross margin.
 
 ## Licence
 

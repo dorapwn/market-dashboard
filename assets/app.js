@@ -101,7 +101,9 @@
     chart: null,           // uPlot instance
     chartData: null,
     activeTab: 'indices',  // which tab of the workspace is showing
-    stale: false
+    stale: false,
+    fundamentals: {},      // symbol -> parsed fundamentals payload
+    fxRates: {}            // "CNY/HKD" -> rate
   };
 
   var els = {};
@@ -269,7 +271,76 @@
     });
   }
 
-  /** CoinGecko spot prices for the crypto cards (CORS-enabled, no key). */
+  // ------------------------------------------------------- fundamentals
+
+  var YAHOO_FUNDAMENTALS =
+    'https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries';
+
+  /**
+   * Fetch the financial statements for one symbol.
+   *
+   * Only equities have statements — an index, an FX pair and a crypto coin
+   * return an empty result — so a null answer is normal and the panel is
+   * simply not shown.
+   */
+  function fetchFundamentals(symbol) {
+    var types = window.FundamentalsModel.requestTypes().join(',');
+    var q = 'symbol=' + encodeURIComponent(symbol) + '&type=' + types +
+      '&period1=1400000000&period2=1900000000';
+    return fetchYahoo(YAHOO_FUNDAMENTALS + '/' + encodeURIComponent(symbol), q)
+      .then(function (payload) {
+        var parsed = window.FundamentalsModel.parse(payload, symbol);
+        state.fundamentals[symbol] = parsed;
+        return parsed;
+      })
+      .catch(function () {
+        // A missing fundamentals feed must never break the page.
+        state.fundamentals[symbol] = null;
+        return null;
+      });
+  }
+
+  /**
+   * Fetch the FX rates needed to put a price and a statement in the same
+   * currency.
+   *
+   * A Hong Kong stock's statements are in CNY while its price is in HKD.
+   * Frankfurter publishes ECB reference rates for both, so the conversion
+   * is one request.
+   */
+  function fetchFxRates(base, quote) {
+    if (!base || !quote || base === quote) return Promise.resolve(null);
+    var key = base + '/' + quote;
+    if (state.fxRates[key] !== undefined) return Promise.resolve(state.fxRates[key]);
+    var url = 'https://api.frankfurter.dev/v1/latest?base=' + encodeURIComponent(base) +
+      '&symbols=' + encodeURIComponent(quote);
+    return fetch(url, { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (data) {
+        var rate = data && data.rates ? data.rates[quote] : null;
+        state.fxRates[key] = typeof rate === 'number' ? rate : null;
+        return state.fxRates[key];
+      })
+      .catch(function () {
+        state.fxRates[key] = null;
+        return null;
+      });
+  }
+
+  /**
+   * The FX rate that converts the reporting currency into the quote
+   * currency, or null when it is not available.
+   */
+  function fxRateFor(reportCurrency, quoteCurrency) {
+    if (!reportCurrency || !quoteCurrency || reportCurrency === quoteCurrency) return null;
+    var key = reportCurrency + '/' + quoteCurrency;
+    var rate = state.fxRates[key];
+    return typeof rate === 'number' ? rate : null;
+  }
+
+  /**
+   * CoinGecko spot prices for the crypto cards (CORS-enabled, no key).
+   */
   function fetchCryptoFallback() {
     var ids = Object.keys(COINGECKO_IDS).map(function (s) { return COINGECKO_IDS[s]; }).join(',');
     var url = 'https://api.coingecko.com/api/v3/simple/price?ids=' + ids +
@@ -346,6 +417,21 @@
       .then(function (snap) {
         if (!snap || !snap.quotes) throw new Error('snapshot empty');
         return snap;
+      });
+  }
+
+  /**
+   * The committed financial statements — used when the live feed fails.
+   *
+   * They are kept in their own file because they change only when a
+   * company reports, so they do not belong in the quote snapshot.
+   */
+  function fetchFundamentalsSnapshot() {
+    return fetch('data/fundamentals.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('no fundamentals'); return r.json(); })
+      .then(function (snap) {
+        if (!snap || !snap.fundamentals) throw new Error('fundamentals empty');
+        return snap.fundamentals;
       });
   }
 
@@ -1179,6 +1265,79 @@
     }).join('');
   }
 
+  /**
+   * Render the fundamentals panel under the chart.
+   *
+   * The panel is absent for anything that has no financial statements —
+   * an index, an FX pair or a crypto coin — and for any instrument whose
+   * statements have not been fetched yet.
+   */
+  function renderFundamentals() {
+    var parsed = state.fundamentals[state.selected];
+    if (!parsed) {
+      els.fundamentals.hidden = true;
+      els.fundGroups.innerHTML = '';
+      els.fundNotes.innerHTML = '';
+      els.fundMeta.textContent = '';
+      return;
+    }
+
+    var quote = state.quotes[state.selected] || {};
+    var derived = window.FundamentalsModel.derive(parsed, {
+      price: quote.price,
+      quoteCurrency: quote.currency,
+      fxRate: fxRateFor(parsed.currency, quote.currency)
+    });
+
+    els.fundamentals.hidden = false;
+    els.fundMeta.textContent = derived.currency ?
+      ('TTM · ' + derived.currency + (derived.asOf ? ' · to ' + derived.asOf : '')) : '';
+
+    els.fundGroups.innerHTML = window.FundamentalsModel.groupMetrics(derived)
+      .map(function (group) {
+        var metrics = group.metrics.map(function (m) {
+          var text = fmtFundamental(m.value, m.kind);
+          var cls = m.value === null || m.value === undefined ? ' is-empty' : '';
+          return '<div class="fund-metric">' +
+            '<span class="fund-metric-label">' + escapeHtml(m.label) + '</span>' +
+            '<span class="fund-metric-value' + cls + '">' + escapeHtml(text) + '</span>' +
+            '</div>';
+        }).join('');
+        return '<div class="fund-group">' +
+          '<div class="fund-group-title">' + escapeHtml(group.title) + '</div>' +
+          metrics + '</div>';
+      }).join('');
+
+    els.fundNotes.innerHTML = derived.notes.map(function (note) {
+      return '<p class="fund-note">' + escapeHtml(note) + '</p>';
+    }).join('');
+  }
+
+  /**
+   * Format a fundamental metric by its kind.
+   *
+   * A ratio is plain, a percentage carries its sign, a money figure is
+   * abbreviated, and a missing value is a dash rather than a zero.
+   */
+  function fmtFundamental(value, kind) {
+    if (value === null || value === undefined || isNaN(value)) return '—';
+    switch (kind) {
+      case 'ratio':
+        return value.toFixed(1) + '×';
+      case 'ratioPercent':
+        // A margin is a ratio: 0.677 is 67.7%.
+        return (value * 100).toFixed(1) + '%';
+      case 'percent':
+        return (value >= 0 ? '+' : '') + value.toFixed(1) + '%';
+      case 'moneyPerShare':
+        return fmtNum(value, 2);
+      case 'money':
+        return fmtCompact(value);
+      default:
+        return fmtNum(value, 2);
+    }
+  }
+
   // --------------------------------------------------------------- refresh
 
   function setBusy(busy) {
@@ -1228,6 +1387,9 @@
         state.lastUpdate = new Date();
         renderAll();
         renderChartHeader();
+        // The P/E and the FCF yield move with the price, so the panel is
+        // re-rendered with the new quote.
+        renderFundamentals();
         loadChart(state.selected, state.range);
       })
       .catch(function (err) {
@@ -1286,7 +1448,60 @@
     // Re-render the treemap so the selected tile picks up its highlight.
     if (heatmapData) renderHeatmap();
     renderChartHeader();
+    renderFundamentals();
     loadChart(symbol, state.range);
+    loadFundamentals(symbol);
+  }
+
+  /**
+   * Load the financial statements for the selected instrument, then
+   * re-render the panel.
+   *
+   * The statements are fetched on demand rather than for the whole
+   * universe, because most instruments have none and a request per
+   * instrument would be 30 requests for nothing.
+   */
+  function loadFundamentals(symbol) {
+    var meta = UNIVERSE.filter(function (u) { return u.symbol === symbol; })[0];
+    // Only equities have statements. Asking for an index wastes a request
+    // and returns nothing.
+    var isEquity = meta ? meta.group === 'equity' : false;
+    if (!isEquity) {
+      state.fundamentals[symbol] = null;
+      renderFundamentals();
+      return;
+    }
+
+    if (state.fundamentals[symbol] !== undefined) {
+      renderFundamentals();
+      return;
+    }
+
+    renderFundamentals();
+    return fetchFundamentals(symbol).then(function (parsed) {
+      if (!parsed) {
+        // The live feed failed. The committed statements are the fallback,
+        // so the panel is not simply empty.
+        return fetchFundamentalsSnapshot().then(function (snap) {
+          if (snap[symbol]) {
+            state.fundamentals[symbol] = snap[symbol];
+          }
+          renderFundamentals();
+        }).catch(function () {
+          renderFundamentals();
+        });
+      }
+      // The statements may be in a different currency from the price. If
+      // they are, the conversion rate is needed before anything can be
+      // compared, so it is fetched too.
+      var quote = state.quotes[symbol] || {};
+      if (parsed.currency && quote.currency && parsed.currency !== quote.currency) {
+        return fetchFxRates(parsed.currency, quote.currency).then(function () {
+          renderFundamentals();
+        });
+      }
+      renderFundamentals();
+    });
   }
 
   function bindEvents() {
@@ -1488,6 +1703,10 @@
       chartHost: $('chartHost'),
       chartLoading: $('chartLoading'),
       chartStats: $('chartStats'),
+      fundamentals: $('fundamentals'),
+      fundGroups: $('fundGroups'),
+      fundNotes: $('fundNotes'),
+      fundMeta: $('fundMeta'),
       rangeTabs: $('rangeTabs'),
       portfolioBody: $('portfolioBody'),
       sectorStrip: $('sectorStrip'),
@@ -1531,6 +1750,9 @@
     initHeatmap();
     refresh(true).then(function () {
       scheduleRefresh();
+      // The statements for the selected instrument are loaded once the
+      // quotes are in, because the P/E needs the price.
+      loadFundamentals(state.selected);
     });
   }
 

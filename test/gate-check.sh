@@ -115,5 +115,52 @@ model_rejects "    { symbol: 'AAPL', role: 'x', sector: 'Tech', group: 'tech', w
   "weights that do not sum to 100"
 
 echo
+echo "=== DIRECTION 5: the fundamentals model must refuse a cross-currency P/E ==="
+# A Hong Kong stock's statements are in CNY and its price is in HKD. The
+# P/E must stay empty rather than be computed across two currencies, and
+# the model must say why.
+if node -e "
+  const model = require('./assets/fundamentals-model.js');
+  const cross = { timeseries: { result: [
+    { meta: {}, trailingTotalRevenue: [
+      { asOfDate: '2026-06-30', currencyCode: 'CNY', reportedValue: { raw: 788483000000 } }
+    ] },
+    { meta: {}, trailingDilutedEPS: [
+      { asOfDate: '2026-06-30', currencyCode: 'CNY', reportedValue: { raw: 25.44 } }
+    ] }
+  ] } };
+  const parsed = model.parse(cross, '0700.HK');
+  const d = model.derive(parsed, { price: 394, quoteCurrency: 'HKD' });
+  const ok = parsed && parsed.currency === 'CNY' && d.crossCurrency === true &&
+             d.valuation.pe === null && d.notes.length > 0;
+  process.exit(ok ? 0 : 1);
+" 2>/dev/null; then
+  echo "  PASS  a cross-currency P/E is refused and explained"; PASS=$((PASS+1))
+else
+  echo "  FAIL  a cross-currency P/E was computed without a rate"; FAIL=$((FAIL+1))
+fi
+
+# With the rate it must be computed — the gate must not block the honest case.
+if node -e "
+  const model = require('./assets/fundamentals-model.js');
+  const cross = { timeseries: { result: [
+    { meta: {}, trailingTotalRevenue: [
+      { asOfDate: '2026-06-30', currencyCode: 'CNY', reportedValue: { raw: 788483000000 } }
+    ] },
+    { meta: {}, trailingDilutedEPS: [
+      { asOfDate: '2026-06-30', currencyCode: 'CNY', reportedValue: { raw: 25.44 } }
+    ] }
+  ] } };
+  const parsed = model.parse(cross, '0700.HK');
+  const d = model.derive(parsed, { price: 394, quoteCurrency: 'HKD', fxRate: 1.1759 });
+  const expected = 394 / (25.44 * 1.1759);
+  process.exit(Math.abs(d.valuation.pe - expected) < 0.01 ? 0 : 1);
+" 2>/dev/null; then
+  echo "  PASS  a converted P/E is computed when the rate is known"; PASS=$((PASS+1))
+else
+  echo "  FAIL  a converted P/E was not computed"; FAIL=$((FAIL+1))
+fi
+
+echo
 echo "=== SUMMARY: $PASS passed, $FAIL failed ==="
 [ "$FAIL" -eq 0 ] || exit 1

@@ -39,7 +39,7 @@ if [ -z "$URL" ]; then
 fi
 
 FAILED=0
-for probe in tabs_probe fx_probe heatmap_probe interactions; do
+for probe in tabs_probe fx_probe heatmap_probe interactions fundamentals_probe; do
   echo
   echo "=== ${probe} ==="
   if ! "$PY" "$HERE/${probe}.py" "$URL"; then

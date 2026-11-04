@@ -331,6 +331,41 @@ button { font-family: inherit; cursor: pointer; }
 .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-4); }
 .stat-value { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text-2); margin-top: 2px; }
 
+/* ----------------------------------------------------------- fundamentals */
+
+.fundamentals {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+.fundamentals[hidden] { display: none; }
+
+.fund-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+.fund-title { font-size: 12px; font-weight: 560; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-3); }
+.fund-meta { font-size: 11px; color: var(--text-4); font-family: var(--mono); }
+
+.fund-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px 20px;
+}
+.fund-group { min-width: 0; }
+.fund-group-title {
+  font-size: 10px; font-weight: 510; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--text-4); margin-bottom: 7px;
+}
+.fund-metric { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 2px 0; }
+.fund-metric-label { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+.fund-metric-value {
+  font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums;
+  color: var(--text-2); text-align: right; white-space: nowrap;
+}
+.fund-metric-value.is-empty { color: var(--text-4); }
+
+.fund-notes { margin-top: 12px; }
+.fund-note { font-size: 11px; color: var(--text-4); line-height: 1.5; }
+.fund-note + .fund-note { margin-top: 4px; }
+
 /* -------------------------------------------------------------- watchlist */
 
 .table-scroll { overflow-x: auto; margin: 0 -4px; }

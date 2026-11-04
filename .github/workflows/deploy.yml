@@ -41,6 +41,7 @@ jobs:
           test -f assets/heatmap-model.js
           test -f assets/tabs-model.js
           test -f assets/universe.js
+          test -f assets/fundamentals-model.js
           test -f assets/vendor/uPlot.min.js
           test -f assets/vendor/uPlot.min.css
           test -f data/snapshot.json
@@ -54,6 +55,7 @@ jobs:
           grep -q 'assets/heatmap-model.js' index.html || { echo 'ERROR: heatmap-model.js not referenced'; exit 1; }
           grep -q 'assets/tabs-model.js' index.html || { echo 'ERROR: tabs-model.js not referenced'; exit 1; }
           grep -q 'assets/universe.js' index.html || { echo 'ERROR: universe.js not referenced'; exit 1; }
+          grep -q 'assets/fundamentals-model.js' index.html || { echo 'ERROR: fundamentals-model.js not referenced'; exit 1; }
           echo "asset check OK"
 
       - name: Run unit tests
@@ -172,6 +174,35 @@ jobs:
             console.log('FX OK: ' + tracked.length + ' pairs, all derivable from Frankfurter');
           "
 
+      - name: Validate the fundamentals model
+        run: |
+          set -euo pipefail
+          # The committed statements are the offline fallback. Every tracked
+          # equity must be in there, or the panel would be empty whenever
+          # the live feed is unreachable.
+          node -e "
+            const fs = require('fs');
+            const universe = require('./assets/universe.js');
+            const model = require('./assets/fundamentals-model.js');
+            const snap = require('./data/fundamentals.json');
+            const equities = universe.ofGroup('equity');
+            const missing = equities.map(e => e.symbol).filter(s => !snap.fundamentals[s]);
+            if (missing.length) {
+              console.error('ERROR: these equities have no committed statements: ' + missing.join(', '));
+              console.error('Run: node scripts/make-fundamentals.js');
+              process.exit(1);
+            }
+            // Each entry must carry its currency, because the price and the
+            // statements are not always in the same currency.
+            const noCurrency = Object.keys(snap.fundamentals).filter(s => !snap.fundamentals[s].currency);
+            if (noCurrency.length) {
+              console.error('ERROR: these entries have no reporting currency: ' + noCurrency.join(', '));
+              process.exit(1);
+            }
+            console.log('fundamentals OK: ' + Object.keys(snap.fundamentals).length +
+              ' entries covering every tracked equity, updated ' + snap.updated);
+          "
+
       - name: Validate the tab workspace
         run: |
           set -euo pipefail
@@ -280,6 +311,7 @@ jobs:
           node --check assets/portfolio.js
           node --check assets/heatmap-model.js
           node --check assets/universe.js
+          node --check assets/fundamentals-model.js
           node --check scripts/make-snapshot.js
           echo "js syntax OK"
 
