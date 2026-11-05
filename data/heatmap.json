@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-05T02:35:12Z"
+ "updated": "2026-11-05T09:53:16Z"
 }
