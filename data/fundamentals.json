@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05T18:03:39.786Z",
+  "updated": "2026-11-05T23:40:24.132Z",
   "count": 14,
   "fundamentals": {
     "AAPL": {
@@ -1952,7 +1952,7 @@
       "asOf": "2026-09-30",
       "ttm": {
         "revenue": {
-          "value": 198551000000,
+          "value": 198653000000,
           "date": "2026-09-30",
           "currency": "USD"
         },
@@ -1967,13 +1967,13 @@
         "costOfRevenue": null,
         "totalExpenses": null,
         "operatingCashFlow": {
-          "value": -148615000000,
-          "date": "2025-06-30",
+          "value": -84159000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "freeCashFlow": {
-          "value": -148615000000,
-          "date": "2025-06-30",
+          "value": -84159000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "capex": null,
@@ -2063,23 +2063,23 @@
       },
       "quarterly": {
         "totalAssets": {
-          "value": 5015069000000,
-          "date": "2026-06-30",
+          "value": 5091545000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "equity": {
-          "value": 374598000000,
-          "date": "2026-06-30",
+          "value": 372368000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "cash": {
-          "value": 309811000000,
-          "date": "2026-06-30",
+          "value": 326271000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "totalDebt": {
-          "value": 532953000000,
-          "date": "2026-06-30",
+          "value": 531499000000,
+          "date": "2026-09-30",
           "currency": "USD"
         }
       }
@@ -2225,23 +2225,23 @@
       },
       "quarterly": {
         "totalAssets": {
-          "value": 464482000000,
-          "date": "2026-06-30",
+          "value": 470917000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "equity": {
-          "value": 259380000000,
-          "date": "2026-06-30",
+          "value": 265789000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "cash": {
-          "value": 10588000000,
-          "date": "2026-06-30",
+          "value": 12153000000,
+          "date": "2026-09-30",
           "currency": "USD"
         },
         "totalDebt": {
-          "value": 42368000000,
-          "date": "2026-06-30",
+          "value": 34250000000,
+          "date": "2026-09-30",
           "currency": "USD"
         }
       }
