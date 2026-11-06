@@ -25,7 +25,7 @@
    "changePct": -3.575,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3981121010914,
+   "marketCap": 3980352109999,
    "name": "Microsoft",
    "price": 535.93,
    "sector": "Information Technology",
@@ -555,7 +555,7 @@
    "changePct": -10.8247,
    "group": "tech",
    "industry": "Communications Equipment",
-   "marketCap": 200732592000,
+   "marketCap": 201082744000,
    "name": "Arista Networks",
    "price": 159.16,
    "sector": "Information Technology",
@@ -1155,7 +1155,7 @@
    "changePct": 0.3781,
    "group": "nontech",
    "industry": "Electric Utilities",
-   "marketCap": 101230424693,
+   "marketCap": 101462400000,
    "name": "Duke Energy",
    "price": 130.08,
    "sector": "Utilities",
@@ -3235,7 +3235,7 @@
    "changePct": -0.4717,
    "group": "nontech",
    "industry": "Packaged Foods & Meats",
-   "marketCap": 30029520000,
+   "marketCap": 29978880000,
    "name": "Kraft Heinz",
    "price": 25.32,
    "sector": "Consumer Staples",
@@ -3745,7 +3745,7 @@
    "changePct": -1.5048,
    "group": "nontech",
    "industry": "Paper & Plastic Packaging Products & Materials",
-   "marketCap": 23346514635,
+   "marketCap": 23346655598,
    "name": "Smurfit Westrock",
    "price": 44.51,
    "sector": "Materials",
@@ -4905,7 +4905,7 @@
    "changePct": -8.9742,
    "group": "nontech",
    "industry": "Heavy Electrical Equipment",
-   "marketCap": 10168441768,
+   "marketCap": 10165463734,
    "name": "Generac",
    "price": 172.33,
    "sector": "Industrials",
@@ -5005,7 +5005,7 @@
    "changePct": 3.284,
    "group": "nontech",
    "industry": "Fertilizers & Agricultural Chemicals",
-   "marketCap": 7098609775,
+   "marketCap": 7098766576,
    "name": "Mosaic Company (The)",
    "price": 22.33,
    "sector": "Materials",
@@ -5050,7 +5050,7 @@
      "changePct": -3.575,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3981121010914,
+     "marketCap": 3980352109999,
      "name": "Microsoft",
      "price": 535.93,
      "sector": "Information Technology",
@@ -5210,7 +5210,7 @@
      "changePct": -10.8247,
      "group": "tech",
      "industry": "Communications Equipment",
-     "marketCap": 200732592000,
+     "marketCap": 201082744000,
      "name": "Arista Networks",
      "price": 159.16,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 22930125626059,
+   "marketCap": 22929706877144,
    "sector": "Information Technology"
   },
   {
@@ -8675,7 +8675,7 @@
      "changePct": -8.9742,
      "group": "nontech",
      "industry": "Heavy Electrical Equipment",
-     "marketCap": 10168441768,
+     "marketCap": 10165463734,
      "name": "Generac",
      "price": 172.33,
      "sector": "Industrials",
@@ -8692,7 +8692,7 @@
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5351427633333,
+   "marketCap": 5351424655299,
    "sector": "Industrials"
   },
   {
@@ -8902,7 +8902,7 @@
      "changePct": -0.4717,
      "group": "nontech",
      "industry": "Packaged Foods & Meats",
-     "marketCap": 30029520000,
+     "marketCap": 29978880000,
      "name": "Kraft Heinz",
      "price": 25.32,
      "sector": "Consumer Staples",
@@ -9029,7 +9029,7 @@
      "symbol": "CLX"
     }
    ],
-   "marketCap": 3871702129463,
+   "marketCap": 3871651489463,
    "sector": "Consumer Staples"
   },
   {
@@ -9276,7 +9276,7 @@
      "changePct": 0.3781,
      "group": "nontech",
      "industry": "Electric Utilities",
-     "marketCap": 101230424693,
+     "marketCap": 101462400000,
      "name": "Duke Energy",
      "price": 130.08,
      "sector": "Utilities",
@@ -9563,7 +9563,7 @@
      "symbol": "AES"
     }
    ],
-   "marketCap": 1384703545201,
+   "marketCap": 1384935520508,
    "sector": "Utilities"
   },
   {
@@ -10000,7 +10000,7 @@
      "changePct": -1.5048,
      "group": "nontech",
      "industry": "Paper & Plastic Packaging Products & Materials",
-     "marketCap": 23346514635,
+     "marketCap": 23346655598,
      "name": "Smurfit Westrock",
      "price": 44.51,
      "sector": "Materials",
@@ -10110,17 +10110,17 @@
      "changePct": 3.284,
      "group": "nontech",
      "industry": "Fertilizers & Agricultural Chemicals",
-     "marketCap": 7098609775,
+     "marketCap": 7098766576,
      "name": "Mosaic Company (The)",
      "price": 22.33,
      "sector": "Materials",
      "symbol": "MOS"
     }
    ],
-   "marketCap": 1170529173509,
+   "marketCap": 1170529471273,
    "sector": "Materials"
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-06T03:42:10Z"
+ "updated": "2026-11-06T11:35:38Z"
 }
