@@ -25,7 +25,7 @@
    "changePct": -3.575,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3980352109999,
+   "marketCap": 3981121010914,
    "name": "Microsoft",
    "price": 535.93,
    "sector": "Information Technology",
@@ -1155,7 +1155,7 @@
    "changePct": 0.3781,
    "group": "nontech",
    "industry": "Electric Utilities",
-   "marketCap": 101462400000,
+   "marketCap": 101230424693,
    "name": "Duke Energy",
    "price": 130.08,
    "sector": "Utilities",
@@ -1442,6 +1442,16 @@
    "symbol": "TT"
   },
   {
+   "changePct": 3.4906,
+   "group": "nontech",
+   "industry": "Hotels, Resorts & Cruise Lines",
+   "marketCap": 86765009783,
+   "name": "Hilton Worldwide",
+   "price": 376.53,
+   "sector": "Consumer Discretionary",
+   "symbol": "HLT"
+  },
+  {
    "changePct": -3.9862,
    "group": "nontech",
    "industry": "Specialty Chemicals",
@@ -1490,16 +1500,6 @@
    "price": 311.43,
    "sector": "Information Technology",
    "symbol": "CDNS"
-  },
-  {
-   "changePct": 1.5969,
-   "group": "nontech",
-   "industry": "Hotels, Resorts & Cruise Lines",
-   "marketCap": 85177325090,
-   "name": "Hilton Worldwide",
-   "price": 369.64,
-   "sector": "Consumer Discretionary",
-   "symbol": "HLT"
   },
   {
    "changePct": -2.4703,
@@ -5050,7 +5050,7 @@
      "changePct": -3.575,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3980352109999,
+     "marketCap": 3981121010914,
      "name": "Microsoft",
      "price": 535.93,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 22929356725144,
+   "marketCap": 22930125626059,
    "sector": "Information Technology"
   },
   {
@@ -7495,12 +7495,12 @@
      "symbol": "RCL"
     },
     {
-     "changePct": 1.5969,
+     "changePct": 3.4906,
      "group": "nontech",
      "industry": "Hotels, Resorts & Cruise Lines",
-     "marketCap": 85177325090,
+     "marketCap": 86765009783,
      "name": "Hilton Worldwide",
-     "price": 369.64,
+     "price": 376.53,
      "sector": "Consumer Discretionary",
      "symbol": "HLT"
     },
@@ -7855,7 +7855,7 @@
      "symbol": "NCLH"
     }
    ],
-   "marketCap": 6891680802440,
+   "marketCap": 6893268487133,
    "sector": "Consumer Discretionary"
   },
   {
@@ -9276,7 +9276,7 @@
      "changePct": 0.3781,
      "group": "nontech",
      "industry": "Electric Utilities",
-     "marketCap": 101462400000,
+     "marketCap": 101230424693,
      "name": "Duke Energy",
      "price": 130.08,
      "sector": "Utilities",
@@ -9563,7 +9563,7 @@
      "symbol": "AES"
     }
    ],
-   "marketCap": 1384935520508,
+   "marketCap": 1384703545201,
    "sector": "Utilities"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-05T23:42:06Z"
+ "updated": "2026-11-06T03:42:10Z"
 }
