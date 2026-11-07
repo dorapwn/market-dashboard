@@ -1442,6 +1442,16 @@
    "symbol": "CDNS"
   },
   {
+   "changePct": 3.4906,
+   "group": "nontech",
+   "industry": "Hotels, Resorts & Cruise Lines",
+   "marketCap": 86765009783,
+   "name": "Hilton Worldwide",
+   "price": 376.53,
+   "sector": "Consumer Discretionary",
+   "symbol": "HLT"
+  },
+  {
    "changePct": -1.8515,
    "group": "nontech",
    "industry": "Asset Management & Custody Banks",
@@ -1470,16 +1480,6 @@
    "price": 395.2,
    "sector": "Financials",
    "symbol": "TRV"
-  },
-  {
-   "changePct": 0.2191,
-   "group": "nontech",
-   "industry": "Hotels, Resorts & Cruise Lines",
-   "marketCap": 85363975976,
-   "name": "Hilton Worldwide",
-   "price": 370.45,
-   "sector": "Consumer Discretionary",
-   "symbol": "HLT"
   },
   {
    "changePct": 2.6252,
@@ -7495,12 +7495,12 @@
      "symbol": "RCL"
     },
     {
-     "changePct": 0.2191,
+     "changePct": 3.4906,
      "group": "nontech",
      "industry": "Hotels, Resorts & Cruise Lines",
-     "marketCap": 85363975976,
+     "marketCap": 86765009783,
      "name": "Hilton Worldwide",
-     "price": 370.45,
+     "price": 376.53,
      "sector": "Consumer Discretionary",
      "symbol": "HLT"
     },
@@ -7855,7 +7855,7 @@
      "symbol": "NCLH"
     }
    ],
-   "marketCap": 6914410552669,
+   "marketCap": 6915811586476,
    "sector": "Consumer Discretionary"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-06T23:34:06Z"
+ "updated": "2026-11-07T03:16:57Z"
 }
