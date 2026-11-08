@@ -25,7 +25,7 @@
    "changePct": -0.9927,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3941601738289,
+   "marketCap": 3940840470000,
    "name": "Microsoft",
    "price": 530.61,
    "sector": "Information Technology",
@@ -1442,16 +1442,6 @@
    "symbol": "CDNS"
   },
   {
-   "changePct": 3.4906,
-   "group": "nontech",
-   "industry": "Hotels, Resorts & Cruise Lines",
-   "marketCap": 86765009783,
-   "name": "Hilton Worldwide",
-   "price": 376.53,
-   "sector": "Consumer Discretionary",
-   "symbol": "HLT"
-  },
-  {
    "changePct": -1.8515,
    "group": "nontech",
    "industry": "Asset Management & Custody Banks",
@@ -1480,6 +1470,16 @@
    "price": 395.2,
    "sector": "Financials",
    "symbol": "TRV"
+  },
+  {
+   "changePct": 1.8195,
+   "group": "nontech",
+   "industry": "Hotels, Resorts & Cruise Lines",
+   "marketCap": 85363975976,
+   "name": "Hilton Worldwide",
+   "price": 370.45,
+   "sector": "Consumer Discretionary",
+   "symbol": "HLT"
   },
   {
    "changePct": 2.6252,
@@ -5050,7 +5050,7 @@
      "changePct": -0.9927,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3941601738289,
+     "marketCap": 3940840470000,
      "name": "Microsoft",
      "price": 530.61,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 23223533448218,
+   "marketCap": 23222772179929,
    "sector": "Information Technology"
   },
   {
@@ -7495,12 +7495,12 @@
      "symbol": "RCL"
     },
     {
-     "changePct": 3.4906,
+     "changePct": 1.8195,
      "group": "nontech",
      "industry": "Hotels, Resorts & Cruise Lines",
-     "marketCap": 86765009783,
+     "marketCap": 85363975976,
      "name": "Hilton Worldwide",
-     "price": 376.53,
+     "price": 370.45,
      "sector": "Consumer Discretionary",
      "symbol": "HLT"
     },
@@ -7855,7 +7855,7 @@
      "symbol": "NCLH"
     }
    ],
-   "marketCap": 6915811586476,
+   "marketCap": 6914410552669,
    "sector": "Consumer Discretionary"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-08T13:31:22Z"
+ "updated": "2026-11-08T18:32:44Z"
 }
