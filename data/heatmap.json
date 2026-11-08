@@ -1472,7 +1472,7 @@
    "symbol": "TRV"
   },
   {
-   "changePct": 1.8195,
+   "changePct": 0.2191,
    "group": "nontech",
    "industry": "Hotels, Resorts & Cruise Lines",
    "marketCap": 85363975976,
@@ -7495,7 +7495,7 @@
      "symbol": "RCL"
     },
     {
-     "changePct": 1.8195,
+     "changePct": 0.2191,
      "group": "nontech",
      "industry": "Hotels, Resorts & Cruise Lines",
      "marketCap": 85363975976,
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-08T18:32:44Z"
+ "updated": "2026-11-08T22:32:44Z"
 }
