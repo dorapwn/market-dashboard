@@ -25,7 +25,7 @@
    "changePct": 2.7459,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 4049051859999,
+   "marketCap": 4049834031926,
    "name": "Microsoft",
    "price": 545.18,
    "sector": "Information Technology",
@@ -5050,7 +5050,7 @@
      "changePct": 2.7459,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 4049051859999,
+     "marketCap": 4049834031926,
      "name": "Microsoft",
      "price": 545.18,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 23892985561794,
+   "marketCap": 23893767733721,
    "sector": "Information Technology"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-10T03:38:01Z"
+ "updated": "2026-11-10T11:49:53Z"
 }
