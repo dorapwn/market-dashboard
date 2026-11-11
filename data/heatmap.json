@@ -1312,16 +1312,6 @@
    "symbol": "UPS"
   },
   {
-   "changePct": -1.168,
-   "group": "nontech",
-   "industry": "Electrical Components & Equipment",
-   "marketCap": 94291512000,
-   "name": "Emerson Electric",
-   "price": 167.54,
-   "sector": "Industrials",
-   "symbol": "EMR"
-  },
-  {
    "changePct": -3.0171,
    "group": "nontech",
    "industry": "Electric Utilities",
@@ -1330,6 +1320,16 @@
    "price": 267.76,
    "sector": "Utilities",
    "symbol": "CEG"
+  },
+  {
+   "changePct": -1.168,
+   "group": "nontech",
+   "industry": "Electrical Components & Equipment",
+   "marketCap": 93370042000,
+   "name": "Emerson Electric",
+   "price": 167.54,
+   "sector": "Industrials",
+   "symbol": "EMR"
   },
   {
    "changePct": 0.0618,
@@ -1492,16 +1492,6 @@
    "symbol": "PWR"
   },
   {
-   "changePct": 1.7496,
-   "group": "nontech",
-   "industry": "Hotels, Resorts & Cruise Lines",
-   "marketCap": 87509308993,
-   "name": "Hilton Worldwide",
-   "price": 379.76,
-   "sector": "Consumer Discretionary",
-   "symbol": "HLT"
-  },
-  {
    "changePct": -0.1117,
    "group": "tech",
    "industry": "Communications Equipment",
@@ -1520,6 +1510,16 @@
    "price": 400.78,
    "sector": "Financials",
    "symbol": "TRV"
+  },
+  {
+   "changePct": 3.4906,
+   "group": "nontech",
+   "industry": "Hotels, Resorts & Cruise Lines",
+   "marketCap": 86765009783,
+   "name": "Hilton Worldwide",
+   "price": 376.53,
+   "sector": "Consumer Discretionary",
+   "symbol": "HLT"
   },
   {
    "changePct": -3.2408,
@@ -2105,7 +2105,7 @@
    "changePct": 2.0445,
    "group": "nontech",
    "industry": "Oil & Gas Exploration & Production",
-   "marketCap": 56883416551,
+   "marketCap": 56885645950,
    "name": "Occidental Petroleum",
    "price": 56.9,
    "sector": "Energy",
@@ -6888,12 +6888,12 @@
      "symbol": "RCL"
     },
     {
-     "changePct": 1.7496,
+     "changePct": 3.4906,
      "group": "nontech",
      "industry": "Hotels, Resorts & Cruise Lines",
-     "marketCap": 87509308993,
+     "marketCap": 86765009783,
      "name": "Hilton Worldwide",
-     "price": 379.76,
+     "price": 376.53,
      "sector": "Consumer Discretionary",
      "symbol": "HLT"
     },
@@ -7248,7 +7248,7 @@
      "symbol": "APTV"
     }
    ],
-   "marketCap": 7164634601635,
+   "marketCap": 7163890302425,
    "sector": "Consumer Discretionary"
   },
   {
@@ -8035,7 +8035,7 @@
      "changePct": -1.168,
      "group": "nontech",
      "industry": "Electrical Components & Equipment",
-     "marketCap": 94291512000,
+     "marketCap": 93370042000,
      "name": "Emerson Electric",
      "price": 167.54,
      "sector": "Industrials",
@@ -8692,7 +8692,7 @@
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5552290235863,
+   "marketCap": 5551368765863,
    "sector": "Industrials"
   },
   {
@@ -9149,7 +9149,7 @@
      "changePct": 2.0445,
      "group": "nontech",
      "industry": "Oil & Gas Exploration & Production",
-     "marketCap": 56883416551,
+     "marketCap": 56885645950,
      "name": "Occidental Petroleum",
      "price": 56.9,
      "sector": "Energy",
@@ -9246,7 +9246,7 @@
      "symbol": "APA"
     }
    ],
-   "marketCap": 2336842574995,
+   "marketCap": 2336844804394,
    "sector": "Energy"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-11T00:17:10Z"
+ "updated": "2026-11-11T06:45:39Z"
 }
