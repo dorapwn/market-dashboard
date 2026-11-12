@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-12T10:22:11.798Z",
+  "updated": "2026-11-12T18:37:25.071Z",
   "count": 14,
   "fundamentals": {
     "AAPL": {
@@ -878,8 +878,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1639927139677,
-          "date": "2026-11-10",
+          "value": 1607659906787,
+          "date": "2026-11-11",
           "currency": "USD"
         }
       },
@@ -1040,8 +1040,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1501167857506,
-          "date": "2026-11-10",
+          "value": 1544885052998,
+          "date": "2026-11-11",
           "currency": "USD"
         }
       },
@@ -1364,8 +1364,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 844989352587,
-          "date": "2026-11-10",
+          "value": 906804241077,
+          "date": "2026-11-11",
           "currency": "USD"
         }
       },
@@ -1850,8 +1850,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 406771363560,
-          "date": "2026-11-10",
+          "value": 415397364517,
+          "date": "2026-11-11",
           "currency": "USD"
         }
       },
