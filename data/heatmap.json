@@ -12,7 +12,7 @@
    "symbol": "AAPL"
   },
   {
-   "changePct": 2.9233,
+   "changePct": 2.9231,
    "group": "tech",
    "industry": "Semiconductors",
    "marketCap": 4222333919999,
@@ -25,7 +25,7 @@
    "changePct": -2.2573,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3871143035122,
+   "marketCap": 3870395375000,
    "name": "Microsoft",
    "price": 521.125,
    "sector": "Information Technology",
@@ -1352,6 +1352,16 @@
    "symbol": "EMR"
   },
   {
+   "changePct": -0.9716,
+   "group": "nontech",
+   "industry": "Life Sciences Tools & Services",
+   "marketCap": 92541320269,
+   "name": "Waters Corporation",
+   "price": 470.9,
+   "sector": "Health Care",
+   "symbol": "WAT"
+  },
+  {
    "changePct": 0.3026,
    "group": "nontech",
    "industry": "Diversified Banks",
@@ -1842,16 +1852,6 @@
    "symbol": "AEP"
   },
   {
-   "changePct": 1.5879,
-   "group": "nontech",
-   "industry": "Aerospace & Defense",
-   "marketCap": 70187674290,
-   "name": "TransDigm Group",
-   "price": 1245.0,
-   "sector": "Industrials",
-   "symbol": "TDG"
-  },
-  {
    "changePct": 0.9384,
    "group": "nontech",
    "industry": "Industrial Gases",
@@ -1880,6 +1880,16 @@
    "price": 269.51,
    "sector": "Information Technology",
    "symbol": "NXPI"
+  },
+  {
+   "changePct": 1.5879,
+   "group": "nontech",
+   "industry": "Aerospace & Defense",
+   "marketCap": 67949822895,
+   "name": "TransDigm Group",
+   "price": 1245.0,
+   "sector": "Industrials",
+   "symbol": "TDG"
   },
   {
    "changePct": 0.1382,
@@ -2520,16 +2530,6 @@
    "price": 274.53,
    "sector": "Health Care",
    "symbol": "IQV"
-  },
-  {
-   "changePct": -0.9716,
-   "group": "nontech",
-   "industry": "Life Sciences Tools & Services",
-   "marketCap": 46254152500,
-   "name": "Waters Corporation",
-   "price": 470.9,
-   "sector": "Health Care",
-   "symbol": "WAT"
   },
   {
    "changePct": 9.2472,
@@ -4622,16 +4622,6 @@
    "symbol": "TRMB"
   },
   {
-   "changePct": 5.9606,
-   "group": "tech",
-   "industry": "Semiconductors",
-   "marketCap": 13189820000,
-   "name": "Skyworks Solutions",
-   "price": 87.64,
-   "sector": "Information Technology",
-   "symbol": "SWKS"
-  },
-  {
    "changePct": 1.8403,
    "group": "nontech",
    "industry": "Multi-Utilities",
@@ -4650,6 +4640,16 @@
    "price": 107.45,
    "sector": "Consumer Discretionary",
    "symbol": "LULU"
+  },
+  {
+   "changePct": 5.9606,
+   "group": "tech",
+   "industry": "Semiconductors",
+   "marketCap": 13067124000,
+   "name": "Skyworks Solutions",
+   "price": 87.64,
+   "sector": "Information Technology",
+   "symbol": "SWKS"
   },
   {
    "changePct": 0.2439,
@@ -5037,7 +5037,7 @@
      "symbol": "AAPL"
     },
     {
-     "changePct": 2.9233,
+     "changePct": 2.9231,
      "group": "tech",
      "industry": "Semiconductors",
      "marketCap": 4222333919999,
@@ -5050,7 +5050,7 @@
      "changePct": -2.2573,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3871143035122,
+     "marketCap": 3870395375000,
      "name": "Microsoft",
      "price": 521.125,
      "sector": "Information Technology",
@@ -5770,7 +5770,7 @@
      "changePct": 5.9606,
      "group": "tech",
      "industry": "Semiconductors",
-     "marketCap": 13189820000,
+     "marketCap": 13067124000,
      "name": "Skyworks Solutions",
      "price": 87.64,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 24217192965683,
+   "marketCap": 24216322609561,
    "sector": "Information Technology"
   },
   {
@@ -6778,6 +6778,613 @@
    "group": "nontech",
    "items": [
     {
+     "changePct": 0.3491,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 1286087092000,
+     "name": "Lilly (Eli)",
+     "price": 1437.29,
+     "sector": "Health Care",
+     "symbol": "LLY"
+    },
+    {
+     "changePct": -0.1318,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 675210174990,
+     "name": "Johnson & Johnson",
+     "price": 280.41,
+     "sector": "Health Care",
+     "symbol": "JNJ"
+    },
+    {
+     "changePct": 0.3709,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 521488072804,
+     "name": "AbbVie",
+     "price": 294.98,
+     "sector": "Health Care",
+     "symbol": "ABBV"
+    },
+    {
+     "changePct": -0.5381,
+     "group": "nontech",
+     "industry": "Managed Health Care",
+     "marketCap": 364998613542,
+     "name": "UnitedHealth Group",
+     "price": 402.94,
+     "sector": "Health Care",
+     "symbol": "UNH"
+    },
+    {
+     "changePct": -0.5876,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 364215567419,
+     "name": "Merck & Co.",
+     "price": 147.18,
+     "sector": "Health Care",
+     "symbol": "MRK"
+    },
+    {
+     "changePct": -0.0682,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 270017911233,
+     "name": "Thermo Fisher Scientific",
+     "price": 717.71,
+     "sector": "Health Care",
+     "symbol": "TMO"
+    },
+    {
+     "changePct": 0.619,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 253200699000,
+     "name": "Amgen",
+     "price": 468.11,
+     "sector": "Health Care",
+     "symbol": "AMGN"
+    },
+    {
+     "changePct": -0.6672,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 210634930000,
+     "name": "Gilead Sciences",
+     "price": 169.73,
+     "sector": "Health Care",
+     "symbol": "GILD"
+    },
+    {
+     "changePct": -1.0592,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 189792953999,
+     "name": "Abbott Laboratories",
+     "price": 109.29,
+     "sector": "Health Care",
+     "symbol": "ABT"
+    },
+    {
+     "changePct": 0.3065,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 167865000000,
+     "name": "Pfizer",
+     "price": 29.45,
+     "sector": "Health Care",
+     "symbol": "PFE"
+    },
+    {
+     "changePct": -0.3388,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 166340639000,
+     "name": "Danaher Corporation",
+     "price": 235.31,
+     "sector": "Health Care",
+     "symbol": "DHR"
+    },
+    {
+     "changePct": -0.1133,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 159628103000,
+     "name": "Intuitive Surgical",
+     "price": 449.53,
+     "sector": "Health Care",
+     "symbol": "ISRG"
+    },
+    {
+     "changePct": -0.157,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 138940819264,
+     "name": "Vertex Pharmaceuticals",
+     "price": 547.03,
+     "sector": "Health Care",
+     "symbol": "VRTX"
+    },
+    {
+     "changePct": 0.0197,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 130078814741,
+     "name": "Medtronic",
+     "price": 101.61,
+     "sector": "Health Care",
+     "symbol": "MDT"
+    },
+    {
+     "changePct": -0.2586,
+     "group": "nontech",
+     "industry": "Health Care Distributors",
+     "marketCap": 129574800000,
+     "name": "McKesson",
+     "price": 1079.79,
+     "sector": "Health Care",
+     "symbol": "MCK"
+    },
+    {
+     "changePct": 0.1752,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 128588040000,
+     "name": "Bristol Myers Squibb",
+     "price": 62.91,
+     "sector": "Health Care",
+     "symbol": "BMY"
+    },
+    {
+     "changePct": -1.696,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 121937175000,
+     "name": "Stryker Corporation",
+     "price": 318.79,
+     "sector": "Health Care",
+     "symbol": "SYK"
+    },
+    {
+     "changePct": 0.573,
+     "group": "nontech",
+     "industry": "Health Care Services",
+     "marketCap": 114585600000,
+     "name": "CVS Health",
+     "price": 89.52,
+     "sector": "Health Care",
+     "symbol": "CVS"
+    },
+    {
+     "changePct": 0.3212,
+     "group": "nontech",
+     "industry": "Health Care Facilities",
+     "marketCap": 113659164804,
+     "name": "HCA Healthcare",
+     "price": 506.04,
+     "sector": "Health Care",
+     "symbol": "HCA"
+    },
+    {
+     "changePct": 4.7322,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 101426087043,
+     "name": "Regeneron Pharmaceuticals",
+     "price": 959.41,
+     "sector": "Health Care",
+     "symbol": "REGN"
+    },
+    {
+     "changePct": -0.8532,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 100470760000,
+     "name": "Moderna",
+     "price": 248.69,
+     "sector": "Health Care",
+     "symbol": "MRNA"
+    },
+    {
+     "changePct": -0.0396,
+     "group": "nontech",
+     "industry": "Managed Health Care",
+     "marketCap": 94796499713,
+     "name": "Elevance Health",
+     "price": 429.48,
+     "sector": "Health Care",
+     "symbol": "ELV"
+    },
+    {
+     "changePct": -0.9716,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 92541320269,
+     "name": "Waters Corporation",
+     "price": 470.9,
+     "sector": "Health Care",
+     "symbol": "WAT"
+    },
+    {
+     "changePct": -0.5542,
+     "group": "nontech",
+     "industry": "Health Care Services",
+     "marketCap": 79421222800,
+     "name": "Cigna",
+     "price": 301.45,
+     "sector": "Health Care",
+     "symbol": "CI"
+    },
+    {
+     "changePct": 0.3355,
+     "group": "nontech",
+     "industry": "Health Care Distributors",
+     "marketCap": 67854913029,
+     "name": "Cencora",
+     "price": 349.88,
+     "sector": "Health Care",
+     "symbol": "COR"
+    },
+    {
+     "changePct": 0.962,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 66927804306,
+     "name": "Boston Scientific",
+     "price": 45.13,
+     "sector": "Health Care",
+     "symbol": "BSX"
+    },
+    {
+     "changePct": 0.2384,
+     "group": "nontech",
+     "industry": "Health Care Distributors",
+     "marketCap": 64645850000,
+     "name": "Cardinal Health",
+     "price": 277.45,
+     "sector": "Health Care",
+     "symbol": "CAH"
+    },
+    {
+     "changePct": 1.7306,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 61443867000,
+     "name": "Edwards Lifesciences",
+     "price": 105.81,
+     "sector": "Health Care",
+     "symbol": "EW"
+    },
+    {
+     "changePct": 0.8984,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 61224473079,
+     "name": "Becton Dickinson",
+     "price": 214.52,
+     "sector": "Health Care",
+     "symbol": "BDX"
+    },
+    {
+     "changePct": 0.8541,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 56004854080,
+     "name": "Idexx Laboratories",
+     "price": 702.59,
+     "sector": "Health Care",
+     "symbol": "IDXX"
+    },
+    {
+     "changePct": 1.8833,
+     "group": "nontech",
+     "industry": "Managed Health Care",
+     "marketCap": 53821108458,
+     "name": "Humana",
+     "price": 446.31,
+     "sector": "Health Care",
+     "symbol": "HUM"
+    },
+    {
+     "changePct": -0.5228,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 50086472010,
+     "name": "Agilent Technologies",
+     "price": 176.95,
+     "sector": "Health Care",
+     "symbol": "A"
+    },
+    {
+     "changePct": -0.2553,
+     "group": "nontech",
+     "industry": "Health Care Technology",
+     "marketCap": 49914703652,
+     "name": "Veeva Systems",
+     "price": 304.77,
+     "sector": "Health Care",
+     "symbol": "VEEV"
+    },
+    {
+     "changePct": -0.2253,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 46560287999,
+     "name": "IQVIA",
+     "price": 274.53,
+     "sector": "Health Care",
+     "symbol": "IQV"
+    },
+    {
+     "changePct": -1.2552,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 37643841755,
+     "name": "GE HealthCare",
+     "price": 82.6,
+     "sector": "Health Care",
+     "symbol": "GEHC"
+    },
+    {
+     "changePct": 0.0592,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 37440863093,
+     "name": "Biogen",
+     "price": 253.4,
+     "sector": "Health Care",
+     "symbol": "BIIB"
+    },
+    {
+     "changePct": -0.1353,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 35608711990,
+     "name": "Mettler Toledo",
+     "price": 1749.01,
+     "sector": "Health Care",
+     "symbol": "MTD"
+    },
+    {
+     "changePct": 0.1334,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 35086266564,
+     "name": "Zoetis",
+     "price": 82.57,
+     "sector": "Health Care",
+     "symbol": "ZTS"
+    },
+    {
+     "changePct": 0.4132,
+     "group": "nontech",
+     "industry": "Managed Health Care",
+     "marketCap": 34885697040,
+     "name": "Centene Corporation",
+     "price": 70.48,
+     "sector": "Health Care",
+     "symbol": "CNC"
+    },
+    {
+     "changePct": 1.888,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 34405462962,
+     "name": "ResMed",
+     "price": 238.53,
+     "sector": "Health Care",
+     "symbol": "RMD"
+    },
+    {
+     "changePct": -0.9213,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 32578290000,
+     "name": "Illumina, Inc.",
+     "price": 212.93,
+     "sector": "Health Care",
+     "symbol": "ILMN"
+    },
+    {
+     "changePct": 0.5318,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 30916756000,
+     "name": "Dexcom",
+     "price": 80.345,
+     "sector": "Health Care",
+     "symbol": "DXCM"
+    },
+    {
+     "changePct": 0.364,
+     "group": "nontech",
+     "industry": "Health Care Services",
+     "marketCap": 30597306000,
+     "name": "Labcorp",
+     "price": 372.23,
+     "sector": "Health Care",
+     "symbol": "LH"
+    },
+    {
+     "changePct": 0.0751,
+     "group": "nontech",
+     "industry": "Health Care Supplies",
+     "marketCap": 29743843078,
+     "name": "West Pharmaceutical Services",
+     "price": 412.86,
+     "sector": "Health Care",
+     "symbol": "WST"
+    },
+    {
+     "changePct": 0.0967,
+     "group": "nontech",
+     "industry": "Health Care Services",
+     "marketCap": 28518596625,
+     "name": "Quest Diagnostics",
+     "price": 258.69,
+     "sector": "Health Care",
+     "symbol": "DGX"
+    },
+    {
+     "changePct": -0.3306,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 25063206000,
+     "name": "Steris",
+     "price": 256.27,
+     "sector": "Health Care",
+     "symbol": "STE"
+    },
+    {
+     "changePct": 1.6376,
+     "group": "nontech",
+     "industry": "Biotechnology",
+     "marketCap": 24943385675,
+     "name": "Incyte",
+     "price": 122.27,
+     "sector": "Health Care",
+     "symbol": "INCY"
+    },
+    {
+     "changePct": 1.0072,
+     "group": "nontech",
+     "industry": "Pharmaceuticals",
+     "marketCap": 24244589605,
+     "name": "Viatris",
+     "price": 21.06,
+     "sector": "Health Care",
+     "symbol": "VTRS"
+    },
+    {
+     "changePct": 0.1398,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 21008402715,
+     "name": "Zimmer Biomet",
+     "price": 107.47,
+     "sector": "Health Care",
+     "symbol": "ZBH"
+    },
+    {
+     "changePct": -0.5343,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 17768468250,
+     "name": "Revvity",
+     "price": 158.25,
+     "sector": "Health Care",
+     "symbol": "RVTY"
+    },
+    {
+     "changePct": -0.8994,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 16866173730,
+     "name": "Charles River Laboratories",
+     "price": 342.69,
+     "sector": "Health Care",
+     "symbol": "CRL"
+    },
+    {
+     "changePct": -1.6208,
+     "group": "nontech",
+     "industry": "Health Care Technology",
+     "marketCap": 15374760367,
+     "name": "Solventum",
+     "price": 88.62,
+     "sector": "Health Care",
+     "symbol": "SOLV"
+    },
+    {
+     "changePct": -0.3028,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 13626951271,
+     "name": "Baxter International",
+     "price": 26.34,
+     "sector": "Health Care",
+     "symbol": "BAX"
+    },
+    {
+     "changePct": 2.3539,
+     "group": "nontech",
+     "industry": "Health Care Services",
+     "marketCap": 12578741500,
+     "name": "DaVita",
+     "price": 183.5,
+     "sector": "Health Care",
+     "symbol": "DVA"
+    },
+    {
+     "changePct": -1.0068,
+     "group": "nontech",
+     "industry": "Health Care Supplies",
+     "marketCap": 12327987000,
+     "name": "Cooper Companies (The)",
+     "price": 62.93,
+     "sector": "Health Care",
+     "symbol": "COO"
+    },
+    {
+     "changePct": -1.251,
+     "group": "nontech",
+     "industry": "Health Care Supplies",
+     "marketCap": 12280317120,
+     "name": "Align Technology",
+     "price": 172.08,
+     "sector": "Health Care",
+     "symbol": "ALGN"
+    },
+    {
+     "changePct": 0.696,
+     "group": "nontech",
+     "industry": "Health Care Facilities",
+     "marketCap": 12015564854,
+     "name": "Universal Health Services",
+     "price": 196.77,
+     "sector": "Health Care",
+     "symbol": "UHS"
+    },
+    {
+     "changePct": -0.0275,
+     "group": "nontech",
+     "industry": "Life Sciences Tools & Services",
+     "marketCap": 11433522828,
+     "name": "Bio-Techne",
+     "price": 72.8,
+     "sector": "Health Care",
+     "symbol": "TECH"
+    },
+    {
+     "changePct": 1.3305,
+     "group": "nontech",
+     "industry": "Health Care Equipment",
+     "marketCap": 10560734124,
+     "name": "Insulet Corporation",
+     "price": 150.03,
+     "sector": "Health Care",
+     "symbol": "PODD"
+    },
+    {
+     "changePct": -0.3606,
+     "group": "nontech",
+     "industry": "Health Care Distributors",
+     "marketCap": 10236484994,
+     "name": "Henry Schein",
+     "price": 88.42,
+     "sector": "Health Care",
+     "symbol": "HSIC"
+    }
+   ],
+   "marketCap": 7161739319374,
+   "sector": "Health Care"
+  },
+  {
+   "group": "nontech",
+   "items": [
+    {
      "changePct": -1.7351,
      "group": "nontech",
      "industry": "Broadline Retail",
@@ -7255,613 +7862,6 @@
    "group": "nontech",
    "items": [
     {
-     "changePct": 0.3491,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 1286087092000,
-     "name": "Lilly (Eli)",
-     "price": 1437.29,
-     "sector": "Health Care",
-     "symbol": "LLY"
-    },
-    {
-     "changePct": -0.1318,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 675210174990,
-     "name": "Johnson & Johnson",
-     "price": 280.41,
-     "sector": "Health Care",
-     "symbol": "JNJ"
-    },
-    {
-     "changePct": 0.3709,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 521488072804,
-     "name": "AbbVie",
-     "price": 294.98,
-     "sector": "Health Care",
-     "symbol": "ABBV"
-    },
-    {
-     "changePct": -0.5381,
-     "group": "nontech",
-     "industry": "Managed Health Care",
-     "marketCap": 364998613542,
-     "name": "UnitedHealth Group",
-     "price": 402.94,
-     "sector": "Health Care",
-     "symbol": "UNH"
-    },
-    {
-     "changePct": -0.5876,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 364215567419,
-     "name": "Merck & Co.",
-     "price": 147.18,
-     "sector": "Health Care",
-     "symbol": "MRK"
-    },
-    {
-     "changePct": -0.0682,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 270017911233,
-     "name": "Thermo Fisher Scientific",
-     "price": 717.71,
-     "sector": "Health Care",
-     "symbol": "TMO"
-    },
-    {
-     "changePct": 0.619,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 253200699000,
-     "name": "Amgen",
-     "price": 468.11,
-     "sector": "Health Care",
-     "symbol": "AMGN"
-    },
-    {
-     "changePct": -0.6672,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 210634930000,
-     "name": "Gilead Sciences",
-     "price": 169.73,
-     "sector": "Health Care",
-     "symbol": "GILD"
-    },
-    {
-     "changePct": -1.0592,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 189792953999,
-     "name": "Abbott Laboratories",
-     "price": 109.29,
-     "sector": "Health Care",
-     "symbol": "ABT"
-    },
-    {
-     "changePct": 0.3065,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 167865000000,
-     "name": "Pfizer",
-     "price": 29.45,
-     "sector": "Health Care",
-     "symbol": "PFE"
-    },
-    {
-     "changePct": -0.3388,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 166340639000,
-     "name": "Danaher Corporation",
-     "price": 235.31,
-     "sector": "Health Care",
-     "symbol": "DHR"
-    },
-    {
-     "changePct": -0.1133,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 159628103000,
-     "name": "Intuitive Surgical",
-     "price": 449.53,
-     "sector": "Health Care",
-     "symbol": "ISRG"
-    },
-    {
-     "changePct": -0.157,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 138940819264,
-     "name": "Vertex Pharmaceuticals",
-     "price": 547.03,
-     "sector": "Health Care",
-     "symbol": "VRTX"
-    },
-    {
-     "changePct": 0.0197,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 130078814741,
-     "name": "Medtronic",
-     "price": 101.61,
-     "sector": "Health Care",
-     "symbol": "MDT"
-    },
-    {
-     "changePct": -0.2586,
-     "group": "nontech",
-     "industry": "Health Care Distributors",
-     "marketCap": 129574800000,
-     "name": "McKesson",
-     "price": 1079.79,
-     "sector": "Health Care",
-     "symbol": "MCK"
-    },
-    {
-     "changePct": 0.1752,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 128588040000,
-     "name": "Bristol Myers Squibb",
-     "price": 62.91,
-     "sector": "Health Care",
-     "symbol": "BMY"
-    },
-    {
-     "changePct": -1.696,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 121937175000,
-     "name": "Stryker Corporation",
-     "price": 318.79,
-     "sector": "Health Care",
-     "symbol": "SYK"
-    },
-    {
-     "changePct": 0.573,
-     "group": "nontech",
-     "industry": "Health Care Services",
-     "marketCap": 114585600000,
-     "name": "CVS Health",
-     "price": 89.52,
-     "sector": "Health Care",
-     "symbol": "CVS"
-    },
-    {
-     "changePct": 0.3212,
-     "group": "nontech",
-     "industry": "Health Care Facilities",
-     "marketCap": 113659164804,
-     "name": "HCA Healthcare",
-     "price": 506.04,
-     "sector": "Health Care",
-     "symbol": "HCA"
-    },
-    {
-     "changePct": 4.7322,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 101426087043,
-     "name": "Regeneron Pharmaceuticals",
-     "price": 959.41,
-     "sector": "Health Care",
-     "symbol": "REGN"
-    },
-    {
-     "changePct": -0.8532,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 100470760000,
-     "name": "Moderna",
-     "price": 248.69,
-     "sector": "Health Care",
-     "symbol": "MRNA"
-    },
-    {
-     "changePct": -0.0396,
-     "group": "nontech",
-     "industry": "Managed Health Care",
-     "marketCap": 94796499713,
-     "name": "Elevance Health",
-     "price": 429.48,
-     "sector": "Health Care",
-     "symbol": "ELV"
-    },
-    {
-     "changePct": -0.5542,
-     "group": "nontech",
-     "industry": "Health Care Services",
-     "marketCap": 79421222800,
-     "name": "Cigna",
-     "price": 301.45,
-     "sector": "Health Care",
-     "symbol": "CI"
-    },
-    {
-     "changePct": 0.3355,
-     "group": "nontech",
-     "industry": "Health Care Distributors",
-     "marketCap": 67854913029,
-     "name": "Cencora",
-     "price": 349.88,
-     "sector": "Health Care",
-     "symbol": "COR"
-    },
-    {
-     "changePct": 0.962,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 66927804306,
-     "name": "Boston Scientific",
-     "price": 45.13,
-     "sector": "Health Care",
-     "symbol": "BSX"
-    },
-    {
-     "changePct": 0.2384,
-     "group": "nontech",
-     "industry": "Health Care Distributors",
-     "marketCap": 64645850000,
-     "name": "Cardinal Health",
-     "price": 277.45,
-     "sector": "Health Care",
-     "symbol": "CAH"
-    },
-    {
-     "changePct": 1.7306,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 61443867000,
-     "name": "Edwards Lifesciences",
-     "price": 105.81,
-     "sector": "Health Care",
-     "symbol": "EW"
-    },
-    {
-     "changePct": 0.8984,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 61224473079,
-     "name": "Becton Dickinson",
-     "price": 214.52,
-     "sector": "Health Care",
-     "symbol": "BDX"
-    },
-    {
-     "changePct": 0.8541,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 56004854080,
-     "name": "Idexx Laboratories",
-     "price": 702.59,
-     "sector": "Health Care",
-     "symbol": "IDXX"
-    },
-    {
-     "changePct": 1.8833,
-     "group": "nontech",
-     "industry": "Managed Health Care",
-     "marketCap": 53821108458,
-     "name": "Humana",
-     "price": 446.31,
-     "sector": "Health Care",
-     "symbol": "HUM"
-    },
-    {
-     "changePct": -0.5228,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 50086472010,
-     "name": "Agilent Technologies",
-     "price": 176.95,
-     "sector": "Health Care",
-     "symbol": "A"
-    },
-    {
-     "changePct": -0.2553,
-     "group": "nontech",
-     "industry": "Health Care Technology",
-     "marketCap": 49914703652,
-     "name": "Veeva Systems",
-     "price": 304.77,
-     "sector": "Health Care",
-     "symbol": "VEEV"
-    },
-    {
-     "changePct": -0.2253,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 46560287999,
-     "name": "IQVIA",
-     "price": 274.53,
-     "sector": "Health Care",
-     "symbol": "IQV"
-    },
-    {
-     "changePct": -0.9716,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 46254152500,
-     "name": "Waters Corporation",
-     "price": 470.9,
-     "sector": "Health Care",
-     "symbol": "WAT"
-    },
-    {
-     "changePct": -1.2552,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 37643841755,
-     "name": "GE HealthCare",
-     "price": 82.6,
-     "sector": "Health Care",
-     "symbol": "GEHC"
-    },
-    {
-     "changePct": 0.0592,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 37440863093,
-     "name": "Biogen",
-     "price": 253.4,
-     "sector": "Health Care",
-     "symbol": "BIIB"
-    },
-    {
-     "changePct": -0.1353,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 35608711990,
-     "name": "Mettler Toledo",
-     "price": 1749.01,
-     "sector": "Health Care",
-     "symbol": "MTD"
-    },
-    {
-     "changePct": 0.1334,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 35086266564,
-     "name": "Zoetis",
-     "price": 82.57,
-     "sector": "Health Care",
-     "symbol": "ZTS"
-    },
-    {
-     "changePct": 0.4132,
-     "group": "nontech",
-     "industry": "Managed Health Care",
-     "marketCap": 34885697040,
-     "name": "Centene Corporation",
-     "price": 70.48,
-     "sector": "Health Care",
-     "symbol": "CNC"
-    },
-    {
-     "changePct": 1.888,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 34405462962,
-     "name": "ResMed",
-     "price": 238.53,
-     "sector": "Health Care",
-     "symbol": "RMD"
-    },
-    {
-     "changePct": -0.9213,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 32578290000,
-     "name": "Illumina, Inc.",
-     "price": 212.93,
-     "sector": "Health Care",
-     "symbol": "ILMN"
-    },
-    {
-     "changePct": 0.5318,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 30916756000,
-     "name": "Dexcom",
-     "price": 80.345,
-     "sector": "Health Care",
-     "symbol": "DXCM"
-    },
-    {
-     "changePct": 0.364,
-     "group": "nontech",
-     "industry": "Health Care Services",
-     "marketCap": 30597306000,
-     "name": "Labcorp",
-     "price": 372.23,
-     "sector": "Health Care",
-     "symbol": "LH"
-    },
-    {
-     "changePct": 0.0751,
-     "group": "nontech",
-     "industry": "Health Care Supplies",
-     "marketCap": 29743843078,
-     "name": "West Pharmaceutical Services",
-     "price": 412.86,
-     "sector": "Health Care",
-     "symbol": "WST"
-    },
-    {
-     "changePct": 0.0967,
-     "group": "nontech",
-     "industry": "Health Care Services",
-     "marketCap": 28518596625,
-     "name": "Quest Diagnostics",
-     "price": 258.69,
-     "sector": "Health Care",
-     "symbol": "DGX"
-    },
-    {
-     "changePct": -0.3306,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 25063206000,
-     "name": "Steris",
-     "price": 256.27,
-     "sector": "Health Care",
-     "symbol": "STE"
-    },
-    {
-     "changePct": 1.6376,
-     "group": "nontech",
-     "industry": "Biotechnology",
-     "marketCap": 24943385675,
-     "name": "Incyte",
-     "price": 122.27,
-     "sector": "Health Care",
-     "symbol": "INCY"
-    },
-    {
-     "changePct": 1.0072,
-     "group": "nontech",
-     "industry": "Pharmaceuticals",
-     "marketCap": 24244589605,
-     "name": "Viatris",
-     "price": 21.06,
-     "sector": "Health Care",
-     "symbol": "VTRS"
-    },
-    {
-     "changePct": 0.1398,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 21008402715,
-     "name": "Zimmer Biomet",
-     "price": 107.47,
-     "sector": "Health Care",
-     "symbol": "ZBH"
-    },
-    {
-     "changePct": -0.5343,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 17768468250,
-     "name": "Revvity",
-     "price": 158.25,
-     "sector": "Health Care",
-     "symbol": "RVTY"
-    },
-    {
-     "changePct": -0.8994,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 16866173730,
-     "name": "Charles River Laboratories",
-     "price": 342.69,
-     "sector": "Health Care",
-     "symbol": "CRL"
-    },
-    {
-     "changePct": -1.6208,
-     "group": "nontech",
-     "industry": "Health Care Technology",
-     "marketCap": 15374760367,
-     "name": "Solventum",
-     "price": 88.62,
-     "sector": "Health Care",
-     "symbol": "SOLV"
-    },
-    {
-     "changePct": -0.3028,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 13626951271,
-     "name": "Baxter International",
-     "price": 26.34,
-     "sector": "Health Care",
-     "symbol": "BAX"
-    },
-    {
-     "changePct": 2.3539,
-     "group": "nontech",
-     "industry": "Health Care Services",
-     "marketCap": 12578741500,
-     "name": "DaVita",
-     "price": 183.5,
-     "sector": "Health Care",
-     "symbol": "DVA"
-    },
-    {
-     "changePct": -1.0068,
-     "group": "nontech",
-     "industry": "Health Care Supplies",
-     "marketCap": 12327987000,
-     "name": "Cooper Companies (The)",
-     "price": 62.93,
-     "sector": "Health Care",
-     "symbol": "COO"
-    },
-    {
-     "changePct": -1.251,
-     "group": "nontech",
-     "industry": "Health Care Supplies",
-     "marketCap": 12280317120,
-     "name": "Align Technology",
-     "price": 172.08,
-     "sector": "Health Care",
-     "symbol": "ALGN"
-    },
-    {
-     "changePct": 0.696,
-     "group": "nontech",
-     "industry": "Health Care Facilities",
-     "marketCap": 12015564854,
-     "name": "Universal Health Services",
-     "price": 196.77,
-     "sector": "Health Care",
-     "symbol": "UHS"
-    },
-    {
-     "changePct": -0.0275,
-     "group": "nontech",
-     "industry": "Life Sciences Tools & Services",
-     "marketCap": 11433522828,
-     "name": "Bio-Techne",
-     "price": 72.8,
-     "sector": "Health Care",
-     "symbol": "TECH"
-    },
-    {
-     "changePct": 1.3305,
-     "group": "nontech",
-     "industry": "Health Care Equipment",
-     "marketCap": 10560734124,
-     "name": "Insulet Corporation",
-     "price": 150.03,
-     "sector": "Health Care",
-     "symbol": "PODD"
-    },
-    {
-     "changePct": -0.3606,
-     "group": "nontech",
-     "industry": "Health Care Distributors",
-     "marketCap": 10236484994,
-     "name": "Henry Schein",
-     "price": 88.42,
-     "sector": "Health Care",
-     "symbol": "HSIC"
-    }
-   ],
-   "marketCap": 7115452151605,
-   "sector": "Health Care"
-  },
-  {
-   "group": "nontech",
-   "items": [
-    {
      "changePct": 1.4323,
      "group": "nontech",
      "industry": "Aerospace & Defense",
@@ -8185,7 +8185,7 @@
      "changePct": 1.5879,
      "group": "nontech",
      "industry": "Aerospace & Defense",
-     "marketCap": 70187674290,
+     "marketCap": 67949822895,
      "name": "TransDigm Group",
      "price": 1245.0,
      "sector": "Industrials",
@@ -8692,7 +8692,7 @@
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5623390567517,
+   "marketCap": 5621152716122,
    "sector": "Industrials"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-11T21:37:27Z"
+ "updated": "2026-11-12T02:34:21Z"
 }
