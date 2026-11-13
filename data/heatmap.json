@@ -82,7 +82,7 @@
    "symbol": "META"
   },
   {
-   "changePct": 1.6974,
+   "changePct": 1.6975,
    "group": "nontech",
    "industry": "Automobile Manufacturers",
    "marketCap": 1570980169774,
@@ -6788,7 +6788,7 @@
      "symbol": "AMZN"
     },
     {
-     "changePct": 1.6974,
+     "changePct": 1.6975,
      "group": "nontech",
      "industry": "Automobile Manufacturers",
      "marketCap": 1570980169774,
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-12T23:55:16Z"
+ "updated": "2026-11-13T06:51:27Z"
 }
