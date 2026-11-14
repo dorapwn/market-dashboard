@@ -1015,7 +1015,7 @@
    "changePct": -0.1782,
    "group": "nontech",
    "industry": "Restaurants",
-   "marketCap": 121320312000,
+   "marketCap": 121352244000,
    "name": "Starbucks",
    "price": 106.44,
    "sector": "Consumer Discretionary",
@@ -1562,16 +1562,6 @@
    "symbol": "HLT"
   },
   {
-   "changePct": -2.2589,
-   "group": "nontech",
-   "industry": "Building Products",
-   "marketCap": 85148797378,
-   "name": "Johnson Controls",
-   "price": 139.33,
-   "sector": "Industrials",
-   "symbol": "JCI"
-  },
-  {
    "changePct": 1.735,
    "group": "nontech",
    "industry": "Oil & Gas Exploration & Production",
@@ -1590,6 +1580,16 @@
    "price": 59.24,
    "sector": "Materials",
    "symbol": "FCX"
+  },
+  {
+   "changePct": -2.2589,
+   "group": "nontech",
+   "industry": "Building Products",
+   "marketCap": 83780804443,
+   "name": "Johnson Controls",
+   "price": 139.33,
+   "sector": "Industrials",
+   "symbol": "JCI"
   },
   {
    "changePct": 0.2685,
@@ -2532,16 +2532,6 @@
    "symbol": "CARR"
   },
   {
-   "changePct": -0.4305,
-   "group": "nontech",
-   "industry": "Electrical Components & Equipment",
-   "marketCap": 45250347416,
-   "name": "Rockwell Automation",
-   "price": 402.46,
-   "sector": "Industrials",
-   "symbol": "ROK"
-  },
-  {
    "changePct": -1.1152,
    "group": "nontech",
    "industry": "Electric Utilities",
@@ -2590,6 +2580,16 @@
    "price": 82.86,
    "sector": "Financials",
    "symbol": "AIG"
+  },
+  {
+   "changePct": -0.4305,
+   "group": "nontech",
+   "industry": "Electrical Components & Equipment",
+   "marketCap": 44230354000,
+   "name": "Rockwell Automation",
+   "price": 402.46,
+   "sector": "Industrials",
+   "symbol": "ROK"
   },
   {
    "changePct": 1.4181,
@@ -7458,7 +7458,7 @@
      "changePct": -0.1782,
      "group": "nontech",
      "industry": "Restaurants",
-     "marketCap": 121320312000,
+     "marketCap": 121352244000,
      "name": "Starbucks",
      "price": 106.44,
      "sector": "Consumer Discretionary",
@@ -7855,7 +7855,7 @@
      "symbol": "APTV"
     }
    ],
-   "marketCap": 7114275006018,
+   "marketCap": 7114306938018,
    "sector": "Consumer Discretionary"
   },
   {
@@ -8085,7 +8085,7 @@
      "changePct": -2.2589,
      "group": "nontech",
      "industry": "Building Products",
-     "marketCap": 85148797378,
+     "marketCap": 83780804443,
      "name": "Johnson Controls",
      "price": 139.33,
      "sector": "Industrials",
@@ -8305,7 +8305,7 @@
      "changePct": -0.4305,
      "group": "nontech",
      "industry": "Electrical Components & Equipment",
-     "marketCap": 45250347416,
+     "marketCap": 44230354000,
      "name": "Rockwell Automation",
      "price": 402.46,
      "sector": "Industrials",
@@ -8692,7 +8692,7 @@
      "symbol": "AOS"
     }
    ],
-   "marketCap": 5548168614651,
+   "marketCap": 5545780628300,
    "sector": "Industrials"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-13T21:41:37Z"
+ "updated": "2026-11-14T01:51:45Z"
 }
