@@ -322,12 +322,12 @@
    "symbol": "PM"
   },
   {
-   "changePct": -7.0231,
+   "changePct": -7.0701,
    "group": "tech",
    "industry": "Semiconductors",
-   "marketCap": 294545700000,
+   "marketCap": 294397020000,
    "name": "Intel",
-   "price": 55.47,
+   "price": 55.442,
    "sector": "Information Technology",
    "symbol": "INTC"
   },
@@ -2455,7 +2455,7 @@
    "changePct": -1.0201,
    "group": "nontech",
    "industry": "Agricultural Products & Services",
-   "marketCap": 47891892400,
+   "marketCap": 47912427200,
    "name": "Vylor",
    "price": 71.8,
    "sector": "Consumer Staples",
@@ -5117,12 +5117,12 @@
      "symbol": "ORCL"
     },
     {
-     "changePct": -7.0231,
+     "changePct": -7.0701,
      "group": "tech",
      "industry": "Semiconductors",
-     "marketCap": 294545700000,
+     "marketCap": 294397020000,
      "name": "Intel",
-     "price": 55.47,
+     "price": 55.442,
      "sector": "Information Technology",
      "symbol": "INTC"
     },
@@ -5787,7 +5787,7 @@
      "symbol": "AKAM"
     }
    ],
-   "marketCap": 22978614759293,
+   "marketCap": 22978466079293,
    "sector": "Information Technology"
   },
   {
@@ -8822,7 +8822,7 @@
      "changePct": -1.0201,
      "group": "nontech",
      "industry": "Agricultural Products & Services",
-     "marketCap": 47891892400,
+     "marketCap": 47912427200,
      "name": "Vylor",
      "price": 71.8,
      "sector": "Consumer Staples",
@@ -9029,7 +9029,7 @@
      "symbol": "HRL"
     }
    ],
-   "marketCap": 3932573319534,
+   "marketCap": 3932593854334,
    "sector": "Consumer Staples"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-17T01:07:20Z"
+ "updated": "2026-11-17T09:16:26Z"
 }
