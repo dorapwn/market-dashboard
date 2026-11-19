@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T07:58:48.460Z",
+  "updated": "2026-11-19T17:24:53.075Z",
   "count": 14,
   "fundamentals": {
     "AAPL": {
@@ -230,8 +230,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 3759436730004,
-          "date": "2026-11-17",
+          "value": 3774660428836,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -394,7 +394,7 @@
         "marketCap": {
           "value": 3645231120000,
           "date": "2026-11-18",
-          "currency": null
+          "currency": "USD"
         }
       },
       "annual": {
@@ -554,8 +554,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 3430273400000,
-          "date": "2026-11-17",
+          "value": 3454241400000,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -878,8 +878,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1581981024243,
-          "date": "2026-11-17",
+          "value": 1575615983523,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1040,8 +1040,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1502472258456,
-          "date": "2026-11-17",
+          "value": 1516741614309,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1202,8 +1202,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 1630671961884,
-          "date": "2026-11-17",
+          "value": 1690103653703,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1526,8 +1526,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 245065529891,
-          "date": "2026-11-17",
+          "value": 245640415517,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1688,8 +1688,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 160089960000,
-          "date": "2026-11-17",
+          "value": 156699200000,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1850,8 +1850,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 377230924528,
-          "date": "2026-11-17",
+          "value": 377495969251,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -1988,8 +1988,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 876244913589,
-          "date": "2026-11-17",
+          "value": 860709597961,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
@@ -2150,8 +2150,8 @@
           "currency": "USD"
         },
         "marketCap": {
-          "value": 682086784861,
-          "date": "2026-11-17",
+          "value": 655041540057,
+          "date": "2026-11-18",
           "currency": "USD"
         }
       },
