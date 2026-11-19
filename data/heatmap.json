@@ -15,7 +15,7 @@
    "changePct": 0.4049,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3775069830000,
+   "marketCap": 3775799075696,
    "name": "Microsoft",
    "price": 508.29,
    "sector": "Information Technology",
@@ -482,16 +482,6 @@
    "symbol": "LIN"
   },
   {
-   "changePct": 4.6349,
-   "group": "tech",
-   "industry": "Movies & Entertainment",
-   "marketCap": 219146760000,
-   "name": "Walt Disney Company (The)",
-   "price": 122.36,
-   "sector": "Communication Services",
-   "symbol": "DIS"
-  },
-  {
    "changePct": -0.1203,
    "group": "nontech",
    "industry": "Consumer Finance",
@@ -510,6 +500,16 @@
    "price": 228.53,
    "sector": "Information Technology",
    "symbol": "IBM"
+  },
+  {
+   "changePct": 4.6349,
+   "group": "tech",
+   "industry": "Movies & Entertainment",
+   "marketCap": 212294600000,
+   "name": "Walt Disney Company (The)",
+   "price": 122.36,
+   "sector": "Communication Services",
+   "symbol": "DIS"
   },
   {
    "changePct": -0.7518,
@@ -4092,16 +4092,6 @@
    "symbol": "LNT"
   },
   {
-   "changePct": 5.2073,
-   "group": "tech",
-   "industry": "Communications Equipment",
-   "marketCap": 18518871360,
-   "name": "F5, Inc.",
-   "price": 321.04,
-   "sector": "Information Technology",
-   "symbol": "FFIV"
-  },
-  {
    "changePct": -0.4325,
    "group": "nontech",
    "industry": "Packaged Foods & Meats",
@@ -4130,6 +4120,16 @@
    "price": 173.41,
    "sector": "Real Estate",
    "symbol": "SBAC"
+  },
+  {
+   "changePct": 5.2073,
+   "group": "tech",
+   "industry": "Communications Equipment",
+   "marketCap": 18238603440,
+   "name": "F5, Inc.",
+   "price": 321.04,
+   "sector": "Information Technology",
+   "symbol": "FFIV"
   },
   {
    "changePct": 3.2182,
@@ -5040,7 +5040,7 @@
      "changePct": 0.4049,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3775069830000,
+     "marketCap": 3775799075696,
      "name": "Microsoft",
      "price": 508.29,
      "sector": "Information Technology",
@@ -5670,7 +5670,7 @@
      "changePct": 5.2073,
      "group": "tech",
      "industry": "Communications Equipment",
-     "marketCap": 18518871360,
+     "marketCap": 18238603440,
      "name": "F5, Inc.",
      "price": 321.04,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 22834357836773,
+   "marketCap": 22834806814549,
    "sector": "Information Technology"
   },
   {
@@ -5837,7 +5837,7 @@
      "changePct": 4.6349,
      "group": "tech",
      "industry": "Movies & Entertainment",
-     "marketCap": 219146760000,
+     "marketCap": 212294600000,
      "name": "Walt Disney Company (The)",
      "price": 122.36,
      "sector": "Communication Services",
@@ -6004,7 +6004,7 @@
      "symbol": "SKYD"
     }
    ],
-   "marketCap": 9964231912603,
+   "marketCap": 9957379752603,
    "sector": "Communication Services"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-19T00:28:00Z"
+ "updated": "2026-11-19T07:59:29Z"
 }

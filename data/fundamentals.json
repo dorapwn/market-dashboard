@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T00:26:31.654Z",
+  "updated": "2026-11-19T07:58:48.460Z",
   "count": 14,
   "fundamentals": {
     "AAPL": {
@@ -329,72 +329,72 @@
     "NVDA": {
       "symbol": "NVDA",
       "currency": "USD",
-      "asOf": "2026-07-31",
+      "asOf": "2026-10-31",
       "ttm": {
         "revenue": {
-          "value": 302970000000,
-          "date": "2026-07-31",
+          "value": 361808000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "grossProfit": {
-          "value": 226241000000,
-          "date": "2026-07-31",
+          "value": 271069000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "operatingIncome": {
-          "value": 197579000000,
-          "date": "2026-07-31",
+          "value": 239090000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "netIncome": {
-          "value": 192880000000,
-          "date": "2026-07-31",
+          "value": 226257000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "ebitda": {
-          "value": 233894000000,
-          "date": "2026-07-31",
+          "value": 249452000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "costOfRevenue": {
-          "value": 76729000000,
-          "date": "2026-07-31",
+          "value": 90739000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "totalExpenses": {
-          "value": 105391000000,
-          "date": "2026-07-31",
+          "value": 122718000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "operatingCashFlow": {
-          "value": 134360000000,
-          "date": "2026-07-31",
+          "value": 158863000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "freeCashFlow": {
-          "value": 127006000000,
-          "date": "2026-07-31",
+          "value": 148723000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "capex": {
-          "value": -7354000000,
-          "date": "2026-07-31",
+          "value": -10140000000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "dilutedEps": {
-          "value": 7.91,
-          "date": "2026-07-31",
+          "value": 9.31,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "dilutedShares": {
-          "value": 24397500000,
-          "date": "2026-07-31",
+          "value": 24322750000,
+          "date": "2026-10-31",
           "currency": "USD"
         },
         "marketCap": {
-          "value": 3753892620000,
-          "date": "2026-11-17",
-          "currency": "USD"
+          "value": 3645231120000,
+          "date": "2026-11-18",
+          "currency": null
         }
       },
       "annual": {
