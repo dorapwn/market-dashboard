@@ -15,7 +15,7 @@
    "changePct": -1.776,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3700874100000,
+   "marketCap": 3701589013003,
    "name": "Microsoft",
    "price": 498.3,
    "sector": "Information Technology",
@@ -2602,16 +2602,6 @@
    "symbol": "ROK"
   },
   {
-   "changePct": -1.212,
-   "group": "nontech",
-   "industry": "Homebuilding",
-   "marketCap": 42003935823,
-   "name": "D. R. Horton",
-   "price": 142.64,
-   "sector": "Consumer Discretionary",
-   "symbol": "DHI"
-  },
-  {
    "changePct": -1.1387,
    "group": "nontech",
    "industry": "Electric Utilities",
@@ -2690,6 +2680,16 @@
    "price": 108.16,
    "sector": "Financials",
    "symbol": "ACGL"
+  },
+  {
+   "changePct": -1.212,
+   "group": "nontech",
+   "industry": "Homebuilding",
+   "marketCap": 38717575410,
+   "name": "D. R. Horton",
+   "price": 142.64,
+   "sector": "Consumer Discretionary",
+   "symbol": "DHI"
   },
   {
    "changePct": -1.1577,
@@ -5040,7 +5040,7 @@
      "changePct": -1.776,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3700874100000,
+     "marketCap": 3701589013003,
      "name": "Microsoft",
      "price": 498.3,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 22391734690363,
+   "marketCap": 22392449603366,
    "sector": "Information Technology"
   },
   {
@@ -7021,7 +7021,7 @@
      "changePct": -1.212,
      "group": "nontech",
      "industry": "Homebuilding",
-     "marketCap": 42003935823,
+     "marketCap": 38717575410,
      "name": "D. R. Horton",
      "price": 142.64,
      "sector": "Consumer Discretionary",
@@ -7248,7 +7248,7 @@
      "symbol": "NCLH"
     }
    ],
-   "marketCap": 6861452223459,
+   "marketCap": 6858165863046,
    "sector": "Consumer Discretionary"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-19T23:54:04Z"
+ "updated": "2026-11-20T07:23:06Z"
 }
