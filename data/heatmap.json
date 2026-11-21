@@ -15,7 +15,7 @@
    "changePct": -2.7654,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3599225182782,
+   "marketCap": 3598530040000,
    "name": "Microsoft",
    "price": 484.52,
    "sector": "Information Technology",
@@ -1785,7 +1785,7 @@
    "changePct": -2.2183,
    "group": "nontech",
    "industry": "Industrial Gases",
-   "marketCap": 66157644107,
+   "marketCap": 66158972991,
    "name": "Air Products",
    "price": 297.09,
    "sector": "Materials",
@@ -3755,7 +3755,7 @@
    "changePct": 1.9731,
    "group": "nontech",
    "industry": "Packaged Foods & Meats",
-   "marketCap": 22583714461,
+   "marketCap": 22597226405,
    "name": "Tyson Foods",
    "price": 65.12,
    "sector": "Consumer Staples",
@@ -5040,7 +5040,7 @@
      "changePct": -2.7654,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3599225182782,
+     "marketCap": 3598530040000,
      "name": "Microsoft",
      "price": 484.52,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 20711202954502,
+   "marketCap": 20710507811720,
    "sector": "Information Technology"
   },
   {
@@ -8952,7 +8952,7 @@
      "changePct": 1.9731,
      "group": "nontech",
      "industry": "Packaged Foods & Meats",
-     "marketCap": 22583714461,
+     "marketCap": 22597226405,
      "name": "Tyson Foods",
      "price": 65.12,
      "sector": "Consumer Staples",
@@ -9029,7 +9029,7 @@
      "symbol": "CLX"
     }
    ],
-   "marketCap": 3849231755180,
+   "marketCap": 3849245267124,
    "sector": "Consumer Staples"
   },
   {
@@ -9920,7 +9920,7 @@
      "changePct": -2.2183,
      "group": "nontech",
      "industry": "Industrial Gases",
-     "marketCap": 66157644107,
+     "marketCap": 66158972991,
      "name": "Air Products",
      "price": 297.09,
      "sector": "Materials",
@@ -10117,10 +10117,10 @@
      "symbol": "MOS"
     }
    ],
-   "marketCap": 1075838121229,
+   "marketCap": 1075839450113,
    "sector": "Materials"
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-20T22:50:40Z"
+ "updated": "2026-11-21T04:00:50Z"
 }
