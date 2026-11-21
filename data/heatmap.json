@@ -15,7 +15,7 @@
    "changePct": -2.7654,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3598530040000,
+   "marketCap": 3599225182782,
    "name": "Microsoft",
    "price": 484.52,
    "sector": "Information Technology",
@@ -325,7 +325,7 @@
    "changePct": -5.0894,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 279805800000,
+   "marketCap": 281100676354,
    "name": "Palo Alto Networks",
    "price": 343.32,
    "sector": "Information Technology",
@@ -5040,7 +5040,7 @@
      "changePct": -2.7654,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3598530040000,
+     "marketCap": 3599225182782,
      "name": "Microsoft",
      "price": 484.52,
      "sector": "Information Technology",
@@ -5120,7 +5120,7 @@
      "changePct": -5.0894,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 279805800000,
+     "marketCap": 281100676354,
      "name": "Palo Alto Networks",
      "price": 343.32,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 20710507811720,
+   "marketCap": 20712497830856,
    "sector": "Information Technology"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-21T04:00:50Z"
+ "updated": "2026-11-21T12:43:57Z"
 }
