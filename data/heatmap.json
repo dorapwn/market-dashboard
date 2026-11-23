@@ -1682,7 +1682,7 @@
    "symbol": "CI"
   },
   {
-   "changePct": -3.7187,
+   "changePct": -8.4767,
    "group": "nontech",
    "industry": "Automobile Manufacturers",
    "marketCap": 71153840000,
@@ -7515,7 +7515,7 @@
      "symbol": "ORLY"
     },
     {
-     "changePct": -3.7187,
+     "changePct": -8.4767,
      "group": "nontech",
      "industry": "Automobile Manufacturers",
      "marketCap": 71153840000,
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-22T21:19:14Z"
+ "updated": "2026-11-23T02:00:54Z"
 }
