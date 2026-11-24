@@ -25,7 +25,7 @@
    "changePct": 1.647,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3658504091720,
+   "marketCap": 3657797500000,
    "name": "Microsoft",
    "price": 492.5,
    "sector": "Information Technology",
@@ -3732,16 +3732,6 @@
    "symbol": "LUV"
   },
   {
-   "changePct": 0.4613,
-   "group": "tech",
-   "industry": "Application Software",
-   "marketCap": 23429056000,
-   "name": "PTC Inc.",
-   "price": 196.0,
-   "sector": "Information Technology",
-   "symbol": "PTC"
-  },
-  {
    "changePct": 2.9451,
    "group": "nontech",
    "industry": "Life & Health Insurance",
@@ -3860,6 +3850,16 @@
    "price": 44.99,
    "sector": "Utilities",
    "symbol": "NI"
+  },
+  {
+   "changePct": 0.4613,
+   "group": "tech",
+   "industry": "Application Software",
+   "marketCap": 21291916688,
+   "name": "PTC Inc.",
+   "price": 196.0,
+   "sector": "Information Technology",
+   "symbol": "PTC"
   },
   {
    "changePct": 1.5714,
@@ -5050,7 +5050,7 @@
      "changePct": 1.647,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3658504091720,
+     "marketCap": 3657797500000,
      "name": "Microsoft",
      "price": 492.5,
      "sector": "Information Technology",
@@ -5637,16 +5637,6 @@
      "symbol": "Q"
     },
     {
-     "changePct": 0.4613,
-     "group": "tech",
-     "industry": "Application Software",
-     "marketCap": 23429056000,
-     "name": "PTC Inc.",
-     "price": 196.0,
-     "sector": "Information Technology",
-     "symbol": "PTC"
-    },
-    {
      "changePct": 5.1181,
      "group": "tech",
      "industry": "Technology Distributors",
@@ -5655,6 +5645,16 @@
      "price": 170.06,
      "sector": "Information Technology",
      "symbol": "CDW"
+    },
+    {
+     "changePct": 0.4613,
+     "group": "tech",
+     "industry": "Application Software",
+     "marketCap": 21291916688,
+     "name": "PTC Inc.",
+     "price": 196.0,
+     "sector": "Information Technology",
+     "symbol": "PTC"
     },
     {
      "changePct": 5.6828,
@@ -5787,7 +5787,7 @@
      "symbol": "SWKS"
     }
    ],
-   "marketCap": 22596914860544,
+   "marketCap": 22594071129512,
    "sector": "Information Technology"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-23T22:42:06Z"
+ "updated": "2026-11-24T06:28:26Z"
 }
