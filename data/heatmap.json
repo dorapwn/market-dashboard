@@ -25,7 +25,7 @@
    "changePct": 0.7371,
    "group": "tech",
    "industry": "Systems Software",
-   "marketCap": 3684757510000,
+   "marketCap": 3685469309695,
    "name": "Microsoft",
    "price": 496.13,
    "sector": "Information Technology",
@@ -5050,7 +5050,7 @@
      "changePct": 0.7371,
      "group": "tech",
      "industry": "Systems Software",
-     "marketCap": 3684757510000,
+     "marketCap": 3685469309695,
      "name": "Microsoft",
      "price": 496.13,
      "sector": "Information Technology",
@@ -5787,7 +5787,7 @@
      "symbol": "SNDK"
     }
    ],
-   "marketCap": 21961978156423,
+   "marketCap": 21962689956118,
    "sector": "Information Technology"
   },
   {
@@ -10122,5 +10122,5 @@
   }
  ],
  "source": "wikipedia(GICS) + yahoo(spark, timeseries)",
- "updated": "2026-11-25T02:50:17Z"
+ "updated": "2026-11-25T13:02:50Z"
 }
